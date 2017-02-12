@@ -17,10 +17,17 @@ app.listen(port, function () {
 
 appRouter.route('/ai/voice')
     .post(function (req, res) {
-        console.log(JSON.stringify(req.headers));
+        //console.log(JSON.stringify(req.headers));
         var body = req.body;
         var sessionId = body.sessionId;
         var message = "Today in Boston: Fair, the temperature is 37 F";
+
+        if(body.originalRequest && body.originalRequest.source){
+            console.log('--'+ body.originalRequest.source + '---');
+        }
+
+
+
         /* var fullfilment = {
              "speech": "Today in Boston: Fair, the temperature is 37 F",
              "source": "apiai-weather-webhook-sample",
