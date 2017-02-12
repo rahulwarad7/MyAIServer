@@ -27,13 +27,6 @@ appRouter.route('/ai/voice')
         }
 
 
-
-        /* var fullfilment = {
-             "speech": "Today in Boston: Fair, the temperature is 37 F",
-             "source": "apiai-weather-webhook-sample",
-             "displayText": "Today in Boston: Fair, the temperature is 37 F"
-         };
-         body.result.fulfillment = fullfilment;*/
         var responseBody = {
             "speech": message,
             "displayText": message,

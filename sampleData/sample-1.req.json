@@ -1,0 +1,69 @@
+{
+    "id": "f82abc5f-975c-4663-98e0-646802ba7d98",
+    "timestamp": "2017-02-12T15:41:15.221Z",
+    "lang": "en",
+    "result": {
+        "source": "agent",
+        "resolvedQuery": "weather in boston",
+        "speech": "",
+        "action": "",
+        "actionIncomplete": false,
+        "parameters": {
+            "geo-city": "Boston"
+        },
+        "contexts": [],
+        "metadata": {
+            "intentId": "4443b024-af43-4ae9-b868-d7b24fce89bd",
+            "webhookUsed": "true",
+            "webhookForSlotFillingUsed": "false",
+            "intentName": "Weather Forecast"
+        },
+        "fulfillment": {
+            "speech": "sorry weather is not available at this time.",
+            "messages": [
+                {
+                    "type": 0,
+                    "speech": "sorry weather is not available at this time."
+                }
+            ]
+        },
+        "score": 1
+    },
+    "status": {
+        "code": 200,
+        "errorType": "success"
+    },
+    "sessionId": "1486914054282",
+    "originalRequest": {
+        "source": "google",
+        "data": {
+            "inputs": [
+                {
+                    "arguments": [
+                        {
+                            "raw_text": "weather in boston",
+                            "text_value": "weather in boston",
+                            "name": "text"
+                        }
+                    ],
+                    "intent": "assistant.intent.action.TEXT",
+                    "raw_inputs": [
+                        {
+                            "query": "weather in boston",
+                            "input_type": 2,
+                            "annotation_sets": []
+                        }
+                    ]
+                }
+            ],
+            "user": {
+                "user_id": "TxNS5yeIMNJVDNjU7i8OBX575bbDqfv04ijDtfDUlx4="
+            },
+            "conversation": {
+                "conversation_token": "[]",
+                "conversation_id": "1486914054282",
+                "type": 2
+            }
+        }
+    }
+}

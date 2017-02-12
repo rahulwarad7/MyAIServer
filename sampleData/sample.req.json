@@ -1,0 +1,40 @@
+//req json when invoked directly from api.ai
+
+{
+    "id": "f38b9ecd-086f-4d8e-885f-aeb753adc093",
+    "timestamp": "2017-02-12T15:32:03.415Z",
+    "lang": "en",
+    "result": {
+        "source": "agent",
+        "resolvedQuery": "weather in boston",
+        "speech": "",
+        "action": "",
+        "actionIncomplete": false,
+        "parameters": {
+            "geo-city": "Boston"
+        },
+        "contexts": [],
+        "metadata": {
+            "intentId": "4443b024-af43-4ae9-b868-d7b24fce89bd",
+            "webhookUsed": "true",
+            "webhookForSlotFillingUsed": "false",
+            "intentName": "Weather Forecast"
+        },
+        "fulfillment": {
+            "speech": "sorry weather is not available at this time.",
+            "messages": [
+                {
+                    "type": 0,
+                    "speech": "sorry weather is not available at this time."
+                }
+            ]
+        },
+        "score": 1
+    },
+    "status": {
+        "code": 200,
+        "errorType": "success"
+    },
+    "sessionId": "de1b8fbd-9d8b-47d4-962d-c1547456622c",
+    "originalRequest": null
+}
