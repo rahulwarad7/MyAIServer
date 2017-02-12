@@ -20,7 +20,14 @@ appRouter.route('/ai/voice')
 
         var body = req.body;
         var sessionId = body.sessionId;
+        var fullfilment = {
+            "fulfillment": {
+                "speech": "Today in Boston: Fair, the temperature is 37 F",
+                "source": "apiai-weather-webhook-sample",
+                "displayText": "Today in Boston: Fair, the temperature is 37 F"
+            }
+        };
 
-        res.send('OK');
+        res.send(fullfilment);
     });
 
