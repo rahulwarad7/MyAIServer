@@ -17,7 +17,7 @@ app.listen(port, function () {
 
 appRouter.route('/ai/voice')
     .post(function (req, res) {
-        //console.log(JSON.stringify(req.headers));
+        console.log(JSON.stringify(req.body));
         var body = req.body;
         var sessionId = body.sessionId;
         var message = "Today in Boston: Fair, the temperature is 37 F";
