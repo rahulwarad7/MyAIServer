@@ -17,17 +17,15 @@ app.listen(port, function () {
 
 appRouter.route('/ai/voice')
     .post(function (req, res) {
-
+        console.log(JSON.stringify(req.headers));
         var body = req.body;
         var sessionId = body.sessionId;
         var fullfilment = {
-            "fulfillment": {
-                "speech": "Today in Boston: Fair, the temperature is 37 F",
-                "source": "apiai-weather-webhook-sample",
-                "displayText": "Today in Boston: Fair, the temperature is 37 F"
-            }
+            "speech": "Today in Boston: Fair, the temperature is 37 F",
+            "source": "apiai-weather-webhook-sample",
+            "displayText": "Today in Boston: Fair, the temperature is 37 F"
         };
-
-        res.send(fullfilment);
+        body.result.fulfillment = fullfilment;
+        res.send(body);
     });
 
