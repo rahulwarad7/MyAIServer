@@ -1,6 +1,7 @@
 
 var express = require('express');
 var bodyParser = require('body-parser');
+var allstateAlexa = require('./devices/amazonAlexa/amazonAlexa.js');
 
 
 
@@ -15,7 +16,7 @@ app.listen(port, function () {
     console.log('Pavan Server listening on port: ' + port);
 });
 
-appRouter.route('/ai/voice')
+appRouter.route('/ai/voice/api-ai')
     .post(function (req, res) {
         console.log(JSON.stringify(req.headers));
         console.log(JSON.stringify(req.body));
@@ -23,8 +24,8 @@ appRouter.route('/ai/voice')
         var sessionId = body.sessionId;
         var message = "Today in Boston: Fair, the temperature is 37 F";
 
-        if(body.originalRequest && body.originalRequest.source){
-            console.log('--'+ body.originalRequest.source + '---');
+        if (body.originalRequest && body.originalRequest.source) {
+            console.log('--' + body.originalRequest.source + '---');
         }
 
 
@@ -39,3 +40,13 @@ appRouter.route('/ai/voice')
         res.send(responseBody);
     });
 
+
+appRouter.route('/ai/voice/amzn-alexa')
+    .post(function (req, res) {
+        var body = req.body;
+        var context = {};
+        var responseBody = allstateAlexa.execute(body, context);
+
+        res.setHeader("Content-Type", "application/json");
+        res.send(responseBody);
+    });

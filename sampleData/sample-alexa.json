@@ -1,4 +1,23 @@
 {
+    "host": "pavan-ai-server.herokuapp.com",
+    "connection": "close",
+    "content-type": "application/json; charset=utf-8",
+    "accept": "application/json",
+    "accept-charset": "utf-8",
+    "signature": "iuAejdHTXZEMO9zS8udjCskjHF/v6hrHQb2WPdgceWuYhB65rIpz4V8S6/Pp9mJzkQu0rabHTWfdcA8SYMlW6r9jsWYUodayNacystv8WXirCwrqlIAfnoV/60UUs1NHueIelJlK4wP813XaHo5cS/6iV+C1t7Ph8ZlPmt0ejeG88VFHLSRx42R5/KHZkWQa1IXjPF1EqbvOZ/IVzsCe/5raAkZDQQMxgkxMHBJOQg5IlAx4fLA6OldIoAao/oVmRu5yFq2uwmgeFZ5phMtbCYvDWooThos730Uup/NbZGtbVMTB0d8jHKTnpvn0i5sd73p6XVTswwhbybUOYFCU+w==",
+    "signaturecertchainurl": "https://s3.amazonaws.com/echo.api/echo-api-cert-4.pem",
+    "user-agent": "Apache-HttpClient/UNAVAILABLE (Java/1.8.0_112)",
+    "x-request-id": "d29620a0-566a-4b3a-9d1d-948d28aabfdd",
+    "x-forwarded-for": "72.21.217.74",
+    "x-forwarded-proto": "https",
+    "x-forwarded-port": "443",
+    "via": "1.1 vegur",
+    "connect-time": "0",
+    "x-request-start": "1487758241257",
+    "total-route-time": "0",
+    "content-length": "707"
+}
+{
     "version": "1.0",
     "session": {
         "new": true,
