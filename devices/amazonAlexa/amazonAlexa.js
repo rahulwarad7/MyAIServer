@@ -1,5 +1,5 @@
 
-var AlexaSkill = require('./AlexaSkill');
+var AlexaSkill = require('./alexaSkill.js');
 
 //app id should be allstate app id in amazon alexa
 var APP_ID = "amzn1.ask.skill.1cf6d2e2-8f52-4e41-b540-d6328404d0a4";
