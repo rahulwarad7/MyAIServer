@@ -1,0 +1,30 @@
+{
+    "version": "1.0",
+    "session": {
+        "new": true,
+        "sessionId": "SessionId.e2db1eba-e6b1-493c-99d5-7afeee08a8d1",
+        "application": {
+            "applicationId": "amzn1.ask.skill.1cf6d2e2-8f52-4e41-b540-d6328404d0a4"
+        },
+        "attributes": {},
+        "user": {
+            "userId": "amzn1.ask.account.AGWE2MUA2KEMHOV3WQPDRXM3CWQXFGEKYTYFWP5SXDG75K4BXCI6VUGDDTHRQA5PZKQUGEW5MD43WKMTW24ZI2Y6FMZMNHLH6TUD3FP3NMQ3APAL7SWDLWU7AIQVMQNBG6PNRGATXO64D25ZFMWRQI75MSYBILHMDN7FAOX7LPT5M23XZD77N5WHRCTKIJRUWTP2TR5T5GR4EXI"
+        }
+    },
+    "request": {
+        "type": "IntentRequest",
+        "requestId": "EdwRequestId.140c6495-7c9e-4c86-b2ca-b5c3cd4103d5",
+        "timestamp": "2017-02-22T10:03:04Z",
+        "locale": "en-US",
+        "intent": {
+            "name": "GetWeatherForecast",
+            "slots": {
+                "city": {
+                    "name": "city",
+                    "value": "London"
+                }
+            }
+        },
+        "inDialog": false
+    }
+}
