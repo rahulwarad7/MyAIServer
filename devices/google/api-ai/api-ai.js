@@ -1,3 +1,5 @@
+var googleHome = require('./../home/googleHome.js');
+
 
 var Response = function () {
     this.speech;
@@ -18,7 +20,7 @@ Allstate.prototype.execute = function (body) {
     }
     switch (source.toUpperCase()) {
         case 'GOOGLE':
-            processResponse(body, responseBody)
+            googleHome.processResponse(body, responseBody)
             break;
         case 'FACEBOOK':
             //processFacebookResponse();
@@ -32,9 +34,7 @@ Allstate.prototype.execute = function (body) {
 };
 
 function processResponse(body, responseBody) {
-    var message = "Today in Boston: Fair, the temperature is 37 F";
-    responseBody.speech = message;
-    responseBody.displayText = message;
+    googleHome.processResponse(body, responseBody)
 }
 
 module.exports = new Allstate();
