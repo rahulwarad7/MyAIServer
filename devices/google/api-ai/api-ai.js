@@ -3,7 +3,7 @@ var Response = function () {
     this.speech;
     this.displayText;
     this.data = {};
-    this.context - out;
+    this.contextOut = [];
 }
 
 
@@ -27,7 +27,7 @@ Allstate.prototype.execute = function (body) {
             processResponse(body, responseBody)
             break;
     }
-
+    responseBody['context-out'] = responseBody.contextOut;
     return responseBody;
 };
 
