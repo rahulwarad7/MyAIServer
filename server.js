@@ -2,6 +2,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var allstateAlexa = require('./devices/amazonAlexa/amazonAlexa.js');
+var allstateApiAi = require('./devices/google/api-ai/api-ai.js');
 
 
 
@@ -21,7 +22,9 @@ appRouter.route('/ai/voice/api-ai')
         console.log(JSON.stringify(req.headers));
         console.log(JSON.stringify(req.body));
         var body = req.body;
-        var sessionId = body.sessionId;
+
+        var responseBody = allstateApiAi.execute(body);
+        /*var sessionId = body.sessionId;
         var message = "Today in Boston: Fair, the temperature is 37 F";
 
         if (body.originalRequest && body.originalRequest.source) {
@@ -35,7 +38,7 @@ appRouter.route('/ai/voice/api-ai')
             "data": {},
             "context-out": []
         };
-
+        */
         res.setHeader("Content-Type", "application/json");
         res.send(responseBody);
     });
