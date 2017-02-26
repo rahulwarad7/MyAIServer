@@ -19,26 +19,11 @@ app.listen(port, function () {
 
 appRouter.route('/ai/voice/api-ai')
     .post(function (req, res) {
-        console.log(JSON.stringify(req.headers));
-        console.log(JSON.stringify(req.body));
+        //console.log(JSON.stringify(req.headers));
+        //console.log(JSON.stringify(req.body));
         var body = req.body;
 
         var responseBody = allstateApiAi.execute(body);
-        /*var sessionId = body.sessionId;
-        var message = "Today in Boston: Fair, the temperature is 37 F";
-
-        if (body.originalRequest && body.originalRequest.source) {
-            console.log('--' + body.originalRequest.source + '---');
-        }
-
-
-        var responseBody = {
-            "speech": message,
-            "displayText": message,
-            "data": {},
-            "context-out": []
-        };
-        */
         res.setHeader("Content-Type", "application/json");
         res.send(responseBody);
     });

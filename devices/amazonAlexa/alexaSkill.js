@@ -73,7 +73,7 @@ AlexaSkill.prototype.eventHandlers = {
 AlexaSkill.prototype.intentHandlers = {};
 
 AlexaSkill.prototype.execute = function (event, context) {
-        var responseObj = new Response(context, event.session);
+    var responseObj = new Response(context, event.session);
     try {
         console.log("session applicationId: " + event.session.application.applicationId);
 
@@ -111,12 +111,12 @@ function createSpeechObject(optionsParam) {
     if (optionsParam && optionsParam.type === 'SSML') {
         return {
             type: optionsParam.type,
-            ssml: optionsParam.speech
+            ssml: optionsParam.speech ? optionsParam.speech : optionsParam.text
         };
     } else {
         return {
             type: optionsParam.type || 'PlainText',
-            text: optionsParam.speech || optionsParam
+            text: optionsParam.speech ? optionsParam.speech : optionsParam.text || optionsParam
         }
     }
 }
@@ -140,8 +140,8 @@ Response.prototype = (function () {
             };
         }
         var returnResult = {
-                version: '1.0',
-                response: alexaResponse
+            version: '1.0',
+            response: alexaResponse
         };
         if (options.session && options.session.attributes) {
             returnResult.sessionAttributes = options.session.attributes;
@@ -158,31 +158,31 @@ Response.prototype = (function () {
             });
         },
         tellWithCard: function (speechOutput, cardTitle, cardContent) {
-            this._context.succeed(buildSpeechletResponse({
+            this._context = buildSpeechletResponse({
                 session: this._session,
                 output: speechOutput,
                 cardTitle: cardTitle,
                 cardContent: cardContent,
                 shouldEndSession: true
-            }));
+            });
         },
         ask: function (speechOutput, repromptSpeech) {
-            this._context.succeed(buildSpeechletResponse({
+            this._context = buildSpeechletResponse({
                 session: this._session,
                 output: speechOutput,
                 reprompt: repromptSpeech,
                 shouldEndSession: false
-            }));
+            });
         },
         askWithCard: function (speechOutput, repromptSpeech, cardTitle, cardContent) {
-            this._context.succeed(buildSpeechletResponse({
+            this._context = buildSpeechletResponse({
                 session: this._session,
                 output: speechOutput,
                 reprompt: repromptSpeech,
                 cardTitle: cardTitle,
                 cardContent: cardContent,
                 shouldEndSession: false
-            }));
+            });
         }
     };
 })();

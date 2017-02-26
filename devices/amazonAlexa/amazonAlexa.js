@@ -1,5 +1,6 @@
 
 var AlexaSkill = require('./alexaSkill.js');
+var TidePooler = require('./../../apps/tide-pooler/tide-pooler.js');
 
 //app id should be allstate app id in amazon alexa
 var APP_ID = "amzn1.ask.skill.1cf6d2e2-8f52-4e41-b540-d6328404d0a4";
@@ -44,9 +45,17 @@ Allstate.prototype.intentHandlers = {
             };
         response.tell(speechOutput);
     },
+    "TDSupportedCitiesIntent":function(intent, session, response){
+        supportedCitiesIntent(intent, session, response);
+    },
     "AMAZON.HelpIntent": function (intent, session, response) {
         response.ask("You can say hello to me!", "You can say hello to me!");
     }
 };
+
+function supportedCitiesIntent(intent, session, response){
+    var suppCitesSpeechResponse = TidePooler.getSupportedCitiesResponse();
+    response.ask(suppCitesSpeechResponse.speech, suppCitesSpeechResponse.repromptSpeech);
+}
 
 module.exports = new Allstate();
