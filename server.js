@@ -1,7 +1,7 @@
 
 var express = require('express');
 var bodyParser = require('body-parser');
-var allstateAlexa = require('./devices/amazonAlexa/amazonAlexa.js');
+var AllstateAlexa = require('./devices/amazonAlexa/amazonAlexa.js');
 var allstateApiAi = require('./devices/google/api-ai/api-ai.js');
 
 
@@ -22,7 +22,6 @@ appRouter.route('/ai/voice/api-ai')
         //console.log(JSON.stringify(req.headers));
         //console.log(JSON.stringify(req.body));
         var body = req.body;
-
         var responseBody = allstateApiAi.execute(body);
         res.setHeader("Content-Type", "application/json");
         res.send(responseBody);
@@ -33,8 +32,10 @@ appRouter.route('/ai/voice/amzn-alexa')
     .post(function (req, res) {
         var body = req.body;
         var context = {};
-        var responseBody = allstateAlexa.execute(body, context);
+        var allstate = new AllstateAlexa();
+        allstate.setDebugMode(true);
+        var response = allstate.execute(body, context);
 
         res.setHeader("Content-Type", "application/json");
-        res.send(responseBody);
+        res.send(response.data);
     });
