@@ -8,7 +8,7 @@ var Allstate = function () { };
 var debugMode = false;
 
 Allstate.prototype.setDebugMode = function (debugModeValue) {
-    debugMode = debugModeValue;
+    Allstate.prototype.debugMode = debugModeValue;
 };
 
 //public function start
@@ -76,20 +76,23 @@ function HandleSessionEndedRequest(body) {
 }
 
 function HanldeIntentRequest(body) {
+    var intentResponseInfo;
     var intentName = body.request.intent.name;
     switch (intentName) {
         case "GetWeatherForecast":
             var speechOutput = new Speech();
             speechOutput.text = "Today in Boston: Fair, the temperature is 37 degree fahrenheit.";
-            var repromptOutput = new Speech();
-            var foreCastResponseInfo = AlexaSkillUtil.tell(speechOutput, body.session);
-            return foreCastResponseInfo;
+            intentResponseInfo = AlexaSkillUtil.tell(speechOutput, body.session);            
+            break;
+        case "TDSupportedCities":
+            intentResponseInfo = supportedCitiesIntent(body);
             break;
         default:
             logging('no supporting intent implemented. IntentName: ' + intentName);
             throw 'Unsupported intent: ' + intentName;
             break;
     }
+    return intentResponseInfo;
 }
 
 function onSessionStarted(body) {
@@ -110,6 +113,20 @@ function checkAppId(currentReqAppId) {
         throw "Invalid applicationId";
     }
 }
+
+// private intents functions start
+
+function supportedCitiesIntent(body) {
+    var suppCitesSpeechResponse = TidePooler.getSupportedCitiesResponse();
+    var supCitiesResponseInfo = AlexaSkillUtil.ask(
+        suppCitesSpeechResponse.speechOutput,
+        suppCitesSpeechResponse.repromptOutput,
+        body.session
+    );
+    return supCitiesResponseInfo;
+}
+// private intents functions end
+
 //private function end
 
 module.exports = Allstate;

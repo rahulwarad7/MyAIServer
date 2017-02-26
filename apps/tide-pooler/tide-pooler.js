@@ -1,4 +1,5 @@
-var Response = require('./../../shared/data-models/response.js');
+var SpeechResponse = require('./../../shared/data-models/speechResponse.js');
+var Speech = require('./../../shared/data-models/speech');
 
 var STATIONS = {
     'seattle': 9447130,
@@ -20,6 +21,26 @@ var STATIONS = {
 };
 
 var TidePooler = function () { };
+
+
+TidePooler.prototype.getSupportedCitiesResponse = function () {
+    var suppCitiesSpeechResp = new SpeechResponse();
+    var whichCityPrompt = "Which city would you like tide information for?";
+
+    var speechOutput = new Speech();
+    speechOutput.text = "Currently, I know tide information for these coastal cities: " + getAllStationsText()
+                        + whichCityPrompt
+
+    var repromptOutput = new Speech();
+    repromptOutput.text = whichCityPrompt;
+    
+    suppCitiesSpeechResp.speechOutput = speechOutput;
+    suppCitiesSpeechResp.repromptOutput = repromptOutput;
+
+    return suppCitiesSpeechResp;
+};
+
+//private function start
 
 function getAllStationsText() {
     var stationList = '';
@@ -73,9 +94,9 @@ function getCityDialogResponse(intent, session, response) {
         repromptText = "Currently, I know tide information for these coastal cities: " + getAllStationsText()
             + "Which city would you like tide information for?";
         // if we received a value for the incorrect city, repeat it to the user, otherwise we received an empty slot
-        cityDialogSpeechResp.speech.text = cityStation.city ? 
-                                        "I'm sorry, I don't have any data for " + cityStation.city + ". " + repromptText : 
-                                        repromptText;
+        cityDialogSpeechResp.speech.text = cityStation.city ?
+            "I'm sorry, I don't have any data for " + cityStation.city + ". " + repromptText :
+            repromptText;
         cityDialogSpeechResp.speech.type = 'PlainText';
 
     } else {
@@ -97,21 +118,6 @@ function getCityDialogResponse(intent, session, response) {
 function getFinalTideResponse(cityStation, date, response) {
 
 }
-
-TidePooler.prototype.getSupportedCitiesResponse = function () {
-    var welcomeSpeechResp = new Response();
-    var whichCityPrompt = "Which city would you like tide information for?";
-    var speechOutput = "Currently, I know tide information for these coastal cities: " + getAllStationsText()
-        + whichCityPrompt;
-    welcomeSpeechResp.speech.text = speechOutput;
-    welcomeSpeechResp.speech.type = 'PlainText';
-    
-    welcomeSpeechResp.repromptSpeech.text = whichCityPrompt;
-    welcomeSpeechResp.repromptSpeech.type = 'PlainText';
-
-    return welcomeSpeechResp;
-};
-
-
+//private function end
 
 module.exports = new TidePooler();
