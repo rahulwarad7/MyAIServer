@@ -1,5 +1,6 @@
 var SpeechResponse = require('./../../shared/data-models/speechResponse.js');
 var Speech = require('./../../shared/data-models/speech');
+var alexaDateUtil = require('./../../shared/utilities/dateUtil.js');
 
 var STATIONS = {
     'seattle': 9447130,
@@ -29,18 +30,88 @@ TidePooler.prototype.getSupportedCitiesResponse = function () {
 
     var speechOutput = new Speech();
     speechOutput.text = "Currently, I know tide information for these coastal cities: " + getAllStationsText()
-                        + whichCityPrompt
+        + whichCityPrompt
 
     var repromptOutput = new Speech();
     repromptOutput.text = whichCityPrompt;
-    
+
     suppCitiesSpeechResp.speechOutput = speechOutput;
     suppCitiesSpeechResp.repromptOutput = repromptOutput;
 
     return suppCitiesSpeechResp;
 };
 
+TidePooler.prototype.handleCityDialogRequest = function (body) {
+    var cityDialogSpeechResponse = new SpeechResponse();
+    var intent = body.request.intent;
+    var session = body.session;
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+    var cityStation = getCityStationFromIntent(intent, false);
+    if (cityStation.error) {
+        var repromptText = "Currently, I know tide information for these coastal cities: " + getAllStationsText()
+            + "Which city would you like tide information for?";
+        repromptOutput.text = repromptText;
+        speechOutput.text = cityStation.city ? "I'm sorry, I don't have any data for " + cityStation.city + ". " + repromptText : repromptText;
+    } else {
+        if (session.attributes.date) {
+            speechOutput = getFinalTideResponse(cityStation.city, session.attributes.date);
+            repromptOutput = null;
+        } else {
+            cityDialogSpeechResponse.sessionAttributes = { "city": cityStation };
+            speechOutput.text = "For which date?";
+            repromptOutput.text = "For which date would you like tide information for " + cityStation.city + "?";
+        }
+    }
+
+    cityDialogSpeechResponse.speechOutput = speechOutput;
+    cityDialogSpeechResponse.repromptOutput = repromptOutput;
+
+    return cityDialogSpeechResponse;
+};
+
+TidePooler.prototype.handleDateDialogRequest = function (body) {
+    var dateDialogSpeechResponse = new SpeechResponse();
+    var intent = body.request.intent;
+    var session = body.session;
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+    var date = getDateFromIntent(intent);
+
+    if (!date) {
+        repromptOutput.text = "Please try again saying a day of the week, for example, Saturday. "
+            + "For which date would you like tide information?";
+        speechOutput.text = "I'm sorry, I didn't understand that date. " + repromptText;
+    } else {
+        if (session.attributes.city) {
+            speechOutput = getFinalTideResponse(session.attributes.city, date);
+            repromptOutput = null;
+        } else {
+            cityDialogSpeechResponse.sessionAttributes = { "date": date };
+            speechOutput.text = "For which city would you like tide information for " + date.displayDate + "?";
+            repromptOutput.text = "For which city?";
+        }
+    }
+
+
+    dateDialogSpeechResponse.speechOutput = speechOutput;
+    dateDialogSpeechResponse.repromptOutput = repromptOutput;
+    return dateDialogSpeechResponse;
+};
+
+TidePooler.prototype.handleNoSlotDialogRequest = function (body) {
+
+};
+
 //private function start
+
+function getFinalTideResponse(city, date) {
+    //do the api call to external service i.e. National Oceanic tide service
+    var finalSpeechOutput = new Speech();
+    finalSpeechOutput.text = date.displayDate + " in " + city + ", the first high tide will be around "
+
+    return finalSpeechOutput;
+}
 
 function getAllStationsText() {
     var stationList = '';
@@ -117,6 +188,36 @@ function getCityDialogResponse(intent, session, response) {
 
 function getFinalTideResponse(cityStation, date, response) {
 
+}
+
+function getDateFromIntent(intent) {
+
+    var dateSlot = intent.slots.Date;
+    // slots can be missing, or slots can be provided but with empty value.
+    // must test for both.
+    if (!dateSlot || !dateSlot.value) {
+        // default to today
+        return {
+            displayDate: "Today",
+            requestDateParam: "date=today"
+        }
+    } else {
+
+        var date = new Date(dateSlot.value);
+
+        // format the request date like YYYYMMDD
+        var month = (date.getMonth() + 1);
+        month = month < 10 ? '0' + month : month;
+        var dayOfMonth = date.getDate();
+        dayOfMonth = dayOfMonth < 10 ? '0' + dayOfMonth : dayOfMonth;
+        var requestDay = "begin_date=" + date.getFullYear() + month + dayOfMonth
+            + "&range=24";
+
+        return {
+            displayDate: alexaDateUtil.getFormattedDate(date),
+            requestDateParam: requestDay
+        }
+    }
 }
 //private function end
 

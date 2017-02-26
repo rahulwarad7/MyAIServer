@@ -82,10 +82,13 @@ function HanldeIntentRequest(body) {
         case "GetWeatherForecast":
             var speechOutput = new Speech();
             speechOutput.text = "Today in Boston: Fair, the temperature is 37 degree fahrenheit.";
-            intentResponseInfo = AlexaSkillUtil.tell(speechOutput, body.session);            
+            intentResponseInfo = AlexaSkillUtil.tell(speechOutput, body.session);
             break;
         case "TDSupportedCities":
             intentResponseInfo = supportedCitiesIntent(body);
+            break;
+        case "TDDialogTideIntent":
+            intentResponseInfo = dialogTideIntent(body);
             break;
         default:
             logging('no supporting intent implemented. IntentName: ' + intentName);
@@ -117,13 +120,56 @@ function checkAppId(currentReqAppId) {
 // private intents functions start
 
 function supportedCitiesIntent(body) {
-    var suppCitesSpeechResponse = TidePooler.getSupportedCitiesResponse();
+    var poolerSpeechResponse = TidePooler.getSupportedCitiesResponse();
     var supCitiesResponseInfo = AlexaSkillUtil.ask(
-        suppCitesSpeechResponse.speechOutput,
-        suppCitesSpeechResponse.repromptOutput,
+        poolerSpeechResponse.speechOutput,
+        poolerSpeechResponse.repromptOutput,
         body.session
     );
     return supCitiesResponseInfo;
+}
+
+function dialogTideIntent(body) {
+    var dialogTideSpeechResponse;
+    var intent = body.request.intent;
+    var citySlot = intent.slots.City;
+    var dateSlot = intent.slots.Date;
+    if (citySlot && citySlot.value) {
+        var poolerCitySpeechResponse = TidePooler.handleCityDialogRequest(body);
+        if (poolerCitySpeechResponse.repromptOutput) {
+            //tell the final tide status
+            dialogTideSpeechResponse = AlexaSkillUtil.tellWithCard(
+                poolerCitySpeechResponse.speechOutput,
+                body.session,
+                { "title": "TidePooler", "content": poolerCitySpeechResponse.speechOutput }
+            );
+        } else {
+            //ask for date 
+            dialogTideSpeechResponse = AlexaSkillUtil.ask(
+                poolerCitySpeechResponse.speechOutput,
+                poolerCitySpeechResponse.repromptOutput,
+                { "attributes": poolerCitySpeechResponse.sessionAttributes });
+        }
+    } else if (dateSlot && dateSlot.value) {
+        var poolerDateSpeechResponse = TidePooler.handleDateDialogRequest(body);
+        if (poolerDateSpeechResponse.repromptOutput) {
+            //tell the final tide status
+            dialogTideSpeechResponse = AlexaSkillUtil.tellWithCard(
+                poolerDateSpeechResponse.speechOutput,
+                body.session,
+                { "title": "TidePooler", "content": poolerDateSpeechResponse.speechOutput }
+            );
+        } else {
+            //ask for city 
+            dialogTideSpeechResponse = AlexaSkillUtil.ask(
+                poolerDateSpeechResponse.speechOutput,
+                poolerDateSpeechResponse.repromptOutput,
+                { "attributes": poolerDateSpeechResponse.sessionAttributes });
+        }
+    } else {
+        dialogTideSpeechResponse = TidePooler.handleNoSlotDialogRequest(body);
+    }
+    return dialogTideSpeechResponse;
 }
 // private intents functions end
 
