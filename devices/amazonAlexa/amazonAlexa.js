@@ -150,8 +150,9 @@ function dialogTideIntent(body) {
 function processPoolerSpeechResp(poolerDateSpeechResponse, body) {
     var processedResponse;
     var combinedAttributes = Object.assign(
-                                            poolerDateSpeechResponse.sessionAttributes,
-                                            body.session.attributes);
+        poolerDateSpeechResponse.sessionAttributes ? poolerDateSpeechResponse.sessionAttributes : {},
+        body.session.attributes ? body.session.attributes : {}
+    );
     if (poolerDateSpeechResponse.repromptOutput) {
         //ask for city or date
         processedResponse = AlexaSkillUtil.ask(
