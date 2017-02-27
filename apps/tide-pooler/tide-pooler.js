@@ -100,7 +100,22 @@ TidePooler.prototype.handleDateDialogRequest = function (body) {
 };
 
 TidePooler.prototype.handleNoSlotDialogRequest = function (body) {
+    var dateDialogSpeechResponse = new SpeechResponse();
+    var intent = body.request.intent;
+    var session = body.session;
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
 
+    if (session.attributes.city) {
+        speechOutput.text = "Please try again saying a day of the week, for example, Saturday. ";
+        repromptOutput.text = speechOutput.text;
+        dateDialogSpeechResponse.speechOutput = speechOutput;
+        dateDialogSpeechResponse.repromptOutput = repromptOutput;
+    } else {
+        dateDialogSpeechResponse = getSupportedCitiesResponse();
+    }
+
+    return dateDialogSpeechResponse;
 };
 
 //private function start
@@ -124,7 +139,7 @@ function getAllStationsText() {
 
 function getCityStationFromIntent(intent, assignDefault) {
 
-    var citySlot = intent.slots.City;
+    var citySlot = intent.slots.td_city;
     // slots can be missing, or slots can be provided but with empty value.
     // must test for both.
     if (!citySlot || !citySlot.value) {
@@ -154,40 +169,6 @@ function getCityStationFromIntent(intent, assignDefault) {
             }
         }
     }
-}
-
-function getCityDialogResponse(intent, session, response) {
-    var cityDialogSpeechResp = new Response();
-    var cityStation = TidePooler.getCityStationFromIntent(intent, false),
-        repromptText,
-        speechOutput;
-    if (cityStation.error) {
-        repromptText = "Currently, I know tide information for these coastal cities: " + getAllStationsText()
-            + "Which city would you like tide information for?";
-        // if we received a value for the incorrect city, repeat it to the user, otherwise we received an empty slot
-        cityDialogSpeechResp.speech.text = cityStation.city ?
-            "I'm sorry, I don't have any data for " + cityStation.city + ". " + repromptText :
-            repromptText;
-        cityDialogSpeechResp.speech.type = 'PlainText';
-
-    } else {
-        // if we don't have a date yet, go to date. If we have a date, we perform the final request
-        if (session.attributes.date) {
-            getFinalTideResponse(cityStation, session.attributes.date, response);
-        } else {
-            // set city in session and prompt for date
-            cityDialogSpeechResp.sessionAttributes.city = cityStation;
-            cityDialogSpeechResp.speech.text = "For which date?";
-            cityDialogSpeechResp.speech.type = 'PlainText';
-            cityDialogSpeechResp.repromptSpeech.text = "For which date would you like tide information for " + cityStation.city + "?";
-            cityDialogSpeechResp.repromptSpeech.type = 'PlainText';
-        }
-    }
-    return cityDialogSpeechResp;
-}
-
-function getFinalTideResponse(cityStation, date, response) {
-
 }
 
 function getDateFromIntent(intent) {
