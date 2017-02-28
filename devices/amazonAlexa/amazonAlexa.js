@@ -163,9 +163,10 @@ function processPoolerSpeechResp(poolerDateSpeechResponse, body) {
             { "attributes": combinedAttributes });
     } else {
         //tell the final tide status
-        processedResponse = AlexaSkillUtil.tell(
+        processedResponse = AlexaSkillUtil.tellWithCard(
             poolerDateSpeechResponse.speechOutput,
-            { "attributes": combinedAttributes }
+            { "attributes": combinedAttributes },
+            { "title": "TidePooler", "content": poolerDateSpeechResponse.speechOutput.text }
         );
     }
     return processedResponse;
