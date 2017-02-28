@@ -78,6 +78,7 @@ function HandleSessionEndedRequest(body) {
 function HanldeIntentRequest(body) {
     var intentResponseInfo;
     var intentName = body.request.intent.name;
+    logging("intent start: " + intentName);
     switch (intentName) {
         case "GetWeatherForecast":
             var speechOutput = new Speech();
@@ -95,6 +96,7 @@ function HanldeIntentRequest(body) {
             throw 'Unsupported intent: ' + intentName;
             break;
     }
+    logging("intent end: " + intentName);
     return intentResponseInfo;
 }
 
