@@ -96,7 +96,7 @@ function HanldeIntentRequest(body) {
             throw 'Unsupported intent: ' + intentName;
             break;
     }
-    logging("intent end: " + intentName);
+    logging("intent start: " + intentName);
     return intentResponseInfo;
 }
 
@@ -163,10 +163,9 @@ function processPoolerSpeechResp(poolerDateSpeechResponse, body) {
             { "attributes": combinedAttributes });
     } else {
         //tell the final tide status
-        processedResponse = AlexaSkillUtil.tellWithCard(
+        processedResponse = AlexaSkillUtil.tell(
             poolerDateSpeechResponse.speechOutput,
-            { "attributes": {} },
-            { "title": "TidePooler", "content": poolerDateSpeechResponse.speechOutput }
+            { "attributes": combinedAttributes }
         );
     }
     return processedResponse;
