@@ -33,7 +33,6 @@ appRouter.route('/ai/voice/amzn-alexa')
         var body = req.body;
         var context = {};
         var allstate = new AllstateAlexa();
-        allstate.setDebugMode(true);
         var response = allstate.execute(body, context);
 
         res.setHeader("Content-Type", "application/json");

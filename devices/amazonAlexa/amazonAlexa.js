@@ -104,7 +104,7 @@ function onSessionStarted(body) {
 }
 
 function logging(data) {
-    if (this._debugMode) {
+    if (true) {
         console.log(data);
     }
 }
