@@ -20,21 +20,21 @@ Allstate.prototype.execute = function (body) {
     }
     switch (source.toUpperCase()) {
         case 'GOOGLE':
-            googleHome.processResponse(body, responseBody)
+            responseBody = googleHome.processResponse(body)
             break;
         case 'FACEBOOK':
             //processFacebookResponse();
             break;
         default:
-            processResponse(body, responseBody)
+            responseBody = processResponse(body)
             break;
     }
     responseBody['context-out'] = responseBody.contextOut;
     return responseBody;
 };
 
-function processResponse(body, responseBody) {
-    googleHome.processResponse(body, responseBody)
+function processResponse(body) {
+   return  googleHome.processResponse(body)
 }
 
 module.exports = new Allstate();
