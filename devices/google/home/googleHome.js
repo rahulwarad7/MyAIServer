@@ -24,6 +24,9 @@ function intentHandlers(body) {
             responseBody.speech = poolerSpeechResponse.speechOutput.text;
             responseBody.displayText = poolerSpeechResponse.speechOutput.text;
             break;
+        case "TDDialogTideIntent":
+            intentResponseInfo = dialogTideIntent(body);
+            break;
         case "HELPINTENT":
         default:
             var message = "You can say hello to me!";
@@ -33,6 +36,26 @@ function intentHandlers(body) {
     }
     return responseBody;    
 };
+
+
+
+function dialogTideIntent(body) {
+    var dialogTideSpeechResponse;
+    var result = body.result;
+    var city = result.parameters.geo-city;
+    var date = result.parameters.date;
+    if (city) {
+        var poolerCitySpeechResponse = TidePooler.handleCityDialogRequest(city, {});
+        dialogTideSpeechResponse = processPoolerSpeechResp(poolerCitySpeechResponse, body);
+    } else if (date) {
+        var poolerDateSpeechResponse = TidePooler.handleDateDialogRequest(date, {});
+        dialogTideSpeechResponse = processPoolerSpeechResp(poolerDateSpeechResponse, body);
+
+    } else {
+        dialogTideSpeechResponse = TidePooler.handleNoSlotDialogRequest(body);
+    }
+    return dialogTideSpeechResponse;
+}
 
 
 module.exports = new GoogleHome();

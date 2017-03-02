@@ -134,17 +134,17 @@ function supportedCitiesIntent(body) {
 function dialogTideIntent(body) {
     var dialogTideSpeechResponse;
     var intent = body.request.intent;
-    var citySlot = intent.slots.td_city;
-    var dateSlot = intent.slots.Date;
-    if (citySlot && citySlot.value) {
-        var poolerCitySpeechResponse = TidePooler.handleCityDialogRequest(body);
+    var citySlotValue = intent.slots.td_city ? intent.slots.td_city.value : null;
+    var dateSlotValue = intent.slots.Date ? intent.slots.Date.value : null;
+    if (citySlotValue) {
+        var poolerCitySpeechResponse = TidePooler.handleCityDialogRequest(citySlotValue, body.session.attributes);
         dialogTideSpeechResponse = processPoolerSpeechResp(poolerCitySpeechResponse, body);
-    } else if (dateSlot && dateSlot.value) {
-        var poolerDateSpeechResponse = TidePooler.handleDateDialogRequest(body);
+    } else if (dateSlotValue) {
+        var poolerDateSpeechResponse = TidePooler.handleDateDialogRequest(dateSlotValue, body.session.attributes);
         dialogTideSpeechResponse = processPoolerSpeechResp(poolerDateSpeechResponse, body);
 
     } else {
-        dialogTideSpeechResponse = TidePooler.handleNoSlotDialogRequest(body);
+        dialogTideSpeechResponse = TidePooler.handleNoSlotDialogRequest(body.session.attributes);
     }
     return dialogTideSpeechResponse;
 }

@@ -41,21 +41,22 @@ TidePooler.prototype.getSupportedCitiesResponse = function () {
     return suppCitiesSpeechResp;
 };
 
-TidePooler.prototype.handleCityDialogRequest = function (body) {
+TidePooler.prototype.handleCityDialogRequest = function (cityValue, sessionAttrs) {
     var cityDialogSpeechResponse = new SpeechResponse();
-    var intent = body.request.intent;
-    var session = body.session;
+    //var intent = body.request.intent;
+    //var cityValue = intent.slots.td_city ? intent.slots.td_city.value : null;
+    //var session = body.session;
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    var cityStation = getCityStationFromIntent(intent, false);
+    var cityStation = getCityStationFromIntent(cityValue, false);
     if (cityStation.error) {
         var repromptText = "Currently, I know tide information for these coastal cities: " + getAllStationsText()
             + "Which city would you like tide information for?";
         repromptOutput.text = repromptText;
         speechOutput.text = cityStation.city ? "I'm sorry, I don't have any data for " + cityStation.city + ". " + repromptText : repromptText;
     } else {
-        if (session.attributes.date) {
-            speechOutput = getFinalTideResponse(cityStation.city, session.attributes.date);
+        if (sessionAttrs.date) {
+            speechOutput = getFinalTideResponse(cityStation.city, sessionAttrs.date);
             repromptOutput = null;
         } else {
             cityDialogSpeechResponse.sessionAttributes = { "city": cityStation };
@@ -70,21 +71,21 @@ TidePooler.prototype.handleCityDialogRequest = function (body) {
     return cityDialogSpeechResponse;
 };
 
-TidePooler.prototype.handleDateDialogRequest = function (body) {
+TidePooler.prototype.handleDateDialogRequest = function (dateValue, sessionAttrs) {
     var dateDialogSpeechResponse = new SpeechResponse();
-    var intent = body.request.intent;
-    var session = body.session;
+    //var intent = body.request.intent;
+    //var session = body.session;
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    var date = getDateFromIntent(intent);
+    var date = getDateFromIntent(dateValue);
 
     if (!date) {
         repromptOutput.text = "Please try again saying a day of the week, for example, Saturday. "
             + "For which date would you like tide information?";
         speechOutput.text = "I'm sorry, I didn't understand that date. " + repromptText;
     } else {
-        if (session.attributes.city) {
-            speechOutput = getFinalTideResponse(session.attributes.city, date);
+        if (sessionAttrs.city) {
+            speechOutput = getFinalTideResponse(sessionAttrs.city, date);
             repromptOutput = null;
         } else {
             cityDialogSpeechResponse.sessionAttributes = { "date": date };
@@ -99,14 +100,14 @@ TidePooler.prototype.handleDateDialogRequest = function (body) {
     return dateDialogSpeechResponse;
 };
 
-TidePooler.prototype.handleNoSlotDialogRequest = function (body) {
+TidePooler.prototype.handleNoSlotDialogRequest = function (sessionAttrs) {
     var dateDialogSpeechResponse = new SpeechResponse();
-    var intent = body.request.intent;
-    var session = body.session;
+    //var intent = body.request.intent;
+    //var session = body.session;
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    if (session.attributes.city) {
+    if (sessionAttrs.city) {
         speechOutput.text = "Please try again saying a day of the week, for example, Saturday. ";
         repromptOutput.text = speechOutput.text;
         dateDialogSpeechResponse.speechOutput = speechOutput;
@@ -137,12 +138,12 @@ function getAllStationsText() {
     return stationList;
 };
 
-function getCityStationFromIntent(intent, assignDefault) {
+function getCityStationFromIntent(cityValue, assignDefault) {
 
-    var citySlot = intent.slots.td_city;
+    //var citySlot = intent.slots.td_city;
     // slots can be missing, or slots can be provided but with empty value.
     // must test for both.
-    if (!citySlot || !citySlot.value) {
+    if (!cityValue) {
         if (!assignDefault) {
             return {
                 error: true
@@ -156,7 +157,7 @@ function getCityStationFromIntent(intent, assignDefault) {
         }
     } else {
         // lookup the city. Sample skill uses well known mapping of a few known cities to station id.
-        var cityName = citySlot.value;
+        var cityName = cityValue;
         if (STATIONS[cityName.toLowerCase()]) {
             return {
                 city: cityName,
@@ -171,12 +172,12 @@ function getCityStationFromIntent(intent, assignDefault) {
     }
 }
 
-function getDateFromIntent(intent) {
+function getDateFromIntent(dateSlotValue) {
 
-    var dateSlot = intent.slots.Date;
+    //var dateSlot = intent.slots.Date;
     // slots can be missing, or slots can be provided but with empty value.
     // must test for both.
-    if (!dateSlot || !dateSlot.value) {
+    if (!dateSlotValue) {
         // default to today
         return {
             displayDate: "Today",
@@ -184,7 +185,7 @@ function getDateFromIntent(intent) {
         }
     } else {
 
-        var date = new Date(dateSlot.value);
+        var date = new Date(dateSlotValue);
 
         // format the request date like YYYYMMDD
         var month = (date.getMonth() + 1);
