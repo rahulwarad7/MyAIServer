@@ -41,6 +41,7 @@ function intentHandlers(body) {
 };
 
 function handleTDCityIntent(body) {
+    //test
     var dialogTideSpeechResponse = {};
     var result = body.result;
     var tdPoolerCntx = result.contexts.find(function (curCntx) { return curCntx.name === "tide-pooler"; });
