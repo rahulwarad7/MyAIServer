@@ -45,13 +45,16 @@ function handleTDCityIntent(body) {
     var result = body.result;
     var tdPoolerCntx = result.contexts.find(function (curCntx) { return curCntx.name === "tide-pooler"; });
     var city;
-    var date;
     var sessionAttrs = { 'date': undefined };
     if (tdPoolerCntx) {
-        city = tdPoolerCntx.parameters['geo-city.original'];
-        date = tdPoolerCntx.parameters['date.original'];
-        city = city.length > 0 ? city : undefined;
-        date = date.length > 0 ? date : undefined;
+        var cityOrg = tdPoolerCntx.parameters['geo-city.original'];
+        var dateOrg = tdPoolerCntx.parameters['date.original'];
+        if(cityOrg && cityOrg.length > 0){
+            city = tdPoolerCntx.parameters['geo-city'];
+        }
+        if(dateOrg && dateOrg.length > 0){
+            sessionAttrs.date = tdPoolerCntx.parameters.date;
+        }
     }
     if (city) {
         var poolerCitySpeechResponse = TidePooler.handleCityDialogRequest(city, sessionAttrs);
