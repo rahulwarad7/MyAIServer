@@ -124,7 +124,7 @@ TidePooler.prototype.handleNoSlotDialogRequest = function (sessionAttrs) {
 function getFinalTideResponse(city, date) {
     //do the api call to external service i.e. National Oceanic tide service
     var finalSpeechOutput = new Speech();
-    finalSpeechOutput.text = date.displayDate + " in " + city.city + ", the first high tide will be around "
+    finalSpeechOutput.text = date.displayDate + " in " + city + ", the first high tide will be around "
 
     return finalSpeechOutput;
 }

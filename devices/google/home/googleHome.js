@@ -30,6 +30,9 @@ function intentHandlers(body) {
         case "TDDIALOG-CITY":
             responseBody = handleTDCityIntent(body);
             break;
+        case "TDDIALOG-DATE":
+            responseBody = handleTDDateIntent(body);
+            break;
         case "HELPINTENT":
         default:
             var message = "You can say hello to me!";
@@ -41,7 +44,6 @@ function intentHandlers(body) {
 };
 
 function handleTDCityIntent(body) {
-    //test
     var dialogTideSpeechResponse = {};
     var result = body.result;
     var tdPoolerCntx = result.contexts.find(function (curCntx) { return curCntx.name === "tide-pooler"; });
@@ -50,10 +52,10 @@ function handleTDCityIntent(body) {
     if (tdPoolerCntx) {
         var cityOrg = tdPoolerCntx.parameters['geo-city.original'];
         var dateOrg = tdPoolerCntx.parameters['date.original'];
-        if(cityOrg && cityOrg.length > 0){
+        if (cityOrg && cityOrg.length > 0) {
             city = tdPoolerCntx.parameters['geo-city'];
         }
-        if(dateOrg && dateOrg.length > 0){
+        if (dateOrg && dateOrg.length > 0) {
             sessionAttrs.date = tdPoolerCntx.parameters.date;
         }
     }
@@ -62,6 +64,32 @@ function handleTDCityIntent(body) {
         dialogTideSpeechResponse.speech = poolerCitySpeechResponse.speechOutput.text;
         dialogTideSpeechResponse.displayText = poolerCitySpeechResponse.speechOutput.text;
     }
+    return dialogTideSpeechResponse;
+}
+
+function handleTDDateIntent(body) {
+    var dialogTideSpeechResponse = {};
+    var result = body.result;
+    var tdPoolerCntx = result.contexts.find(function (curCntx) { return curCntx.name === "tide-pooler"; });
+    var date;
+    var sessionAttrs = { 'city': undefined };
+    if (tdPoolerCntx) {
+        var cityOrg = tdPoolerCntx.parameters['geo-city.original'];
+        var dateOrg = tdPoolerCntx.parameters['date.original'];
+        if (cityOrg && cityOrg.length > 0) {
+            sessionAttrs.city = tdPoolerCntx.parameters['geo-city'];
+        }
+        if (dateOrg && dateOrg.length > 0) {
+            date = tdPoolerCntx.parameters.date;
+        }
+    }
+    if (date) {
+        var poolerCitySpeechResponse = TidePooler.handleDateDialogRequest(date, sessionAttrs);
+        dialogTideSpeechResponse.speech = poolerCitySpeechResponse.speechOutput.text;
+        dialogTideSpeechResponse.displayText = poolerCitySpeechResponse.speechOutput.text;
+    }
+
+
     return dialogTideSpeechResponse;
 }
 

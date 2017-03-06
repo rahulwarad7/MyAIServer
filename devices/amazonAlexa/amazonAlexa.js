@@ -136,11 +136,14 @@ function dialogTideIntent(body) {
     var intent = body.request.intent;
     var citySlotValue = intent.slots.td_city ? intent.slots.td_city.value : null;
     var dateSlotValue = intent.slots.Date ? intent.slots.Date.value : null;
+    var sessionAttrs = {};
     if (citySlotValue) {
-        var poolerCitySpeechResponse = TidePooler.handleCityDialogRequest(citySlotValue, body.session.attributes);
+        sessionAttrs.date = body.session.attributes.date;
+        var poolerCitySpeechResponse = TidePooler.handleCityDialogRequest(citySlotValue, sessionAttrs);
         dialogTideSpeechResponse = processPoolerSpeechResp(poolerCitySpeechResponse, body);
     } else if (dateSlotValue) {
-        var poolerDateSpeechResponse = TidePooler.handleDateDialogRequest(dateSlotValue, body.session.attributes);
+        sessionAttrs.city = body.session.attributes.city.city;
+        var poolerDateSpeechResponse = TidePooler.handleDateDialogRequest(dateSlotValue, sessionAttrs);
         dialogTideSpeechResponse = processPoolerSpeechResp(poolerDateSpeechResponse, body);
 
     } else {
