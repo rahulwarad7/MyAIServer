@@ -47,23 +47,14 @@ function handleTDCityIntent(body) {
     var dialogTideSpeechResponse = {};
     var result = body.result;
     var tdPoolerCntx = result.contexts.find(function (curCntx) { return curCntx.name === "tide-pooler"; });
-    var city;
-    var sessionAttrs = { 'date': undefined };
-    if (tdPoolerCntx) {
-        var cityOrg = tdPoolerCntx.parameters['geo-city.original'];
-        var dateOrg = tdPoolerCntx.parameters['date.original'];
-        if (cityOrg && cityOrg.length > 0) {
-            city = tdPoolerCntx.parameters['geo-city'];
-        }
-        if (dateOrg && dateOrg.length > 0) {
-            sessionAttrs.date = tdPoolerCntx.parameters.date;
-        }
-    }
-    if (city) {
-        var poolerCitySpeechResponse = TidePooler.handleCityDialogRequest(city, sessionAttrs);
+    var sessionAttrs = getTDSessionAttributes(tdPoolerCntx);
+    
+    if (sessionAttrs.city) {
+        var poolerCitySpeechResponse = TidePooler.handleCityDialogRequest(sessionAttrs.city, sessionAttrs);
         dialogTideSpeechResponse.speech = poolerCitySpeechResponse.speechOutput.text;
         dialogTideSpeechResponse.displayText = poolerCitySpeechResponse.speechOutput.text;
     }
+    
     return dialogTideSpeechResponse;
 }
 
@@ -71,26 +62,33 @@ function handleTDDateIntent(body) {
     var dialogTideSpeechResponse = {};
     var result = body.result;
     var tdPoolerCntx = result.contexts.find(function (curCntx) { return curCntx.name === "tide-pooler"; });
-    var date;
-    var sessionAttrs = { 'city': undefined };
-    if (tdPoolerCntx) {
-        var cityOrg = tdPoolerCntx.parameters['geo-city.original'];
-        var dateOrg = tdPoolerCntx.parameters['date.original'];
-        if (cityOrg && cityOrg.length > 0) {
-            sessionAttrs.city = tdPoolerCntx.parameters['geo-city'];
-        }
-        if (dateOrg && dateOrg.length > 0) {
-            date = tdPoolerCntx.parameters.date;
-        }
-    }
-    if (date) {
-        var poolerCitySpeechResponse = TidePooler.handleDateDialogRequest(date, sessionAttrs);
+    var sessionAttrs = getTDSessionAttributes(tdPoolerCntx);
+    
+    if (sessionAttrs.date) {
+        var poolerCitySpeechResponse = TidePooler.handleDateDialogRequest(sessionAttrs.date, sessionAttrs);
         dialogTideSpeechResponse.speech = poolerCitySpeechResponse.speechOutput.text;
         dialogTideSpeechResponse.displayText = poolerCitySpeechResponse.speechOutput.text;
     }
 
 
     return dialogTideSpeechResponse;
+}
+
+function getTDSessionAttributes(contextInfo) {
+    var sessionAttrs = { "city": undefined, "date": undefined };
+    
+    if (contextInfo) {
+        var cityOrg = contextInfo.parameters['geo-city.original'];
+        var dateOrg = contextInfo.parameters['date.original'];
+        if (cityOrg && cityOrg.length > 0) {
+            sessionAttrs.city = contextInfo.parameters['geo-city'];
+        }
+        if (dateOrg && dateOrg.length > 0) {
+            sessionAttrs.date = contextInfo.parameters.date;
+        }
+    }
+
+    return sessionAttrs;
 }
 
 
