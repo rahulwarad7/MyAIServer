@@ -24,8 +24,11 @@ function intentHandlers(body) {
             responseBody.speech = poolerSpeechResponse.speechOutput.text;
             responseBody.displayText = poolerSpeechResponse.speechOutput.text;
             break;
-        case "TDDialogTideIntent":
-            intentResponseInfo = dialogTideIntent(body);
+        case "TDDIALOGTIDEINTENT":
+            responseBody = dialogTideIntent(body);
+            break;
+        case "TDDIALOG-CITY":
+            responseBody = handleTDCityIntent(body);
             break;
         case "HELPINTENT":
         default:
@@ -34,15 +37,35 @@ function intentHandlers(body) {
             responseBody.displayText = message;
             break;
     }
-    return responseBody;    
+    return responseBody;
 };
 
+function handleTDCityIntent(body) {
+    var dialogTideSpeechResponse = {};
+    var result = body.result;
+    var tdPoolerCntx = result.contexts.find(function (curCntx) { return curCntx.name === "tide-pooler"; });
+    var city;
+    var date;
+    var sessionAttrs = { 'date': undefined };
+    if (tdPoolerCntx) {
+        city = tdPoolerCntx.parameters['geo-city.original'];
+        date = tdPoolerCntx.parameters['date.original'];
+        city = city.length > 0 ? city : undefined;
+        date = date.length > 0 ? date : undefined;
+    }
+    if (city) {
+        var poolerCitySpeechResponse = TidePooler.handleCityDialogRequest(city, sessionAttrs);
+        dialogTideSpeechResponse.speech = poolerCitySpeechResponse.speechOutput.text;
+        dialogTideSpeechResponse.displayText = poolerCitySpeechResponse.speechOutput.text;
+    }
+    return dialogTideSpeechResponse;
+}
 
 
 function dialogTideIntent(body) {
     var dialogTideSpeechResponse;
     var result = body.result;
-    var city = result.parameters.geo-city;
+    var city = result.parameters['geo-city'];
     var date = result.parameters.date;
     if (city) {
         var poolerCitySpeechResponse = TidePooler.handleCityDialogRequest(city, {});
@@ -56,6 +79,14 @@ function dialogTideIntent(body) {
     }
     return dialogTideSpeechResponse;
 }
+
+function processPoolerSpeechResp(poolerDateSpeechResponse, body) {
+    var responseInfo;
+
+
+    return responseInfo;
+}
+
 
 
 module.exports = new GoogleHome();
