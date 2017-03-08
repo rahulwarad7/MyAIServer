@@ -6,7 +6,7 @@ var GoogleHome = function () { };
 GoogleHome.prototype.processResponse = function (body) {
     var deferred = q.defer();
     if (body.result && body.result.metadata && body.result.metadata.intentName) {
-        intentHandlers(body, deferred)
+        intentHandlers(body)
             .then(function (responseInfo) {
                 deferred.resolve(responseInfo);
             });
@@ -14,7 +14,8 @@ GoogleHome.prototype.processResponse = function (body) {
     return deferred.promise;
 }
 
-function intentHandlers(body, deferred) {
+function intentHandlers(body) {
+    var deferred = q.defer();
     var intentName = body.result.metadata.intentName;
     var responseBody = {};
     switch (intentName.toUpperCase()) {

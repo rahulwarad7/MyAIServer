@@ -25,7 +25,7 @@ appRouter.route('/ai/voice/api-ai')
         allstateApiAi.execute(body)
             .then(function (responseBody) {
                 res.setHeader("Content-Type", "application/json");
-                res.send(responseBody);
+                res.send(responseBody.data);
             });
     });
 
