@@ -20,7 +20,7 @@ Allstate.prototype.execute = function (body) {
             onSessionStarted(body);
         }
 
-        HandleRequest(body, deferred)
+        HandleRequest(body)
             .then(function (respData) {
                 responseInfo.data = respData;
                 deferred.resolve(responseInfo);
@@ -42,7 +42,8 @@ Allstate.prototype.execute = function (body) {
 //public function end
 
 //private function start
-function HandleRequest(body, deferred) {
+function HandleRequest(body) {
+    var deferred = q.defer();
     var handleRequestRespInfo;
     switch (body.request.type) {
         case 'LaunchRequest':
