@@ -22,9 +22,11 @@ appRouter.route('/ai/voice/api-ai')
         //console.log(JSON.stringify(req.headers));
         //console.log(JSON.stringify(req.body));
         var body = req.body;
-        var responseBody = allstateApiAi.execute(body);
-        res.setHeader("Content-Type", "application/json");
-        res.send(responseBody);
+        allstateApiAi.execute(body)
+            .then(function (responseBody) {
+                res.setHeader("Content-Type", "application/json");
+                res.send(responseBody);
+            });
     });
 
 
@@ -33,8 +35,10 @@ appRouter.route('/ai/voice/amzn-alexa')
         var body = req.body;
         var context = {};
         var allstate = new AllstateAlexa();
-        var response = allstate.execute(body, context);
+        allstate.execute(body, context)
+            .then(function (response) {
+                res.setHeader("Content-Type", "application/json");
+                res.send(response.data);
+            });
 
-        res.setHeader("Content-Type", "application/json");
-        res.send(response.data);
     });

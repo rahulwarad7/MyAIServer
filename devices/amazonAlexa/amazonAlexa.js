@@ -2,18 +2,15 @@ var AlexaSkillUtil = require('./alexaSkillUtil.js');
 var TidePooler = require('./../../apps/tide-pooler/tide-pooler.js');
 var Response = require('./../../shared/data-models/response.js');
 var Speech = require('./../../shared/data-models/speech.js');
+var q = require('q');
 
 var Allstate = function () { };
 
-var debugMode = false;
-
-Allstate.prototype.setDebugMode = function (debugModeValue) {
-    Allstate.prototype.debugMode = debugModeValue;
-};
 
 //public function start
 Allstate.prototype.execute = function (body) {
     var responseInfo = new Response();
+    var deferred = q.defer();
     try {
         checkAppId(body.session.application.applicationId);
         if (!body.session.attributes) {
@@ -22,41 +19,65 @@ Allstate.prototype.execute = function (body) {
         if (body.session.new) {
             onSessionStarted(body);
         }
-        responseInfo.data = HandleRequest(body);
+
+        HandleRequest(body, deferred)
+            .then(function (respData) {
+                responseInfo.data = respData;
+                deferred.resolve(responseInfo);
+            })
+            .catch(function () {
+                logging("Unexpected exception " + error);
+                responseInfo.status = 1;
+                deferred.reject(responseInfo);
+            });
 
     } catch (error) {
         logging("Unexpected exception " + error);
         responseInfo.status = 1;
+        deferred.reject(responseInfo);
     }
-    return responseInfo;
+    return deferred.promise;
 };
 
 //public function end
 
 //private function start
-function HandleRequest(body) {
+function HandleRequest(body, deferred) {
     var handleRequestRespInfo;
     switch (body.request.type) {
         case 'LaunchRequest':
-            handleRequestRespInfo = HandleLaunchRequest(body);
+            HandleLaunchRequest(body, deferred)
+                .then(function (output) {
+                    handleRequestRespInfo = output;
+                    deferred.resolve(handleRequestRespInfo);
+                });
             break;
         case 'SessionEndedRequest':
-            handleRequestRespInfo = HandleSessionEndedRequest(body);
+            HandleSessionEndedRequest(body, deferred)
+                .then(function (output) {
+                    handleRequestRespInfo = output;
+                    deferred.resolve(handleRequestRespInfo);
+                });
             break;
         case 'IntentRequest':
         default:
             logging('dispatch intent: ' + body.request.intent.name);
-            handleRequestRespInfo = HanldeIntentRequest(body);
+            HanldeIntentRequest(body, deferred)
+                .then(function (output) {
+                    handleRequestRespInfo = output;
+                    deferred.resolve(handleRequestRespInfo);
+                });
             break;
     }
-    return handleRequestRespInfo;
+    return deferred.promise;
 }
 
-function HandleLaunchRequest(body) {
+function HandleLaunchRequest(body, deferred) {
     logging("onLaunch requestId: " + body.request.requestId + ", sessionId: " + body.session.sessionId);
-    return handleWelcomeRequest();
+    return handleWelcomeRequest(body, deferred);
 }
-function handleWelcomeRequest(body) {
+
+function handleWelcomeRequest(body, deferred) {
     var speechOutput = new Speech();
     speechOutput.text = "Welcome to Allstate. How can I help?";
 
@@ -66,16 +87,19 @@ function handleWelcomeRequest(body) {
         " provide insurance. " +
         "I can even help you with Road Side Assistance.";
     var welcomeResponseInfo = AlexaSkillUtil.ask(speechOutput, repromptOutput, body.session);
-    return welcomeResponseInfo;
+    deferred.resolve(welcomeResponseInfo);
+    return deferred.promise;
 }
 
-function HandleSessionEndedRequest(body) {
+function HandleSessionEndedRequest(body, deferred) {
     logging("onSessionEnded requestId: " + body.request.requestId
         + ", sessionId: " + body.session.sessionId);
     // any cleanup logic goes here
+    deferred.resolve();
+    return deferred.promise;
 }
 
-function HanldeIntentRequest(body) {
+function HanldeIntentRequest(body, deferred) {
     var intentResponseInfo;
     var intentName = body.request.intent.name;
     logging("intent start: " + intentName);
@@ -84,12 +108,18 @@ function HanldeIntentRequest(body) {
             var speechOutput = new Speech();
             speechOutput.text = "Today in Boston: Fair, the temperature is 37 degree fahrenheit.";
             intentResponseInfo = AlexaSkillUtil.tell(speechOutput, body.session);
+            deferred.resolve(intentResponseInfo);
             break;
         case "TDSupportedCities":
             intentResponseInfo = supportedCitiesIntent(body);
+            deferred.resolve(intentResponseInfo);
             break;
         case "TDDialogTideIntent":
-            intentResponseInfo = dialogTideIntent(body);
+            dialogTideIntent(body, deferred)
+                .then(function (output) {
+                    intentResponseInfo = output;
+                    deferred.resolve(intentResponseInfo);
+                });
             break;
         default:
             logging('no supporting intent implemented. IntentName: ' + intentName);
@@ -97,7 +127,7 @@ function HanldeIntentRequest(body) {
             break;
     }
     logging("intent start: " + intentName);
-    return intentResponseInfo;
+    return deferred.promise;
 }
 
 function onSessionStarted(body) {
@@ -106,7 +136,7 @@ function onSessionStarted(body) {
 }
 
 function logging(data) {
-    if (true) {
+    if (false) {
         console.log(data);
     }
 }
@@ -131,7 +161,7 @@ function supportedCitiesIntent(body) {
     return supCitiesResponseInfo;
 }
 
-function dialogTideIntent(body) {
+function dialogTideIntent(body, deferred) {
     var dialogTideSpeechResponse;
     var intent = body.request.intent;
     var citySlotValue = intent.slots.td_city ? intent.slots.td_city.value : null;
@@ -139,17 +169,26 @@ function dialogTideIntent(body) {
     var sessionAttrs = {};
     if (citySlotValue) {
         sessionAttrs.date = body.session.attributes.date;
-        var poolerCitySpeechResponse = TidePooler.handleCityDialogRequest(citySlotValue, sessionAttrs);
-        dialogTideSpeechResponse = processPoolerSpeechResp(poolerCitySpeechResponse, body);
+        TidePooler.handleCityDialogRequest(citySlotValue, sessionAttrs)
+            .then(function (poolerCitySpeechResponse) {
+                dialogTideSpeechResponse = processPoolerSpeechResp(poolerCitySpeechResponse, body);
+                deferred.resolve(dialogTideSpeechResponse);
+            });
     } else if (dateSlotValue) {
         sessionAttrs.city = body.session.attributes.city.city;
-        var poolerDateSpeechResponse = TidePooler.handleDateDialogRequest(dateSlotValue, sessionAttrs);
-        dialogTideSpeechResponse = processPoolerSpeechResp(poolerDateSpeechResponse, body);
-
+        TidePooler.handleDateDialogRequest(dateSlotValue, sessionAttrs)
+            .then(function (poolerDateSpeechResponse) {
+                dialogTideSpeechResponse = processPoolerSpeechResp(poolerDateSpeechResponse, body);
+                deferred.resolve(dialogTideSpeechResponse);
+            });
     } else {
-        dialogTideSpeechResponse = TidePooler.handleNoSlotDialogRequest(body.session.attributes);
+        TidePooler.handleNoSlotDialogRequest(body.session.attributes)
+            .then(function (poolerNoSlotSpeechResponse) {
+                dialogTideSpeechResponse = poolerNoSlotSpeechResponse;
+                deferred.resolve(dialogTideSpeechResponse);
+            });
     }
-    return dialogTideSpeechResponse;
+    return deferred.promise;
 }
 
 function processPoolerSpeechResp(poolerDateSpeechResponse, body) {

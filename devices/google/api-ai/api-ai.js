@@ -1,4 +1,5 @@
 var googleHome = require('./../home/googleHome.js');
+var q = require('q');
 
 
 var Response = function () {
@@ -13,6 +14,7 @@ var Response = function () {
 var Allstate = function () { };
 
 Allstate.prototype.execute = function (body) {
+    var deferred = q.defer();
     var source = '';
     var responseBody = new Response();
     if (body.originalRequest && body.originalRequest.source) {
@@ -20,21 +22,32 @@ Allstate.prototype.execute = function (body) {
     }
     switch (source.toUpperCase()) {
         case 'GOOGLE':
-            responseBody = googleHome.processResponse(body)
+            googleHome.processResponse(body)
+                .then(function (respData) {
+                    responseBody.data = respData;
+                    deferred.resolve(responseBody);
+                }).catch(function(error){
+                    responseBody.status = 1;
+                    deferred.reject(responseBody);
+                });
             break;
         case 'FACEBOOK':
             //processFacebookResponse();
             break;
         default:
-            responseBody = processResponse(body)
+            googleHome.processResponse(body)
+                .then(function (respData) {
+                    responseBody.data = respData;
+                    deferred.resolve(responseBody);
+                }).catch(function(error){
+                    responseBody.status = 1;
+                    deferred.reject(responseBody);
+                });
             break;
     }
-    responseBody['context-out'] = responseBody.contextOut;
-    return responseBody;
+    return deferred.promise;
 };
 
-function processResponse(body) {
-   return  googleHome.processResponse(body)
-}
+
 
 module.exports = new Allstate();

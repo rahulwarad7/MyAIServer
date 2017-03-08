@@ -1,16 +1,20 @@
 var TidePooler = require('./../../../apps/tide-pooler/tide-pooler.js');
+var q = require('q');
 
 var GoogleHome = function () { };
 
 GoogleHome.prototype.processResponse = function (body) {
-    var responseInfo;
+    var deferred = q.defer();
     if (body.result && body.result.metadata && body.result.metadata.intentName) {
-        responseInfo = intentHandlers(body);
+        intentHandlers(body, deferred)
+            .then(function (responseInfo) {
+                deferred.resolve(responseInfo);
+            });
     }
-    return responseInfo;
+    return deferred.promise;
 }
 
-function intentHandlers(body) {
+function intentHandlers(body, deferred) {
     var intentName = body.result.metadata.intentName;
     var responseBody = {};
     switch (intentName.toUpperCase()) {
@@ -18,65 +22,83 @@ function intentHandlers(body) {
             var message = "Today in Boston: Fair, the temperature is 37 degree fahrenheit.";
             responseBody.speech = message;
             responseBody.displayText = message;
+            deferred.resolve(responseBody);
             break;
         case "TDSUPPORTEDCITIES":
             var poolerSpeechResponse = TidePooler.getSupportedCitiesResponse();
             responseBody.speech = poolerSpeechResponse.speechOutput.text;
             responseBody.displayText = poolerSpeechResponse.speechOutput.text;
+            deferred.resolve(responseBody);
             break;
         case "TDDIALOGTIDEINTENT":
-            responseBody = dialogTideIntent(body);
+            dialogTideIntent(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
             break;
         case "TDDIALOG-CITY":
-            responseBody = handleTDCityIntent(body);
+            handleTDCityIntent(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
             break;
         case "TDDIALOG-DATE":
-            responseBody = handleTDDateIntent(body);
+            handleTDDateIntent(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
             break;
         case "HELPINTENT":
         default:
             var message = "You can say hello to me!";
             responseBody.speech = message;
             responseBody.displayText = message;
+            deferred.resolve(responseBody);
             break;
     }
-    return responseBody;
+    return deferred.promise;
 };
 
-function handleTDCityIntent(body) {
+function handleTDCityIntent(body, deferred) {
     var dialogTideSpeechResponse = {};
     var result = body.result;
     var tdPoolerCntx = result.contexts.find(function (curCntx) { return curCntx.name === "tide-pooler"; });
     var sessionAttrs = getTDSessionAttributes(tdPoolerCntx);
-    
+
     if (sessionAttrs.city) {
-        var poolerCitySpeechResponse = TidePooler.handleCityDialogRequest(sessionAttrs.city, sessionAttrs);
-        dialogTideSpeechResponse.speech = poolerCitySpeechResponse.speechOutput.text;
-        dialogTideSpeechResponse.displayText = poolerCitySpeechResponse.speechOutput.text;
+        TidePooler.handleCityDialogRequest(sessionAttrs.city, sessionAttrs)
+            .then(function (poolerCitySpeechResponse) {
+                dialogTideSpeechResponse.speech = poolerCitySpeechResponse.speechOutput.text;
+                dialogTideSpeechResponse.displayText = poolerCitySpeechResponse.speechOutput.text;
+                deferred.resolve(dialogTideSpeechResponse);
+            });
     }
-    
+
     return dialogTideSpeechResponse;
 }
 
-function handleTDDateIntent(body) {
+function handleTDDateIntent(body, deferred) {
     var dialogTideSpeechResponse = {};
     var result = body.result;
     var tdPoolerCntx = result.contexts.find(function (curCntx) { return curCntx.name === "tide-pooler"; });
     var sessionAttrs = getTDSessionAttributes(tdPoolerCntx);
-    
+
     if (sessionAttrs.date) {
-        var poolerCitySpeechResponse = TidePooler.handleDateDialogRequest(sessionAttrs.date, sessionAttrs);
-        dialogTideSpeechResponse.speech = poolerCitySpeechResponse.speechOutput.text;
-        dialogTideSpeechResponse.displayText = poolerCitySpeechResponse.speechOutput.text;
+        TidePooler.handleDateDialogRequest(sessionAttrs.date, sessionAttrs)
+            .then(function (poolerDateSpeechResponse) {
+                dialogTideSpeechResponse.speech = poolerDateSpeechResponse.speechOutput.text;
+                dialogTideSpeechResponse.displayText = poolerDateSpeechResponse.speechOutput.text;
+                deferred.resolve(dialogTideSpeechResponse);
+            });
     }
 
 
-    return dialogTideSpeechResponse;
+    return deferred.promise;
 }
 
 function getTDSessionAttributes(contextInfo) {
     var sessionAttrs = { "city": undefined, "date": undefined };
-    
+
     if (contextInfo) {
         var cityOrg = contextInfo.parameters['geo-city.original'];
         var dateOrg = contextInfo.parameters['date.original'];
@@ -92,22 +114,31 @@ function getTDSessionAttributes(contextInfo) {
 }
 
 
-function dialogTideIntent(body) {
+function dialogTideIntent(body, deferred) {
     var dialogTideSpeechResponse;
     var result = body.result;
     var city = result.parameters['geo-city'];
     var date = result.parameters.date;
     if (city) {
-        var poolerCitySpeechResponse = TidePooler.handleCityDialogRequest(city, {});
-        dialogTideSpeechResponse = processPoolerSpeechResp(poolerCitySpeechResponse, body);
+        TidePooler.handleCityDialogRequest(city, {})
+            .then(function (poolerCitySpeechResponse) {
+                dialogTideSpeechResponse = processPoolerSpeechResp(poolerCitySpeechResponse, body);
+                deferred.resolve(dialogTideSpeechResponse);
+            });
     } else if (date) {
-        var poolerDateSpeechResponse = TidePooler.handleDateDialogRequest(date, {});
-        dialogTideSpeechResponse = processPoolerSpeechResp(poolerDateSpeechResponse, body);
+        TidePooler.handleDateDialogRequest(date, {})
+            .then(function (poolerDateSpeechResponse) {
+                dialogTideSpeechResponse = processPoolerSpeechResp(poolerDateSpeechResponse, body);
+                deferred.resolve(dialogTideSpeechResponse);
+            });
 
     } else {
-        dialogTideSpeechResponse = TidePooler.handleNoSlotDialogRequest(body);
+        TidePooler.handleNoSlotDialogRequest(body)
+            .then(function (noSlotSpeechResponse) {
+                deferred.resolve(noSlotSpeechResponse);
+            });
     }
-    return dialogTideSpeechResponse;
+    return deferred.promise;
 }
 
 function processPoolerSpeechResp(poolerDateSpeechResponse, body) {
