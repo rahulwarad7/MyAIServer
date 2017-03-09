@@ -1,4 +1,5 @@
 var TidePooler = require('./../../../apps/tide-pooler/tide-pooler.js');
+var aos = require('./../../../apps/aos/aos.js');
 var q = require('q');
 
 var GoogleHome = function () { };
@@ -19,6 +20,16 @@ function intentHandlers(body) {
     var intentName = body.result.metadata.intentName;
     var responseBody = {};
     switch (intentName.toUpperCase()) {
+        case "AGENT-FIND":
+            handleAgentFindIntent(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AGENT-FIND-BYZIP":
+            break;
+        case "AGENT-FIND-BYCURRENTLOC":
+            break;
         case "WEATHERFORECAST":
             var message = "Today in Boston: Fair, the temperature is 37 degree fahrenheit.";
             responseBody.speech = message;
@@ -60,6 +71,41 @@ function intentHandlers(body) {
     return deferred.promise;
 };
 
+
+//#region Agent
+
+function handleAgentFindIntent(body, deferred) {
+    var agentFindSpeechResp = {};
+    var result = body.result;
+    var agFindCntx = result.contexts.find(function (curCntx) { return curCntx.name === "agent"; });
+    var sessionAttrs = getAgentSessionAttributes(agFindCntx);
+
+    aos.handleAgentFindRequest(sessionAttrs)
+        .then(function (agentFindSpeechResponse) {
+            agentFindSpeechResp.speech = agentFindSpeechResponse.speechOutput.text;
+            agentFindSpeechResp.displayText = agentFindSpeechResponse.speechOutput.text;
+            deferred.resolve(agentFindSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+function getAgentSessionAttributes(contextInfo) {
+    var sessionAttrs = { "zip": undefined, "agents": [] };
+    if (contextInfo) {
+        var zip = contextInfo.parameters["zip.original"];
+        if (zip && zip.length > 0) {
+            sessionAttrs.zip = contextInfo.parameters["zip"];
+        }
+    }
+
+    return sessionAttrs;
+}
+
+//#endregion
+
+
+//#region Tidepooler
 function handleTDCityIntent(body, deferred) {
     var dialogTideSpeechResponse = {};
     var result = body.result;
@@ -75,9 +121,8 @@ function handleTDCityIntent(body, deferred) {
             });
     }
 
-    return dialogTideSpeechResponse;
+    return deferred.promise;
 }
-
 function handleTDDateIntent(body, deferred) {
     var dialogTideSpeechResponse = {};
     var result = body.result;
@@ -148,6 +193,8 @@ function processPoolerSpeechResp(poolerDateSpeechResponse, body) {
 
     return responseInfo;
 }
+//#endregion
+
 
 
 
