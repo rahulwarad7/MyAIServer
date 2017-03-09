@@ -1,0 +1,68 @@
+{
+  "id": "29277cfd-529b-41c5-ae73-4ba2e43e9ec2",
+  "timestamp": "2017-03-06T17:41:21.017Z",
+  "lang": "en",
+  "result": {
+    "source": "agent",
+    "resolvedQuery": "tomorrow",
+    "action": "tidepooler.dialog.date",
+    "actionIncomplete": false,
+    "parameters": {
+      "date": "2017-03-07"
+    },
+    "contexts": [
+      {
+        "name": "tide-pooler",
+        "parameters": {
+          "date": "2017-03-07",
+          "geo-city": "Boston",
+          "date.original": "tomorrow",
+          "geo-city.original": "boston"
+        },
+        "lifespan": 5
+      },
+      {
+        "name": "td-city",
+        "parameters": {
+          "date": "2017-03-07",
+          "geo-city": "Boston",
+          "date.original": "tomorrow",
+          "geo-city.original": "boston"
+        },
+        "lifespan": 5
+      },
+      {
+        "name": "td-date",
+        "parameters": {
+          "date": "2017-03-07",
+          "geo-city": "Boston",
+          "date.original": "tomorrow",
+          "geo-city.original": "boston"
+        },
+        "lifespan": 4
+      }
+    ],
+    "metadata": {
+      "intentId": "81369fef-e2ca-478c-a817-cb969fd77ece",
+      "webhookUsed": "true",
+      "webhookForSlotFillingUsed": "false",
+      "intentName": "TDDialog-Date"
+    },
+    "fulfillment": {
+      "speech": "You can say hello to me!",
+      "displayText": "You can say hello to me!",
+      "messages": [
+        {
+          "type": 0,
+          "speech": "You can say hello to me!"
+        }
+      ]
+    },
+    "score": 1
+  },
+  "status": {
+    "code": 200,
+    "errorType": "success"
+  },
+  "sessionId": "61c5fa44-e729-47dd-aead-ca2f78b00eb9"
+}

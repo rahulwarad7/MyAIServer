@@ -1,0 +1,35 @@
+{
+  "session": {
+    "sessionId": "SessionId.baf372fe-b997-427a-b3f6-858432f28219",
+    "application": {
+      "applicationId": "amzn1.ask.skill.1cf6d2e2-8f52-4e41-b540-d6328404d0a4"
+    },
+    "attributes": {},
+    "user": {
+      "userId": "amzn1.ask.account.AGWE2MUA2KEMHOV3WQPDRXM3CWQXFGEKYTYFWP5SXDG75K4BXCI6VUGDDTHRQA5PZKQUGEW5MD43WKMTW24ZI2Y6FMZMNHLH6TUD3FP3NMQ3APAL7SWDLWU7AIQVMQNBG6PNRGATXO64D25ZFMWRQI75MSYBILHMDN7FAOX7LPT5M23XZD77N5WHRCTKIJRUWTP2TR5T5GR4EXI"
+    },
+    "new": true
+  },
+  "request": {
+    "type": "IntentRequest",
+    "requestId": "EdwRequestId.271b39fc-f9d4-41f7-b50d-f72d46b55140",
+    "locale": "en-US",
+    "timestamp": "2017-02-27T18:01:06Z",
+    "intent": {
+      "name": "TDDialogTideIntent",
+      "slots": {
+        "td_city": {
+          "name": "td_city",
+          "value": "Boston"
+        },
+        "td_state": {
+          "name": "td_state"
+        },
+        "Date": {
+          "name": "Date"
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}
