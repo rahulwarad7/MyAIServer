@@ -27,6 +27,10 @@ function intentHandlers(body) {
                 });
             break;
         case "AGENT-FIND-BYZIP":
+            handleAgentFindByZip(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
             break;
         case "AGENT-FIND-BYCURRENTLOC":
             break;
@@ -73,6 +77,23 @@ function intentHandlers(body) {
 
 
 //#region Agent
+
+function handleAgentFindByZip(body, deferred) {
+    var agentFindSpeechResp = {};
+    var result = body.result;
+    var agFindCntx = result.contexts.find(function (curCntx) { return curCntx.name === "agent"; });
+    var sessionAttrs = getAgentSessionAttributes(agFindCntx);
+
+    if (sessionAttrs.zip) {
+        aos.handleAgentFindByZipIntent(sessionAttrs)
+            .then(function (agentFindSpeechResponse) {
+                agentFindSpeechResp.speech = agentFindSpeechResponse.speechOutput.text;
+                agentFindSpeechResp.displayText = agentFindSpeechResponse.speechOutput.text;
+                deferred.resolve(agentFindSpeechResp);
+            });
+    }
+    return deferred.promise;
+}
 
 function handleAgentFindIntent(body, deferred) {
     var agentFindSpeechResp = {};

@@ -19,7 +19,7 @@ AOS.prototype.handleAgentFindRequest = function (sessionAttrs) {
     var repromptOutput = new Speech();
 
     if (sessionAttrs.zip) {
-        getFinalAgentFindResponse(zip)
+        getFinalAgentFindResponse(sessionAttrs.zip)
             .then(function (agentSpeechOutput) {
                 agentFindSpeechResp.speechOutput = agentSpeechOutput;
                 agentFindSpeechResp.repromptOutput = null;
@@ -36,9 +36,30 @@ AOS.prototype.handleAgentFindRequest = function (sessionAttrs) {
     return deferred.promise;
 };
 
+AOS.prototype.handleAgentFindByZipIntent = function (sessionAttrs) {
+    var deferred = q.defer();
+    var agentFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+
+    getFinalAgentFindResponse(sessionAttrs.zip)
+        .then(function (agentSpeechOutput) {
+            agentFindSpeechResp.speechOutput = agentSpeechOutput;
+            agentFindSpeechResp.repromptOutput = null;
+            deferred.resolve(agentFindSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
 function getFinalAgentFindResponse(zip) {
+    var deferred = q.defer();
     var finalSpeechOutput = new Speech();
-    return finalSpeechOutput;
+    finalSpeechOutput.text = "your agents are 13413.";
+
+    deferred.resolve(finalSpeechOutput);
+    return deferred.promise;
 };
 
 module.exports = new AOS();
