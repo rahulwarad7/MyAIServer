@@ -1,8 +1,11 @@
+
+var q = require('q');
+
 var AlexaSkillUtil = require('./alexaSkillUtil.js');
 var TidePooler = require('./../../apps/tide-pooler/tide-pooler.js');
 var Response = require('./../../shared/data-models/response.js');
 var Speech = require('./../../shared/data-models/speech.js');
-var q = require('q');
+var aos = require('./../../apps/aos/aos.js');
 
 var Allstate = function () { };
 
@@ -122,6 +125,13 @@ function HanldeIntentRequest(body, deferred) {
                     deferred.resolve(intentResponseInfo);
                 });
             break;
+        case "AgentFind":
+            handleAgentFindIntent(body, deferred)
+                .then(function (output) {
+                    intentResponseInfo = output;
+                    deferred.resolve(intentResponseInfo);
+                });
+            break;
         default:
             logging('no supporting intent implemented. IntentName: ' + intentName);
             throw 'Unsupported intent: ' + intentName;
@@ -213,6 +223,45 @@ function processPoolerSpeechResp(poolerDateSpeechResponse, body) {
         );
     }
     return processedResponse;
+}
+
+function handleAgentFindIntent(body, deferred) {
+    var findAgentSpeechResponse;
+    var intent = body.request.intent;
+    var zipValue = intent.slots.agent_zip ? intent.slots.agent_zip.value : undefined;
+    var sessionAttrs = { "zip": zipValue, "agents": [] };;
+
+    aos.handleAgentFindRequest(sessionAttrs)
+        .then(function (handleAgentFindResponse) {
+            findAgentSpeechResponse = proessFindAgentSpeechResp(handleAgentFindResponse, body);
+            deferred.resolve(findAgentSpeechResponse);
+        });
+
+    return deferred.promise;
+}
+
+function proessFindAgentSpeechResp(handleAgentFindResponse, body) {
+    var processedResponse;
+    var combinedAttributes = Object.assign(
+        handleAgentFindResponse.sessionAttributes ? handleAgentFindResponse.sessionAttributes : {},
+        body.session.attributes ? body.session.attributes : {}
+    );
+    if (handleAgentFindResponse.repromptOutput) {
+        //ask for zip
+        processedResponse = AlexaSkillUtil.ask(
+            handleAgentFindResponse.speechOutput,
+            handleAgentFindResponse.repromptOutput,
+            { "attributes": combinedAttributes });
+    } else {
+        //tell the final agent status
+        processedResponse = AlexaSkillUtil.tellWithCard(
+            handleAgentFindResponse.speechOutput,
+            { "attributes": combinedAttributes },
+            { "title": "Find Agent", "content": handleAgentFindResponse.speechOutput.text }
+        );
+    }
+    return processedResponse;
+
 }
 // private intents functions end
 

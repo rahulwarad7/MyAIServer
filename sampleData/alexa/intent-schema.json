@@ -1,0 +1,66 @@
+{
+    "intents": [
+        {
+            "intent": "GetWeatherForecast",
+            "slots": [
+                {
+                    "name": "wf_city",
+                    "type": "AMAZON.AT_CITY"
+                }
+            ]
+        },
+        {
+            "intent": "TDDialogTideIntent",
+            "slots": [
+                {
+                    "name": "td_city",
+                    "type": "TD_LIST_OF_CITIES"
+                },
+                {
+                    "name": "td_state",
+                    "type": "TD_LIST_OF_STATES"
+                },
+                {
+                    "name": "Date",
+                    "type": "AMAZON.DATE"
+                }
+            ]
+        },
+        {
+            "intent": "TDSupportedCities"
+        },
+        {
+            "intent":"AgentFind",
+            "slots":[
+                {
+                    "name":"agent_zip",
+                    "type":"AMAZON.NUMBER"
+                }
+            ]
+        },
+        {
+            "intent":"AgentFindByZip",
+            "slots":[
+                {
+                    "name":"agent_zip",
+                    "type":"AMAZON.NUMBER"
+                }
+            ]
+        },
+        {
+            "intent":"AgentFindByCurrentLoc"
+        },
+        {
+            "intent": "GetNextEventIntent"
+        },
+        {
+            "intent": "AMAZON.HelpIntent"
+        },
+        {
+            "intent": "AMAZON.StopIntent"
+        },
+        {
+            "intent": "AMAZON.CancelIntent"
+        }
+    ]
+}

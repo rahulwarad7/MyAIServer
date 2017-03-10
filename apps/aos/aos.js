@@ -81,7 +81,7 @@ function getFinalAgentFindResponse(zip) {
                 var firstAgentName = agentsResp.agents[0].name;
                 finalSpeechOutput.text = "nearest Allstate agent to you is, " + firstAgentName + 
                                         ". You can call the agent at " + agentsResp.agents[0].phoneNumber + 
-                                        ". Or, would like me to email you the agent details?";
+                                        ". Or, would you like me to email you the agent details?";
             } else {
                 finalSpeechOutput.text = "sorry! no agents are available at zip " + sessionInfo.zip;
             }

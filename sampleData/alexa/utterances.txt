@@ -1,0 +1,17 @@
+GetWeatherForecast weather in {wf_city}
+TDDialogTideIntent {td_city}
+TDDialogTideIntent {td_city} {td_state}
+TDDialogTideIntent {Date}
+TDSupportedCities what cities
+TDSupportedCities what cities are supported
+TDSupportedCities which cities are supported
+TDSupportedCities which cities
+TDSupportedCities which cities do you know
+AgentFindByZip I need agent for zip {agent_zip}
+AgentFindByZip I need an agent for zip {agent_zip}
+AgentFind I need help from agent
+AgentFind I need an agent
+AgentFind I need an allstate agent
+AgentFind Get me an agent
+AgentFind Find me an agent
+AgentFind {agent_zip}
