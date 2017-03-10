@@ -107,6 +107,7 @@ function HanldeIntentRequest(body, deferred) {
     var intentResponseInfo;
     var intentName = body.request.intent.name;
     logging("intent start: " + intentName);
+    updateIntentSequence(body, intentName);
     switch (intentName) {
         case "GetWeatherForecast":
             var speechOutput = new Speech();
@@ -161,6 +162,18 @@ function checkAppId(currentReqAppId) {
 }
 
 // private intents functions start
+
+function updateIntentSequence(body, curIntentName) {
+    var intentSeq = "";
+    if (curIntentName) {
+        if (body.session.attributes['intentsequence']) {
+            intentSeq = intentSeq + "|" + curIntentName.toUpperCase();
+        } else {
+            intentSeq = curIntentName.toUpperCase();
+        }
+        body.session.attributes['intentsequence'] = intentSeq;
+    }
+}
 
 function supportedCitiesIntent(body) {
     var poolerSpeechResponse = TidePooler.getSupportedCitiesResponse();
