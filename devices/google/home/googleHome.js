@@ -35,12 +35,22 @@ function intentHandlers(body) {
         case "AGENT-FIND-BYCURRENTLOC":
             break;
         case "AGENT-FIND-EMAIL-YES":
-            handleAgentFindEmail(body, deferred)
+            handleAgentFindEmailYes(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AGENT-FIND-EMAIL-NO":
+            handleAgentFindEmailNo(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
                 });
             break;
         case "AGENT-FIND-EMAIL-SEND":
+            handleAgentFindEmailSend(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
             break;
         case "WEATHERFORECAST":
             var message = "Today in Boston: Fair, the temperature is 37 degree fahrenheit.";
@@ -86,14 +96,14 @@ function intentHandlers(body) {
 
 //#region Agent
 
-function handleAgentFindEmail(body, deferred) {
+function handleAgentFindEmailYes(body, deferred) {
     var agentFindSpeechResp = {};
     var result = body.result;
     var agFindCntx = result.contexts.find(function (curCntx) { return curCntx.name === "agentfindbyzip"; });
     var sessionAttrs = getAgentSessionAttributes(agFindCntx);
 
 
-    aos.handleAgentFindEmailIntent(sessionAttrs)
+    aos.handleAgentFindEmailYesIntent(sessionAttrs)
         .then(function (agentFindSpeechResponse) {
             agentFindSpeechResp.speech = agentFindSpeechResponse.speechOutput.text;
             agentFindSpeechResp.displayText = agentFindSpeechResponse.speechOutput.text;
@@ -103,10 +113,28 @@ function handleAgentFindEmail(body, deferred) {
     return deferred.promise;
 }
 
+function handleAgentFindEmailNo(body, deferred) {
+    var agentFindSpeechResp = {};
+    var result = body.result;
+    var agFindCntx = result.contexts.find(function (curCntx) { return curCntx.name === "agentfindbyzip"; });
+    var sessionAttrs = getAgentSessionAttributes(agFindCntx);
+
+
+    aos.handleAgentFindEmailNoIntent(sessionAttrs)
+        .then(function (agentFindSpeechResponse) {
+            agentFindSpeechResp.speech = agentFindSpeechResponse.speechOutput.text;
+            agentFindSpeechResp.displayText = agentFindSpeechResponse.speechOutput.text;
+            deferred.resolve(agentFindSpeechResp);
+        });
+
+    return deferred.promise;
+
+}
+
 function handleAgentFindEmailSend(body, deferred) {
     var agentFindSpeechResp = {};
     var result = body.result;
-    var agFindCntx = result.contexts.find(function (curCntx) { return curCntx.name === "agent"; });
+    var agFindCntx = result.contexts.find(function (curCntx) { return curCntx.name === "agentfindbyzip"; });
     var sessionAttrs = getAgentSessionAttributes(agFindCntx);
 
 

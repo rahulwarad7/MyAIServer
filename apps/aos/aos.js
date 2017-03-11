@@ -82,7 +82,7 @@ AOS.prototype.handleAgentFindByZipIntent = function (sessionAttrs) {
     return deferred.promise;
 }
 
-AOS.prototype.handleAgentFindEmailIntent = function (sessionAttrs) {
+AOS.prototype.handleAgentFindEmailYesIntent = function (sessionAttrs) {
     var deferred = q.defer();
     var agentFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
@@ -107,7 +107,20 @@ AOS.prototype.handleAgentFindEmailIntent = function (sessionAttrs) {
     return deferred.promise;
 };
 
-AOS.prototype.handleAgentFindEmailSend = function () {
+AOS.prototype.handleAgentFindEmailNoIntent = function (sessionAttrs) {
+    var deferred = q.defer();
+    var agentFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+
+    speechOutput.text = "Thank you for chosing Allstate. You are in Good Hands.";
+    agentFindSpeechResp.speechOutput = speechOutput;
+    agentFindSpeechResp.repromptOutput = null;
+    deferred.resolve(agentFindSpeechResp);
+
+    return deferred.promise;
+};
+
+AOS.prototype.handleAgentFindEmailSendIntent = function (sessionAttrs) {
     var deferred = q.defer();
     var agentFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
@@ -146,7 +159,7 @@ function getFinalAgentFindSendEmailResponse(sessionAttrs) {
 }
 
 function buildAgentEmailBody(agentInfo, to) {
-    var emailBody = "";  
+    var emailBody = "";
 
     emailBody = emailBody + "\nThank you for your interest in Allstate agents.\n"
     emailBody = emailBody + "\nBelow are details you requested regarding our agent: " + agentInfo.name;
