@@ -132,7 +132,7 @@ function handleAgentFindByZip(body, deferred) {
             .then(function (agentFindSpeechResponse) {
                 agentFindSpeechResp.speech = agentFindSpeechResponse.speechOutput.text;
                 agentFindSpeechResp.displayText = agentFindSpeechResponse.speechOutput.text;
-                agentFindSpeechResp.contextOut = [{ "sessionAttrs": sessionAttrs }];
+                agentFindSpeechResp.contextOut = [{ "name": "AgentFindByZip", "parameters": sessionAttrs }];
                 deferred.resolve(agentFindSpeechResp);
             });
     }
@@ -156,7 +156,7 @@ function handleAgentFindIntent(body, deferred) {
 }
 
 function getAgentSessionAttributes(contextInfo) {
-    var sessionAttrs = { "zip": undefined, "agents": [] };
+    var sessionAttrs = { "zip": undefined, "agent": [] };
     if (contextInfo) {
         var zip = contextInfo.parameters["zip.original"];
         if (zip && zip.trim().length > 0) {

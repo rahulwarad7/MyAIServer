@@ -10,6 +10,8 @@ var request = require('request');
 
 var AOS = function () { };
 
+var AOSTranData = [];
+
 //#region CONSTANTS
 var URL_COMMON = "https://purchase-stest.allstate.com/onlinesalesapp-common/";
 var URL_RENTERS_SESSIONID = URL_COMMON + "api/transaction/RENTERS/sessionid";
@@ -158,7 +160,7 @@ function getFinalAgentFindResponse(sessionAttrs) {
             return getAgents(sessionInfo);
         }).then(function (agentsResp) {
             if (agentsResp && agentsResp.length > 0) {
-                sessionAttrs.agents = [agentsResp[0]];
+                sessionAttrs.agent = agentsResp[0];
                 var firstAgentName = agentsResp[0].name;
                 finalSpeechOutput.text = "nearest Allstate agent to you is, " + firstAgentName +
                     ". You can call the agent at " + agentsResp[0].phoneNumber +
