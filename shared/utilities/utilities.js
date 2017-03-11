@@ -35,8 +35,8 @@ Utilities.prototype.sendEmail = function (to, subject, body, type) {
     });
     console.log("sendEmail - sg - start");
     sg.API(request, function (error, response) {
-    console.log("sendEmail - end");
-    console.log(JSON.stringify(error));
+        console.log("sendEmail - end");
+        console.log(JSON.stringify(error));
         deferred.resolve(error ? false : true);
     });
 

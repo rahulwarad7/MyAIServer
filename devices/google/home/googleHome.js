@@ -19,6 +19,7 @@ function intentHandlers(body) {
     var deferred = q.defer();
     var intentName = body.result.metadata.intentName;
     var responseBody = {};
+    console.log("intentName: " + intentName);
     switch (intentName.toUpperCase()) {
         case "AGENT-FIND":
             handleAgentFindIntent(body, deferred)

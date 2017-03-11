@@ -20,7 +20,7 @@ app.listen(port, function () {
 appRouter.route('/ai/voice/api-ai')
     .post(function (req, res) {
         //console.log(JSON.stringify(req.headers));
-        //console.log(JSON.stringify(req.body));
+        console.log(JSON.stringify(req.body));
         var body = req.body;
         allstateApiAi.execute(body)
             .then(function (responseBody) {
