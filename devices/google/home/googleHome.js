@@ -137,11 +137,13 @@ function handleAgentFindEmailSend(body, deferred) {
     var agFindCntx = result.contexts.find(function (curCntx) { return curCntx.name === "agentfindbyzip"; });
     var sessionAttrs = getAgentSessionAttributes(agFindCntx);
 
+    console.log("handleAgentFindEmailSend - start");
 
     aos.handleAgentFindEmailSendIntent(sessionAttrs)
         .then(function (agentFindSpeechResponse) {
             agentFindSpeechResp.speech = agentFindSpeechResponse.speechOutput.text;
             agentFindSpeechResp.displayText = agentFindSpeechResponse.speechOutput.text;
+            console.log("handleAgentFindEmailSend - end");
             deferred.resolve(agentFindSpeechResp);
         });
 

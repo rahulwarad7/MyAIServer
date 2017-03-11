@@ -12,6 +12,7 @@ Utilities.prototype.GetRandomValue = function (inputArray) {
 };
 
 Utilities.prototype.sendEmail = function (to, subject, body, type) {
+    console.log("sendEmail - start");
     var deferred = q.defer();
     var data = {
         "from": "npavangouda@gmail.com",
@@ -32,7 +33,10 @@ Utilities.prototype.sendEmail = function (to, subject, body, type) {
         path: '/v3/mail/send',
         body: mail.toJSON()
     });
+    console.log("sendEmail - sg - start");
     sg.API(request, function (error, response) {
+    console.log("sendEmail - end");
+    console.log(JSON.stringify(error));
         deferred.resolve(error ? false : true);
     });
 

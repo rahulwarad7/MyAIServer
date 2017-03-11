@@ -125,11 +125,13 @@ AOS.prototype.handleAgentFindEmailSendIntent = function (sessionAttrs) {
     var agentFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
+    console.log("handleAgentFindEmailSendIntent - start");
 
     getFinalAgentFindSendEmailResponse(sessionAttrs)
         .then(function (agentSpeechOutput) {
             agentFindSpeechResp.speechOutput = agentSpeechOutput;
             agentFindSpeechResp.repromptOutput = null;
+            console.log("handleAgentFindEmailSendIntent - end");
             deferred.resolve(agentFindSpeechResp);
         });
 
