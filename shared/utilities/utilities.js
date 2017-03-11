@@ -1,7 +1,7 @@
 
-var SendGridHelper = require('sendgrid').mail;
 var q = require('q');
-
+var Mailgun = require('mailgun').Mailgun;
+var mg = new Mailgun('key-eceeb1d9fe3c2821e4668ae4b9fbf475');
 
 var Utilities = function () {
 
@@ -16,29 +16,15 @@ Utilities.prototype.sendEmail = function (to, subject, body, type) {
     var deferred = q.defer();
     var data = {
         "from": "npavangouda@gmail.com",
-        "to": to,
+        "to": [to],
         "subject": subject,
         "text": body
     };
 
-    var from_email = new SendGridHelper.Email(data.from);
-    var to_email = new SendGridHelper.Email(data.to);
-    var subject = data.subject;
-    var content = new SendGridHelper.Content("text/plain", data.text);
-    var mail = new SendGridHelper.Mail(from_email, subject, to_email, content);
+    mg.sendText(data.from, data.to, data.subject, data.text, function (error) {
+        deferred.resolve(error ? false : true)
+    });
 
-    var sg = require('sendgrid')("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");
-    var request = sg.emptyRequest({
-        method: 'POST',
-        path: '/v3/mail/send',
-        body: mail.toJSON()
-    });
-    console.log("sendEmail - sg - start");
-    sg.API(request, function (error, response) {
-        console.log("sendEmail - end");
-        console.log(JSON.stringify(error));
-        deferred.resolve(error ? false : true);
-    });
 
     return deferred.promise;
 }
