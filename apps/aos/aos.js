@@ -3,6 +3,7 @@ var Speech = require('./../../shared/data-models/speech');
 var Utilities = require('./../../shared/utilities/utilities.js');
 var agents = require('./../../shared/data-models/agent.js');
 var Session = require('./../../shared/data-models/session.js');
+var Agent = require('./../../shared/data-models/agent.js');
 
 var q = require('q');
 var request = require('request');
@@ -20,6 +21,19 @@ var AGENTFINDRESP = [
     "I can help you with that. What's your zip?",
     "Please provide the zip?",
 ];
+var EMAILRESP = [
+    "Sure. what's your email id?",
+    "Please provide the email id",
+    "Email id please",
+    "What's the email id?",
+    "please provide email id"
+];
+var EMAILSENTRESPAGENT = [
+    "Email sent.",
+    "We have sent an email to you.",
+    "We have sent an email to you with agent details.",
+    "Agent details has been sent to your mailbox.",
+];
 //#endregion
 
 AOS.prototype.handleAgentFindRequest = function (sessionAttrs) {
@@ -29,10 +43,11 @@ AOS.prototype.handleAgentFindRequest = function (sessionAttrs) {
     var repromptOutput = new Speech();
 
     if (sessionAttrs.zip) {
-        getFinalAgentFindResponse(sessionAttrs.zip)
+        getFinalAgentFindResponse(sessionAttrs)
             .then(function (agentSpeechOutput) {
                 agentFindSpeechResp.speechOutput = agentSpeechOutput;
                 agentFindSpeechResp.repromptOutput = null;
+                agentFindSpeechResp.sessionAttrs = sessionAttrs;
                 deferred.resolve(agentFindSpeechResp);
             });
     } else {
@@ -53,35 +68,101 @@ AOS.prototype.handleAgentFindByZipIntent = function (sessionAttrs) {
     var repromptOutput = new Speech();
 
 
-    getFinalAgentFindResponse(sessionAttrs.zip)
+    getFinalAgentFindResponse(sessionAttrs)
         .then(function (agentSpeechOutput) {
             agentFindSpeechResp.speechOutput = agentSpeechOutput;
             agentFindSpeechResp.repromptOutput = null;
+            agentFindSpeechResp.sessionAttrs = sessionAttrs;
             deferred.resolve(agentFindSpeechResp);
         });
 
     return deferred.promise;
 }
 
-function getFinalAgentFindResponse(zip) {
+AOS.prototype.handleAgentFindEmailIntent = function (sessionAttrs) {
+    var deferred = q.defer();
+    var agentFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    if (sessionAttrs.email) {
+        getFinalAgentFindSendEmailResponse(sessionAttrs.email)
+            .then(function (agentSpeechOutput) {
+                agentFindSpeechResp.speechOutput = agentSpeechOutput;
+                agentFindSpeechResp.repromptOutput = null;
+                deferred.resolve(agentFindSpeechResp);
+            });
+    } else {
+        speechOutput.text = Utilities.GetRandomValue(EMAILRESP);
+        repromptOutput.text = Utilities.GetRandomValue(EMAILRESP);
+        agentFindSpeechResp.speechOutput = speechOutput;
+        agentFindSpeechResp.repromptOutput = repromptOutput;
+        deferred.resolve(agentFindSpeechResp);
+    }
+
+
+    return deferred.promise;
+};
+
+AOS.prototype.handleAgentFindEmailSend = function () {
+    var deferred = q.defer();
+    var agentFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    getFinalAgentFindSendEmailResponse(sessionAttrs.email)
+        .then(function (agentSpeechOutput) {
+            agentFindSpeechResp.speechOutput = agentSpeechOutput;
+            agentFindSpeechResp.repromptOutput = null;
+            deferred.resolve(agentFindSpeechResp);
+        });
+
+
+    return deferred.promise;
+
+};
+
+function getFinalAgentFindSendEmailResponse(email) {
+    var deferred = q.defer();
+    var finalSpeechOutput = new Speech();
+    var to = email;
+    var subject = "Allstate agent detail: agentName";
+    var body = "Hi, I am agentName. Below are my details";
+    Utilities.sendEmail(to, subject, body)
+        .then(function (emailStatus) {
+            if (emailStatus) {
+                finalSpeechOutput.text = Utilities.GetRandomValue(EMAILSENTRESPAGENT);
+            } else {
+                finalSpeechOutput.text = "Sorry! there was a problem while sending the email to you. Please try again later.";
+            }
+            deferred.resolve(finalSpeechOutput);
+        })
+
+
+    return deferred.promise;
+}
+
+
+function getFinalAgentFindResponse(sessionAttrs) {
     var deferred = q.defer();
     var finalSpeechOutput = new Speech();
     var sessionInfo = new Session();
-    sessionInfo.zip = zip;
+    sessionInfo.zip = sessionAttrs.zip;
 
     startAOSSession()
         .then(function (id) {
             sessionInfo.sessionId = id;
-            return getStateFromZip(sessionInfo.sessionId, zip);
+            return getStateFromZip(sessionInfo.sessionId, sessionInfo.zip);
         }).then(function (state) {
             sessionInfo.state = state;
             return getAgents(sessionInfo);
         }).then(function (agentsResp) {
-            if (agentsResp && agentsResp.agentAvailable) {
-                var firstAgentName = agentsResp.agents[0].name;
-                finalSpeechOutput.text = "nearest Allstate agent to you is, " + firstAgentName + 
-                                        ". You can call the agent at " + agentsResp.agents[0].phoneNumber + 
-                                        ". Or, would you like me to email you the agent details?";
+            if (agentsResp && agentsResp.length > 0) {
+                sessionAttrs.agents = [agentsResp[0]];
+                var firstAgentName = agentsResp[0].name;
+                finalSpeechOutput.text = "nearest Allstate agent to you is, " + firstAgentName +
+                    ". You can call the agent at " + agentsResp[0].phoneNumber +
+                    ". Or, would you like me to email you the agent details?";
             } else {
                 finalSpeechOutput.text = "sorry! no agents are available at zip " + sessionInfo.zip;
             }
@@ -114,11 +195,34 @@ function getAgents(sessionInfo) {
                 errormsg = "Error from server session";
                 deferred.reject(errormsg);
             } else {
-                deferred.resolve(response.body);
+                var agents = ProcessAgentResponse(response.body);
+                deferred.resolve(agents);
             }
         });
 
     return deferred.promise;
+}
+
+function ProcessAgentResponse(agentServResp) {
+    var agents = [];
+    if (agentServResp && agentServResp.agentAvailable && agentServResp.agents.length > 0) {
+        for (var index = 0; index < agentServResp.agents.length; index++) {
+            var currServAgent = agentServResp.agents[index];
+            var agentInfo = new Agent();
+            agentInfo.id = currServAgent.id;
+            agentInfo.name = currServAgent.name;
+            agentInfo.addressLine1 = currServAgent.addressLine1;
+            agentInfo.city = currServAgent.city;
+            agentInfo.state = currServAgent.state;
+            agentInfo.zipCode = currServAgent.zipCode;
+            agentInfo.phoneNumber = currServAgent.phoneNumber;
+            agentInfo.imageUrl = currServAgent.imageURL;
+            agentInfo.emailAddress = currServAgent.emailAddress;
+            agents.push(agentInfo);
+        }
+    }
+
+    return agents;
 }
 
 function startAOSSession(zip) {

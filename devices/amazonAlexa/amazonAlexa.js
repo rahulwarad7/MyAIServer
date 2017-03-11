@@ -164,9 +164,9 @@ function checkAppId(currentReqAppId) {
 // private intents functions start
 
 function updateIntentSequence(body, curIntentName) {
-    var intentSeq = "";
+    var intentSeq = body.session.attributes['intentsequence'];
     if (curIntentName) {
-        if (body.session.attributes['intentsequence']) {
+        if (intentSeq) {
             intentSeq = intentSeq + "|" + curIntentName.toUpperCase();
         } else {
             intentSeq = curIntentName.toUpperCase();

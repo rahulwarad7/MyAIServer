@@ -34,6 +34,14 @@ function intentHandlers(body) {
             break;
         case "AGENT-FIND-BYCURRENTLOC":
             break;
+        case "AGENT-FIND-EMAIL-YES":
+            handleAgentFindEmail(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AGENT-FIND-EMAIL-SEND":
+            break;
         case "WEATHERFORECAST":
             var message = "Today in Boston: Fair, the temperature is 37 degree fahrenheit.";
             responseBody.speech = message;
@@ -78,6 +86,41 @@ function intentHandlers(body) {
 
 //#region Agent
 
+function handleAgentFindEmail(body, deferred) {
+    var agentFindSpeechResp = {};
+    var result = body.result;
+    var agFindCntx = result.contexts.find(function (curCntx) { return curCntx.name === "agent"; });
+    var sessionAttrs = getAgentSessionAttributes(agFindCntx);
+
+
+    aos.handleAgentFindEmailIntent(sessionAttrs)
+        .then(function (agentFindSpeechResponse) {
+            agentFindSpeechResp.speech = agentFindSpeechResponse.speechOutput.text;
+            agentFindSpeechResp.displayText = agentFindSpeechResponse.speechOutput.text;
+            deferred.resolve(agentFindSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+function handleAgentFindEmailSend(body, deferred) {
+    var agentFindSpeechResp = {};
+    var result = body.result;
+    var agFindCntx = result.contexts.find(function (curCntx) { return curCntx.name === "agent"; });
+    var sessionAttrs = getAgentSessionAttributes(agFindCntx);
+
+
+    aos.handleAgentFindEmailSendIntent(sessionAttrs)
+        .then(function (agentFindSpeechResponse) {
+            agentFindSpeechResp.speech = agentFindSpeechResponse.speechOutput.text;
+            agentFindSpeechResp.displayText = agentFindSpeechResponse.speechOutput.text;
+            deferred.resolve(agentFindSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+
 function handleAgentFindByZip(body, deferred) {
     var agentFindSpeechResp = {};
     var result = body.result;
@@ -89,6 +132,7 @@ function handleAgentFindByZip(body, deferred) {
             .then(function (agentFindSpeechResponse) {
                 agentFindSpeechResp.speech = agentFindSpeechResponse.speechOutput.text;
                 agentFindSpeechResp.displayText = agentFindSpeechResponse.speechOutput.text;
+                agentFindSpeechResp.contextOut = [{ "sessionAttrs": sessionAttrs }];
                 deferred.resolve(agentFindSpeechResp);
             });
     }
@@ -115,8 +159,12 @@ function getAgentSessionAttributes(contextInfo) {
     var sessionAttrs = { "zip": undefined, "agents": [] };
     if (contextInfo) {
         var zip = contextInfo.parameters["zip.original"];
-        if (zip && zip.length > 0) {
+        if (zip && zip.trim().length > 0) {
             sessionAttrs.zip = contextInfo.parameters["zip"];
+        }
+        var email = contextInfo.parameters["email.original"];
+        if (email && email.trim().length > 0) {
+            sessionAttrs.email = contextInfo.parameters["email"];
         }
     }
 
