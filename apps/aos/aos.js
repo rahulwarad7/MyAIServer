@@ -18,6 +18,7 @@ var URL_RENTERS_SESSIONID = URL_COMMON + "api/transaction/RENTERS/sessionid";
 var URL_GETAGENTS = URL_COMMON + "api/common/agents";
 var URL_GETSTATE = URL_COMMON + "api/location/{0}/state";
 
+var FROM_EMAIL_ID = "npavangouda@gmail.com";
 var AGENTFINDRESP = [
     "Sure. what's your zip code?",
     "I can help you with that. What's your zip?",
@@ -88,7 +89,7 @@ AOS.prototype.handleAgentFindEmailIntent = function (sessionAttrs) {
     var repromptOutput = new Speech();
 
     if (sessionAttrs.email) {
-        getFinalAgentFindSendEmailResponse(sessionAttrs.email)
+        getFinalAgentFindSendEmailResponse(sessionAttrs)
             .then(function (agentSpeechOutput) {
                 agentFindSpeechResp.speechOutput = agentSpeechOutput;
                 agentFindSpeechResp.repromptOutput = null;
@@ -112,7 +113,7 @@ AOS.prototype.handleAgentFindEmailSend = function () {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    getFinalAgentFindSendEmailResponse(sessionAttrs.email)
+    getFinalAgentFindSendEmailResponse(sessionAttrs)
         .then(function (agentSpeechOutput) {
             agentFindSpeechResp.speechOutput = agentSpeechOutput;
             agentFindSpeechResp.repromptOutput = null;
@@ -124,12 +125,12 @@ AOS.prototype.handleAgentFindEmailSend = function () {
 
 };
 
-function getFinalAgentFindSendEmailResponse(email) {
+function getFinalAgentFindSendEmailResponse(sessionAttrs) {
     var deferred = q.defer();
     var finalSpeechOutput = new Speech();
-    var to = email;
-    var subject = "Allstate agent detail: agentName";
-    var body = "Hi, I am agentName. Below are my details";
+    var to = sessionAttrs.email;
+    var subject = "Allstate agent details: " + sessionAttrs.agent.name;
+    var body = buildAgentEmailBody(sessionAttrs.agent, to);
     Utilities.sendEmail(to, subject, body)
         .then(function (emailStatus) {
             if (emailStatus) {
@@ -144,6 +145,36 @@ function getFinalAgentFindSendEmailResponse(email) {
     return deferred.promise;
 }
 
+function buildAgentEmailBody(agentInfo, to) {
+    var emailBody = "";  
+
+    emailBody = emailBody + "\nThank you for your interest in Allstate agents.\n"
+    emailBody = emailBody + "\nBelow are details you requested regarding our agent: " + agentInfo.name;
+    emailBody = emailBody + "\n-------------------------------------------------------";
+    emailBody = emailBody + "\nAdderess: " + getCombinedAddress(agentInfo);
+    emailBody = emailBody + "\nPhone: " + agentInfo.phoneNumber;
+    emailBody = emailBody + "\nEmail: " + agentInfo.emailAddress;
+
+    return emailBody;
+}
+
+function getCombinedAddress(agentInfo) {
+    var combinedAddr = "";
+    if (agentInfo.addressLine1) {
+        combinedAddr = combinedAddr + agentInfo.addressLine1 + ","
+    }
+    if (agentInfo.city) {
+        combinedAddr = combinedAddr + agentInfo.city + ","
+    }
+    if (agentInfo.state) {
+        combinedAddr = combinedAddr + agentInfo.state + " "
+    }
+    if (agentInfo.zipCode) {
+        combinedAddr = combinedAddr + agentInfo.zipCode
+    }
+
+    return combinedAddr;
+}
 
 function getFinalAgentFindResponse(sessionAttrs) {
     var deferred = q.defer();

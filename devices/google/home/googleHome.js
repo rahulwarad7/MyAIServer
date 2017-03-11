@@ -89,7 +89,7 @@ function intentHandlers(body) {
 function handleAgentFindEmail(body, deferred) {
     var agentFindSpeechResp = {};
     var result = body.result;
-    var agFindCntx = result.contexts.find(function (curCntx) { return curCntx.name === "agent"; });
+    var agFindCntx = result.contexts.find(function (curCntx) { return curCntx.name === "agentfindbyzip"; });
     var sessionAttrs = getAgentSessionAttributes(agFindCntx);
 
 
@@ -156,7 +156,7 @@ function handleAgentFindIntent(body, deferred) {
 }
 
 function getAgentSessionAttributes(contextInfo) {
-    var sessionAttrs = { "zip": undefined, "agent": [] };
+    var sessionAttrs = { "zip": undefined, "email": undefined, "agent": {} };
     if (contextInfo) {
         var zip = contextInfo.parameters["zip.original"];
         if (zip && zip.trim().length > 0) {
@@ -165,6 +165,9 @@ function getAgentSessionAttributes(contextInfo) {
         var email = contextInfo.parameters["email.original"];
         if (email && email.trim().length > 0) {
             sessionAttrs.email = contextInfo.parameters["email"];
+        }
+        if (contextInfo.parameters.agent) {
+            sessionAttrs.agent = contextInfo.parameters.agent;
         }
     }
 

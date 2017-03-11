@@ -10,7 +10,7 @@ Utilities.prototype.GetRandomValue = function (inputArray) {
     return rand;
 };
 
-Utilities.prototype.sendEmail = function (to, subject, body) {
+Utilities.prototype.sendEmail = function (to, subject, body, type) {
     var deferred = q.defer();
     var mgApiInstance = new Mailgun('key-eceeb1d9fe3c2821e4668ae4b9fbf475');
     var data = {
@@ -20,13 +20,24 @@ Utilities.prototype.sendEmail = function (to, subject, body) {
         "text": body
     };
 
-    mgApiInstance.sendText(data.from, data.to, data.subject, data.text, function (err) {
-        var success = true;
-        if(err){
-            success = false;
-        }
-        deferred.resolve(success);
-    })
+    if (type) {
+        mgApiInstance.sendRaw(data.from, data.to, data.subject, data.text, function (err) {
+            var success = true;
+            if (err) {
+                success = false;
+            }
+            deferred.resolve(success);
+        })
+
+    } else {
+        mgApiInstance.sendText(data.from, data.to, data.subject, data.text, function (err) {
+            var success = true;
+            if (err) {
+                success = false;
+            }
+            deferred.resolve(success);
+        })
+    }
 
     return deferred.promise;
 }
