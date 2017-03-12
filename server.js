@@ -1,5 +1,6 @@
 
 var express = require('express');
+var path = require('path');
 var bodyParser = require('body-parser');
 var AllstateAlexa = require('./devices/amazonAlexa/amazonAlexa.js');
 var allstateApiAi = require('./devices/google/api-ai/api-ai.js');
@@ -19,9 +20,9 @@ app.listen(port, function () {
 });
 
 
-appRouter.route('/')
-    .get('/', function (req, res) {
-        res.render('public/index.html');
+appRouter.route('*')
+    .get(function (req, res) {
+        res.sendFile(path.resolve(__dirname, '../public', 'index.html'));;
     });
 
 appRouter.route('/ai/voice/api-ai')
