@@ -34,7 +34,7 @@ function GetWelcomeTemplateInfo(respData) {
                 title: "Allstate",
                 subtitle: respData.displayText,
                 item_url: "https://www.allstate.com/",
-                image_url: "https://www.allstate.com/resources/Allstate/images/global/logo-allstate.png",
+                image_url: "https://pavan-ai-server.herokuapp.com/assets/allstate_026_1_b_blue_large.jpg",
                 buttons: [{
                     type: "web_url",
                     url: "https://www.allstate.com/",
