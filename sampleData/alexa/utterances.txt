@@ -14,4 +14,12 @@ AgentFind I need an agent
 AgentFind I need an allstate agent
 AgentFind Get me an agent
 AgentFind Find me an agent
-AgentFind {agent_zip}
+AgentFind zip is {agent_zip}
+AgentFind zipcode is {agent_zip}
+AgentFind my zip is {agent_zip}
+AgentFind my zip code is {agent_zip}
+AgentFind email should do
+AgentFind email would be good.
+AgentFind yes send email
+AgentFind yes email please
+AgentFind yes! email would be great

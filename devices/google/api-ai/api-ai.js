@@ -1,4 +1,6 @@
 var googleHome = require('./../home/googleHome.js');
+var facebookMsg = require('./../../facebook/facebook.js');
+var apiAiIntentHandler = require('./api-ai-intentHandler.js');
 var q = require('q');
 
 
@@ -20,31 +22,24 @@ Allstate.prototype.execute = function (body) {
     if (body.originalRequest && body.originalRequest.source) {
         source = body.originalRequest.source;
     }
-    switch (source.toUpperCase()) {
-        case 'GOOGLE':
-            googleHome.processResponse(body)
-                .then(function (respData) {
-                    responseBody.data = respData;
-                    deferred.resolve(responseBody);
-                }).catch(function(error){
-                    responseBody.status = 1;
-                    deferred.reject(responseBody);
-                });
-            break;
-        case 'FACEBOOK':
-            //processFacebookResponse();
-            break;
-        default:
-            googleHome.processResponse(body)
-                .then(function (respData) {
-                    responseBody.data = respData;
-                    deferred.resolve(responseBody);
-                }).catch(function(error){
-                    responseBody.status = 1;
-                    deferred.reject(responseBody);
-                });
-            break;
-    }
+    //by default let api-ai generate the basic response.
+    apiAiIntentHandler.processResponse(body)
+        .then(function (respData) {
+            //once the basic response is generated then, do device specific processing.
+            switch (source.toUpperCase()) {
+                case 'GOOGLE':
+                    break;
+                case 'FACEBOOK':
+                    break;
+                default:
+                    break;
+            }
+            responseBody.data = respData;
+            deferred.resolve(responseBody);
+        }).catch(function (error) {
+            responseBody.status = 1;
+            deferred.reject(responseBody);
+        });
     return deferred.promise;
 };
 
