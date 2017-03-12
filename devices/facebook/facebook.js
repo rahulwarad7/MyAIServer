@@ -31,8 +31,8 @@ function GetWelcomeTemplateInfo(respData) {
         payload: {
             template_type: "generic",
             elements: [{
-                title: "Allstate",
-                subtitle: respData.displayText,
+                title: "Allstate ChatBot",
+                subtitle: "Hi, How can I help?",
                 item_url: "https://www.allstate.com/",
                 image_url: "https://pavan-ai-server.herokuapp.com/assets/allstate_026_1_b_blue_large.jpg",
                 buttons: [{
