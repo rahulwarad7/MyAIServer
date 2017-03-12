@@ -22,6 +22,12 @@ function intentHandlers(body) {
     var intentName = body.result.metadata.intentName;
     var responseBody = {};
     switch (intentName.toUpperCase()) {
+        case "WELCOME":
+            handleWelcomeIntent(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
         case "AGENT-FIND":
             handleAgentFindIntent(body, deferred)
                 .then(function (responseInfo) {
@@ -97,6 +103,14 @@ function intentHandlers(body) {
 
 
 //#region Agent
+
+function handleWelcomeIntent(body, deferred) {
+    var agentFindSpeechResp = {};
+    agentFindSpeechResp.speech = "Welcome to Allstate. I can help find an agent, get you an insurance. I can even help you with Road Side Assistance.";
+    agentFindSpeechResp.displayText = agentFindSpeechResp.speech;
+    deferred.resolve(agentFindSpeechResp);
+    return deferred.promise;
+}
 
 function handleAgentFindEmailYes(body, deferred) {
     var agentFindSpeechResp = {};

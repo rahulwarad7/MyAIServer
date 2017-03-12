@@ -30,6 +30,7 @@ Allstate.prototype.execute = function (body) {
                 case 'GOOGLE':
                     break;
                 case 'FACEBOOK':
+                    respData.data = facebookMsg.processResponse(body, respData);
                     break;
                 default:
                     break;
