@@ -13,9 +13,16 @@ var appRouter = express.Router();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/pavanserver/api', appRouter);
+app.use(express.static(__dirname + '/public'));
 app.listen(port, function () {
     console.log('Pavan Server listening on port: ' + port);
 });
+
+
+appRouter.route('/')
+    .get('/', function (req, res) {
+        res.render('public/index.html');
+    });
 
 appRouter.route('/ai/voice/api-ai')
     .post(function (req, res) {
