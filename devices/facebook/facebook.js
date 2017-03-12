@@ -18,7 +18,9 @@ FacebookMsg.prototype.processResponse = function (body, respData) {
         }
 
     }
-    return facebookInfo;
+    if (facebookInfo.facebook) {
+        respData.data = facebookInfo;
+    }
     //return deferred.promise;
 }
 //#endregion
