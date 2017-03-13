@@ -210,7 +210,7 @@ function getAgentSessionAttributes(contextInfo) {
         }
         var email = contextInfo.parameters["email.original"];
         if (email && email.trim().length > 0) {
-            sessionAttrs.email = contextInfo.parameters["email"];
+            sessionAttrs.email = email;
         }
         if (contextInfo.parameters.agent) {
             sessionAttrs.agent = contextInfo.parameters.agent;
