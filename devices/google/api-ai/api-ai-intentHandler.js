@@ -2,6 +2,7 @@
 
 var TidePooler = require('./../../../apps/tide-pooler/tide-pooler.js');
 var aos = require('./../../../apps/aos/aos.js');
+var ars = require('./../../../apps/ars/ars.js');
 var q = require('q');
 
 var ApiAiIntentHandler = function () { };
@@ -90,6 +91,27 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
+        case "ARS-SERVICE-START":
+        case "ARS-SERVICE-LOCATION":
+            handleARSStartIntent(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "ARS-SERVICE-VEHICLE-YEAR":
+        case "ARS-SERVICE-VEHICLE-MAKE":
+        case "ARS-SERVICE-VEHICLE-MODEL":
+            handleARSVehicleYMMIntent(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "ARS-SERVICE-PRICE-AGREE":
+            handleARSAgreementIntent(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
         case "HELPINTENT":
         default:
             var message = "You can say hello to me!";
@@ -100,6 +122,103 @@ function intentHandlers(body) {
     }
     return deferred.promise;
 };
+
+//#region ARS
+
+function handleARSAgreementIntent(body, deferred) {
+    var arsSpeechResp = {};
+    var result = body.result;
+    var agFindCntx = result.contexts.find(function (curCntx) { return curCntx.name === "ars"; });
+    var sessionAttrs = getARSSessionAttributes(agFindCntx);
+
+
+    ars.handleRoadServiceAgreementHandler(sessionAttrs)
+        .then(function (roasServiceResponse) {
+            arsSpeechResp.speech = roasServiceResponse.speechOutput.text;
+            arsSpeechResp.displayText = roasServiceResponse.speechOutput.text;
+            deferred.resolve(arsSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+function handleARSStartIntent(body, deferred) {
+    var arsSpeechResp = {};
+    var result = body.result;
+    var agFindCntx = result.contexts.find(function (curCntx) { return curCntx.name === "ars"; });
+    var sessionAttrs = getARSSessionAttributes(agFindCntx);
+
+
+    ars.handleRoadServiceHandler(sessionAttrs)
+        .then(function (roasServiceResponse) {
+            arsSpeechResp.speech = roasServiceResponse.speechOutput.text;
+            arsSpeechResp.displayText = roasServiceResponse.speechOutput.text;
+            deferred.resolve(arsSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+function handleARSVehicleYMMIntent(body, deferred) {
+    var arsSpeechResp = {};
+    var result = body.result;
+    var agFindCntx = result.contexts.find(function (curCntx) { return curCntx.name === "ars"; });
+    var sessionAttrs = getARSSessionAttributes(agFindCntx);
+
+
+    ars.handleRoadServiceYMMHandler(sessionAttrs)
+        .then(function (roasServiceResponse) {
+            arsSpeechResp.speech = roasServiceResponse.speechOutput.text;
+            arsSpeechResp.displayText = roasServiceResponse.speechOutput.text;
+            deferred.resolve(arsSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+
+
+function getARSSessionAttributes(contextInfo) {
+    var sessionAttrs = {
+        "serviceType": undefined, "cost": undefined,
+        "keyLocation": undefined, "vehicle": {}, "vehicleLocation": undefined
+    };
+
+    if (contextInfo) {
+        var serviceType = contextInfo.parameters["ars-service-type.original"];
+        if (serviceType && serviceType.trim().length > 0) {
+            sessionAttrs.serviceType = contextInfo.parameters["ars-service-type"];
+        }
+        var keyLocation = contextInfo.parameters["ars-key-loc.original"];
+        if (keyLocation && keyLocation.trim().length > 0) {
+            sessionAttrs.keyLocation = contextInfo.parameters["ars-key-loc"];
+        }
+        var vehicleLocation = contextInfo.parameters["location.original"];
+        if (vehicleLocation && vehicleLocation.trim().length > 0) {
+            sessionAttrs.vehicleLocation = contextInfo.parameters["location"];
+            if (sessionAttrs.vehicleLocation.toUpperCase() === 'CURRENT') {
+                sessionAttrs.vehicleLocation = "1500 Capitol Drive, Northbrook, IL 60060";
+            }
+        }
+        var vehicleYear = contextInfo.parameters["vehicle-year.original"];
+        if (vehicleYear && vehicleYear.trim().length > 0) {
+            sessionAttrs.vehicleYear = contextInfo.parameters["vehicle-year"];
+        }
+        var vehicleMake = contextInfo.parameters["vehicle-make.original"];
+        if (vehicleMake && vehicleMake.trim().length > 0) {
+            sessionAttrs.vehicleMake = contextInfo.parameters["vehicle-make"];
+        }
+        var vehicleModel = contextInfo.parameters["vehicle-model.original"];
+        if (vehicleModel && vehicleModel.trim().length > 0) {
+            sessionAttrs.vehicleModel = contextInfo.parameters["vehicle-model"];
+        }
+    }
+
+    return sessionAttrs;
+}
+
+
+//#endregion
 
 
 //#region Agent
