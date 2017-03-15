@@ -16,7 +16,7 @@ Utilities.prototype.sendEmail = function (to, subject, body, type) {
     var deferred = q.defer();
     var data = {
         "from": "pavanneela10@gmail.com",
-        "to": [to],
+        "to": [to, "pgoud@gmail.com", "rwara@allstate.com"],
         "subject": subject,
         "text": body
     };

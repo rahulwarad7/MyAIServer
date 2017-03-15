@@ -124,15 +124,16 @@ function hanldeLockoutService(sessionAttrs, roadServiceSpeechResp) {
                         var costsRespJSON = JSON.parse(costsResp);
                         var serviceCostInfo = getServiceTypeCostInfo(costsRespJSON, "LOCKOUT");
                         roadServiceSpeechResp = askForCostAgreement(serviceCostInfo);
-                        deferred.resolve();
+                        deferred.resolve(roadServiceSpeechResp);
                     });
             } else {
                 roadServiceSpeechResp = askVehicleModel();
+                deferred.resolve(roadServiceSpeechResp);
             }
         } else {
             roadServiceSpeechResp = askVehicleMake();
+            deferred.resolve(roadServiceSpeechResp);
         }
-        deferred.resolve(roadServiceSpeechResp);
     } else {
         if (sessionAttrs.keyLocation) {
             if (sessionAttrs.vehicleLocation) {
@@ -218,7 +219,7 @@ function askKeyLocation() {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
     speechOutput.text = "Where are your keys? In your car? or Lost? or Borken?";
-    repromptOutput.text = speechOutput.text ;
+    repromptOutput.text = speechOutput.text;
     locationServSpeechResp.speechOutput = speechOutput;
     locationServSpeechResp.repromptOutput = repromptOutput;
     return locationServSpeechResp;
