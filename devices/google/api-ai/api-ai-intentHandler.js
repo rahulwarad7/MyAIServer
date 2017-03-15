@@ -101,6 +101,7 @@ function intentHandlers(body) {
         case "ARS-SERVICE-VEHICLE-YEAR":
         case "ARS-SERVICE-VEHICLE-MAKE":
         case "ARS-SERVICE-VEHICLE-MODEL":
+        case "ARS-SERVICE-VEHICLE-YMM":
             handleARSVehicleYMMIntent(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
