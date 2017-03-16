@@ -29,6 +29,23 @@ Utilities.prototype.sendEmail = function (to, subject, body, type) {
     return deferred.promise;
 }
 
+Utilities.prototype.getCombinedAddress = function (agentInfo) {
+    var combinedAddr = "";
+    if (agentInfo.addressLine1) {
+        combinedAddr = combinedAddr + agentInfo.addressLine1 + ","
+    }
+    if (agentInfo.city) {
+        combinedAddr = combinedAddr + agentInfo.city + ","
+    }
+    if (agentInfo.state) {
+        combinedAddr = combinedAddr + agentInfo.state + " "
+    }
+    if (agentInfo.zipCode) {
+        combinedAddr = combinedAddr + agentInfo.zipCode
+    }
+
+    return combinedAddr;
+}
 
 
 

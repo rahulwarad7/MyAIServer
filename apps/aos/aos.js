@@ -164,30 +164,13 @@ function buildAgentEmailBody(agentInfo, to) {
     emailBody = emailBody + "\nThank you for your interest in Allstate agents.\n"
     emailBody = emailBody + "\nBelow are details you requested regarding our agent: " + agentInfo.name;
     emailBody = emailBody + "\n-------------------------------------------------------";
-    emailBody = emailBody + "\nAdderess: " + getCombinedAddress(agentInfo);
+    emailBody = emailBody + "\nAdderess: " + Utilities.getCombinedAddress(agentInfo);
     emailBody = emailBody + "\nPhone: " + agentInfo.phoneNumber;
     emailBody = emailBody + "\nEmail: " + agentInfo.emailAddress;
 
     return emailBody;
 }
 
-function getCombinedAddress(agentInfo) {
-    var combinedAddr = "";
-    if (agentInfo.addressLine1) {
-        combinedAddr = combinedAddr + agentInfo.addressLine1 + ","
-    }
-    if (agentInfo.city) {
-        combinedAddr = combinedAddr + agentInfo.city + ","
-    }
-    if (agentInfo.state) {
-        combinedAddr = combinedAddr + agentInfo.state + " "
-    }
-    if (agentInfo.zipCode) {
-        combinedAddr = combinedAddr + agentInfo.zipCode
-    }
-
-    return combinedAddr;
-}
 
 function getFinalAgentFindResponse(sessionAttrs) {
     var deferred = q.defer();

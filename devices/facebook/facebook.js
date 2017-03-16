@@ -1,5 +1,6 @@
 
 //var q = require('q');
+var Utilities = require("./../../shared/utilities/utilities.js");
 
 var FacebookMsg = function () { };
 
@@ -12,6 +13,9 @@ FacebookMsg.prototype.processResponse = function (body, respData) {
         switch (intentName.toUpperCase()) {
             case "WELCOME":
                 facebookInfo.facebook = GetWelcomeTemplateInfo(respData);
+                break;
+            case "AGENT-FIND-BYZIP":
+                facebookInfo.facebook = GetAgentTemplateInfo(respData);
                 break;
             default:
                 break;
@@ -48,6 +52,37 @@ function GetWelcomeTemplateInfo(respData) {
 
     return { "attachment": attachment };
 }
+
+function GetAgentTemplateInfo(respData) {
+    var agFindCntx = respData.contextOut.find(function (curCntx) { return curCntx.name.toUpperCase() === "AGENTFINDBYZIP"; });
+    var agentInfo = agFindCntx.parameters.agent;
+    var attachment = {
+        type: "template",
+        payload: {
+            template_type: "generic",
+            elements: [{
+                title: agentInfo.name,
+                subtitle: Utilities.getCombinedAddress(agentInfo),
+                item_url: "https://www.agents.allstate.com/",
+                image_url: agentInfo.imageUrl,
+                buttons: [
+                    {
+                        type: "phone_number",
+                        title: "Call",
+                        payload: agentInfo.phoneNumber
+                    },
+                    {
+                        type:"postback",
+                        title:"Email me agent details.",
+                        payload: "email please"
+                    }],
+            }]
+        }
+    };
+
+    return { "attachment": attachment };
+}
+
 
 //#endregion
 
