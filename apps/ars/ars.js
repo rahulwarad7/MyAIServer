@@ -8,7 +8,7 @@ var request = require('request');
 
 var ARS = function () { };
 
-var URL_BASE = "https://qa.m.goodhandsrescue.com/ghrm/api/";
+var URL_BASE = "https://m.goodhandsrescue.com/ghrm/api/";//"https://qa.m.goodhandsrescue.com/ghrm/api/";
 var URL_GET_SERVICE_COSTS = URL_BASE + "servicecosts";
 
 
@@ -115,6 +115,41 @@ function handleARSServiceType(sessionAttrs, roadServiceSpeechResp) {
 
 function hanldeLockoutService(sessionAttrs, roadServiceSpeechResp) {
     var deferred = q.defer();
+
+    if (!sessionAttrs.vehicleYear && !sessionAttrs.vehicleMake && !sessionAttrs.vehicleModel) {
+        if (sessionAttrs.keyLocation) {
+            if (sessionAttrs.vehicleLocation) {
+                roadServiceSpeechResp = askVehicleYMM();
+            } else {
+                roadServiceSpeechResp = askLocation();
+            }
+        } else {
+            //ask current Location.
+            roadServiceSpeechResp = askKeyLocation();
+        }
+        deferred.resolve(roadServiceSpeechResp);
+    } else {
+        if (!sessionAttrs.vehicleYear) {
+            roadServiceSpeechResp = askVehicleYear();
+            deferred.resolve(roadServiceSpeechResp);
+        } else if (!sessionAttrs.vehicleModel) {
+            roadServiceSpeechResp = askVehicleModel();
+            deferred.resolve(roadServiceSpeechResp);
+        } else if (!sessionAttrs.vehicleMake) {
+            roadServiceSpeechResp = askVehicleMake();
+            deferred.resolve(roadServiceSpeechResp);
+        } else {
+            getServiceCosts()
+                .then(function (costsResp) {
+                    //provide esitmated cost and get agreement.
+                    var costsRespJSON = JSON.parse(costsResp);
+                    var serviceCostInfo = getServiceTypeCostInfo(costsRespJSON, "LOCKOUT");
+                    roadServiceSpeechResp = askForCostAgreement(serviceCostInfo);
+                    deferred.resolve(roadServiceSpeechResp);
+                });
+        }
+    }
+    /*
     if (sessionAttrs.vehicleYear) {
         if (sessionAttrs.vehicleMake) {
             if (sessionAttrs.vehicleModel) {
@@ -146,7 +181,7 @@ function hanldeLockoutService(sessionAttrs, roadServiceSpeechResp) {
             roadServiceSpeechResp = askKeyLocation();
         }
         deferred.resolve(roadServiceSpeechResp);
-    }
+    }*/
     return deferred.promise;
 }
 
@@ -175,7 +210,18 @@ function askVehicleYear(sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
     speechOutput.text = "Please provide your vehicle's year";
-    repromptOutput.text = "Please provide your vehicle's year";;
+    repromptOutput.text = speechOutput.text;
+    locationServSpeechResp.speechOutput = speechOutput;
+    locationServSpeechResp.repromptOutput = repromptOutput;
+    return locationServSpeechResp;
+}
+
+function askVehicleYMM(sessionAttrs) {
+    var locationServSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+    speechOutput.text = "Please provide your vehicle's year, make and model";
+    repromptOutput.text = speechOutput.text;
     locationServSpeechResp.speechOutput = speechOutput;
     locationServSpeechResp.repromptOutput = repromptOutput;
     return locationServSpeechResp;
