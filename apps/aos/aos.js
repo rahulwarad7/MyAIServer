@@ -421,7 +421,7 @@ function getCustomerSaveInfo(sessionAttrs, sessionInfo) {
     customerData.zipCode = sessionAttrs.zip;
     customerData.aWSFlag = "N";
     customerData.affinity = {};
-    customerData.insuredAddress = { "addressLine1": "", "aptOrUnit": "", "city": "", "state": "", "zipCode": "" };
+    customerData.insuredAddress = new Address();//{ "addressLine1": "", "aptOrUnit": "", "city": "", "state": "", "zipCode": "" };
     customerData.isInsuredAddressSameAsCurrent = sessionAttrs.IsInsuredAddrSame;
     return customerData;
 }
