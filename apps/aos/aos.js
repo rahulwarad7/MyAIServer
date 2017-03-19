@@ -215,10 +215,9 @@ AOS.prototype.handleRentersInsuranceCityZip = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
     if (sessionAttrs.zip && sessionAttrs.city) {
-        //since all the required data is present. 
-        //do the validation of data
-        //if validation fails  then notify user
-        //otherwise do save customer
+        speechOutput.text = sessionAttrs.firstName + ", is the address you would like to insure same as current address?";
+        rentersFindSpeechResp.speechOutput = speechOutput;
+        rentersFindSpeechResp.repromptOutput = speechOutput;        
     } else if (sessionAttrs.zip && !sessionAttrs.city) {
         speechOutput.text = sessionAttrs.firstName + ", please provide city.";
         rentersFindSpeechResp.speechOutput = speechOutput;

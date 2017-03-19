@@ -120,6 +120,7 @@ function intentHandlers(body) {
                 });
             break;
         case "AOS-RENTERS-NAME":
+        case "AOS-RENTERS-LASTNAME":
             handlerAOSRentersInsuranceName(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
