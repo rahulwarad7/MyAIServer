@@ -137,6 +137,12 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
+        case "AOS-RENTERS-CURCITY-ZIP":
+            handlerAOSRentersInsuranceCityZip(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
         case "GET-LOCATION-PERMISSION":
             var permissionGranted = isPermissionGranted(body);
             handleGetLocationPermission(body, deferred, permissionGranted)
@@ -381,6 +387,23 @@ function handlerAOSRentersInsuranceAddr(body, deferred) {
 
 }
 
+function handlerAOSRentersInsuranceCityZip(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handleRentersInsuranceCityZip(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+
+}
+
 function getAOSRentersSessionAttributes(contextInfo) {
     var sessionAttrs = {
         "name": undefined, "dob": undefined, "addrLine1": undefined, "city": undefined, "zip": undefined
@@ -395,9 +418,24 @@ function getAOSRentersSessionAttributes(contextInfo) {
         if (lastName && lastName.trim().length > 0) {
             sessionAttrs.lastName = contextInfo.parameters["last-name"];
         }
+        var dob = contextInfo.parameters["dob.original"];
+        if (dob && dob.trim().length > 0) {
+            sessionAttrs.dob = contextInfo.parameters["dob"];
+        }
         var addrLine1 = contextInfo.parameters["address.original"];
         if (addrLine1 && addrLine1.trim().length > 0) {
             sessionAttrs.addrLine1 = contextInfo.parameters["address"];
+        }
+        var city = contextInfo.parameters["geo-city.original"];
+        if (city && city.trim().length > 0) {
+            sessionAttrs.city = contextInfo.parameters["geo-city"];
+        }
+        var zip = contextInfo.parameters["zip.original"];
+        if (zip && zip.trim().length > 0) {
+            sessionAttrs.zip = contextInfo.parameters["zip"];
+            if (sessionAttrs.zip.length === 4) {
+                sessionAttrs.zip = "0" + sessionAttrs.zip;
+            }
         }
 
     }

@@ -166,8 +166,6 @@ AOS.prototype.handleRentersInsuranceName = function (sessionAttrs) {
         speechOutput.text = sessionAttrs.firstName + ", please provide last name.";
         rentersFindSpeechResp.speechOutput = speechOutput;
         rentersFindSpeechResp.repromptOutput = speechOutput;
-        rentersFindSpeechResp.contextOut = [];
-        rentersFindSpeechResp.contextOut.push({ "name": "aos-renters-lastname", "parameters": {} });
     }
     deferred.resolve(rentersFindSpeechResp);
 
@@ -188,7 +186,7 @@ AOS.prototype.handleRentersInsuranceDOB = function (sessionAttrs) {
     deferred.resolve(rentersFindSpeechResp);
 
     return deferred.promise;
-}
+};
 
 AOS.prototype.handleRentersInsuranceAddr = function (sessionAttrs) {
     var deferred = q.defer();
@@ -209,7 +207,32 @@ AOS.prototype.handleRentersInsuranceAddr = function (sessionAttrs) {
     deferred.resolve(rentersFindSpeechResp);
 
     return deferred.promise;
-}
+};
+
+AOS.prototype.handleRentersInsuranceCityZip = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+    if (sessionAttrs.zip && sessionAttrs.city) {
+        //since all the data required data is present. 
+        //do the validation of data
+        //if validation fails  then notify user
+        //otherwise do save customer
+    } else if (sessionAttrs.zip && !sessionAttrs.city) {
+        speechOutput.text = sessionAttrs.firstName + ", please provide city.";
+        rentersFindSpeechResp.speechOutput = speechOutput;
+        rentersFindSpeechResp.repromptOutput = speechOutput;
+    } else if (!sessionAttrs.zip && sessionAttrs.city) {
+        speechOutput.text = sessionAttrs.firstName + ", please provide zip.";
+        rentersFindSpeechResp.speechOutput = speechOutput;
+        rentersFindSpeechResp.repromptOutput = speechOutput;
+    }
+
+    deferred.resolve(rentersFindSpeechResp);
+
+    return deferred.promise;
+};
 
 function getFinalAgentFindSendEmailResponse(sessionAttrs) {
     var deferred = q.defer();
