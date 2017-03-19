@@ -138,6 +138,69 @@ AOS.prototype.handleAgentFindEmailSendIntent = function (sessionAttrs) {
 
 };
 
+AOS.prototype.handleRentersInsuranceStart = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    speechOutput.text = "Let's get you a Renters quote. I would need your first and last name.";
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
+
+    return deferred.promise;
+}
+
+AOS.prototype.handleRentersInsuranceName = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    speechOutput.text = "Please provide your date of birth.";
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
+
+    return deferred.promise;
+}
+
+AOS.prototype.handleRentersInsuranceDOB = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    speechOutput.text = "Please provide your current address, or say current location";
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
+
+    return deferred.promise;
+}
+
+AOS.prototype.handleRentersInsuranceAddr = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+    rentersFindSpeechResp.contextOut = [];
+    if (sessionAttrs.addrLine1) {
+        speechOutput.text = "Please provide your city";
+        rentersFindSpeechResp.speechOutput = speechOutput;
+        rentersFindSpeechResp.repromptOutput = speechOutput;
+    } else {
+        speechOutput.text = "To get your current location";
+        rentersFindSpeechResp.speechOutput = speechOutput;
+        rentersFindSpeechResp.repromptOutput = speechOutput;
+        rentersFindSpeechResp.contextOut.push({ "name": "PermissionSeekingIntent", "parameters": { "IntentName": "AOS-RENTERS-CURADDR" } });
+    }
+    deferred.resolve(rentersFindSpeechResp);
+
+    return deferred.promise;
+}
+
 function getFinalAgentFindSendEmailResponse(sessionAttrs) {
     var deferred = q.defer();
     var finalSpeechOutput = new Speech();

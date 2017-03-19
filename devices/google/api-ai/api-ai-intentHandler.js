@@ -113,6 +113,30 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
+        case "AOS-RENTERS-INSURANCE":
+            handlerAOSRentersInsuranceStart(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AOS-RENTERS-NAME":
+            handlerAOSRentersInsuranceName(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AOS-RENTERS-DOB":
+            handlerAOSRentersInsuranceDOB(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AOS-RENTERS-CURADDR":
+            handlerAOSRentersInsuranceAddr(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
         case "HELPINTENT":
         default:
             var message = "You can say hello to me!";
@@ -177,8 +201,6 @@ function handleARSVehicleYMMIntent(body, deferred) {
     return deferred.promise;
 }
 
-
-
 function getARSSessionAttributes(contextInfo) {
     var sessionAttrs = {
         "serviceType": undefined, "cost": undefined,
@@ -218,6 +240,98 @@ function getARSSessionAttributes(contextInfo) {
     return sessionAttrs;
 }
 
+
+//#endregion
+
+//#region Renters insurance
+function handlerAOSRentersInsuranceStart(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getARSSessionAttributes(rentersCntx);
+
+    aos.handleRentersInsuranceStart(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+function handlerAOSRentersInsuranceName(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handleRentersInsuranceName(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+function handlerAOSRentersInsuranceDOB(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handleRentersInsuranceDOB(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+function handlerAOSRentersInsuranceAddr(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handleRentersInsuranceAddr(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+
+}
+
+function getAOSRentersSessionAttributes(contextInfo) {
+    var sessionAttrs = {
+        "name": undefined, "dob": undefined, "addrLine1": undefined, "city": undefined, "zip": undefined
+    };
+
+    if (contextInfo) {
+        var firstName = contextInfo.parameters["given-name.original"];
+        if (firstName && firstName.trim().length > 0) {
+            sessionAttrs.firstName = contextInfo.parameters["given-name"];
+        }
+        var lastName = contextInfo.parameters["last-name.original"];
+        if (lastName && lastName.trim().length > 0) {
+            sessionAttrs.lastName = contextInfo.parameters["last-name"];
+        }
+        var addrLine1 = contextInfo.parameters["address.original"];
+        if (addrLine1 && addrLine1.trim().length > 0) {
+            sessionAttrs.addrLine1 = contextInfo.parameters["address"];
+        }
+
+    }
+
+    return sessionAttrs;
+}
 
 //#endregion
 

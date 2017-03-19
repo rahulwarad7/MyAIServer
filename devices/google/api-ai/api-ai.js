@@ -28,6 +28,7 @@ Allstate.prototype.execute = function (body) {
             //once the basic response is generated then, do device specific processing.
             switch (source.toUpperCase()) {
                 case 'GOOGLE':
+                    googleHome.processResponse(body, respData);
                     break;
                 case 'FACEBOOK':
                     facebookMsg.processResponse(body, respData);
