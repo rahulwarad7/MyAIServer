@@ -158,10 +158,20 @@ AOS.prototype.handleRentersInsuranceName = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    speechOutput.text = "Please provide your date of birth.";
-    rentersFindSpeechResp.speechOutput = speechOutput;
-    rentersFindSpeechResp.repromptOutput = speechOutput;
+    if (sessionAttrs.lastName) {
+        speechOutput.text = "Please provide your date of birth.";
+        rentersFindSpeechResp.speechOutput = speechOutput;
+        rentersFindSpeechResp.repromptOutput = speechOutput;
+    } else {
+        speechOutput.text = sessionAttrs.firstName + ", please provide last name.";
+        rentersFindSpeechResp.speechOutput = speechOutput;
+        rentersFindSpeechResp.repromptOutput = speechOutput;
+        rentersFindSpeechResp.contextOut = [];
+        rentersFindSpeechResp.contextOut.push({ "name": "aos-renters-lastname", "parameters": {} });
+    }
     deferred.resolve(rentersFindSpeechResp);
+
+
 
     return deferred.promise;
 }
@@ -187,7 +197,7 @@ AOS.prototype.handleRentersInsuranceAddr = function (sessionAttrs) {
     var repromptOutput = new Speech();
     rentersFindSpeechResp.contextOut = [];
     if (sessionAttrs.addrLine1) {
-        speechOutput.text = "Please provide your city";
+        speechOutput.text = "Please provide your city and zip";
         rentersFindSpeechResp.speechOutput = speechOutput;
         rentersFindSpeechResp.repromptOutput = speechOutput;
     } else {
