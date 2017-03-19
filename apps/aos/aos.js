@@ -401,6 +401,9 @@ function getRentersSaveCustomerResponse(sessionAttrs) {
             var customerSaveInfo = getCustomerSaveInfo(sessionAttrs, sessionInfo);
             return rentersSaveCustomer(customerSaveInfo, sessionInfo.sessionId);
         }).then(function (saveResp) {
+            if (saveResp && saveResp.transactionToken) {
+                saveCustSpeechOutput.text = "Your control number is: " + saveResp.transactionToken.controlNumber.split("").join(" ");
+            }
             deferred.resolve(saveCustSpeechOutput);
         }).catch(function (error) {
             saveCustSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
