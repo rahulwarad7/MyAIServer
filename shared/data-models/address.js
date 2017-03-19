@@ -1,8 +1,9 @@
 function Address(){
-    this.address;
-    this.apt;
+    this.addressLine1;
+    this.aptOrUnit;
     this.city;
-    this.zip;
+    this.state;
+    this.zipCode;
 }
 
 module.exports = Address;

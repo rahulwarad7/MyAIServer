@@ -117,6 +117,33 @@ var dateUtil = (function () {
             minutes = minutes < 10 ? '0' + minutes : minutes;
             var formattedTime = hours + ':' + minutes + ' ' + ampm;
             return formattedTime;
+        },
+        /**
+         * Return date in the format speicifed by the caller function.
+         */
+        getFormattedDate: function (strDate, format) {
+            var dt = new Date(strDate);
+            var strFormattedDt;
+            var yearPart = dt.getFullYear();
+            var monthPart = dt.getMonth() + 1;
+            var dayPart = dt.getDate();
+
+            switch (format) {
+                case "MMDDYYYY":
+                    if (monthPart.toString().length === 1) {
+                        monthPart = "0" + monthPart;
+                    }
+                    if (dayPart.toString().length === 1) {
+                        dayPart = "0" + dayPart;
+                    }
+                    strFormattedDt = monthPart + dayPart + yearPart;
+                    break;
+                default:
+                    strFormattedDt = strDate;
+                    break;
+            }
+
+            return strFormattedDt;
         }
     };
 })();

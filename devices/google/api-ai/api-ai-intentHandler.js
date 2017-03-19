@@ -144,6 +144,13 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
+        case "AOS-RENTERS-INSADDRSAME-NO":
+        case "AOS-RENTERS-INSADDRSAME-YES":
+            handlerAOSRentersInsuranceInsuredAddrSame(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
         case "GET-LOCATION-PERMISSION":
             var permissionGranted = isPermissionGranted(body);
             handleGetLocationPermission(body, deferred, permissionGranted)
@@ -405,6 +412,22 @@ function handlerAOSRentersInsuranceCityZip(body, deferred) {
 
 }
 
+function handlerAOSRentersInsuranceInsuredAddrSame(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handleRentersInsuranceInsuredAddrSame(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
 function getAOSRentersSessionAttributes(contextInfo) {
     var sessionAttrs = {
         "name": undefined, "dob": undefined, "addrLine1": undefined, "city": undefined, "zip": undefined
@@ -438,6 +461,7 @@ function getAOSRentersSessionAttributes(contextInfo) {
                 sessionAttrs.zip = "0" + sessionAttrs.zip;
             }
         }
+        sessionAttrs.IsInsuredAddrSame = contextInfo.parameters["IsInsuredAddrSame"] === "true" ? true : false;
 
     }
 
