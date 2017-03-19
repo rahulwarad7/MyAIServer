@@ -137,6 +137,13 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
+        case "GET-LOCATION-PERMISSION":
+            var permissionGranted = isPermissionGranted(body);
+            handleGetLocationPermission(body, deferred, permissionGranted)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
         case "HELPINTENT":
         default:
             var message = "You can say hello to me!";
@@ -147,6 +154,71 @@ function intentHandlers(body) {
     }
     return deferred.promise;
 };
+
+//#region permission
+function isPermissionGranted(body) {
+    var permissionStatus = body.originalRequest.data.inputs[0].arguments[0].text_value;
+    if (permissionStatus === "true") {
+        return true;
+    } else {
+        return false;
+    }
+
+
+}
+function handleGetLocationPermission(body, deferred, pemissionGranted) {
+    var agentFindSpeechResp = {};
+    if (pemissionGranted) {
+        var permissionSeekingIntent = getPermissionSeekingIntent(body);
+        if (permissionSeekingIntent) {
+            var intentName = permissionSeekingIntent.parameters.IntentName;
+            var deviceZipCode = getDeviceZipcode(body);
+            processPermissionSeekingIntent(body, deferred, deviceZipCode, intentName)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+        }
+    } else {
+        agentFindSpeechResp.speech = "Request aborted , still you can find agent in manual way";
+        agentFindSpeechResp.displayText = "Request aborted , still you can find agent in manual way";
+        deferred.resolve(agentFindSpeechResp);
+    }
+    return deferred.promise;
+}
+
+function processPermissionSeekingIntent(body, deferred, deviceZipCode, intentName) {
+    switch (intentName.toUpperCase()) {
+        case "AGENT-FIND-BYCURRENTLOC":
+            processAgentFindByCurrentLoc(body, deferred, deviceZipCode)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        default:
+            break;
+
+
+    }
+    return deferred.promise;
+}
+
+function getPermissionSeekingIntent(body) {
+    var incomingContexts = body.result.contexts;
+    var permissionSeekingIntent = incomingContexts.find(function (contextObj) {
+        if (contextObj.name === "PermissionSeekingIntent") {
+            return contextObj;
+        }
+    });
+    return permissionSeekingIntent;
+}
+
+
+function getDeviceZipcode(body) {
+    if (body.originalRequest.data.device) {
+        return body.originalRequest.data.device.location.zip_code;
+    }
+}
+//#endregion
 
 //#region ARS
 
