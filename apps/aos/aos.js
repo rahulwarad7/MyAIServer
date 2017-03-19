@@ -215,7 +215,7 @@ AOS.prototype.handleRentersInsuranceCityZip = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
     if (sessionAttrs.zip && sessionAttrs.city) {
-        //since all the data required data is present. 
+        //since all the required data is present. 
         //do the validation of data
         //if validation fails  then notify user
         //otherwise do save customer
