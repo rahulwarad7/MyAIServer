@@ -151,12 +151,44 @@ function intentHandlers(body) {
                 });
             break;
         case "AOS-RENTERS-INSADDRSAME-NO":
+        case "AOS-RETRIEVE-START":
+            handlerAOSRetrieveInitiate(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AOS-RETRIEVE-LASTNAME":            
+             handlerAOSRetrieveLastName(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AOS-RETRIEVE-DOB":
+             handlerAOSRetrieveDOB(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;  
+        case "AOS-RETRIEVE-EMAIL":
+             handlerAOSRetrieveEmail(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AOS-RETRIEVE-ZIP":
+             handlerAOSRetrieveZipCode(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
         case "AOS-RENTERS-INSADDRSAME-YES":
             handlerAOSRentersInsuranceInsuredAddrSame(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
                 });
             break;
+        
+        
         case "GET-LOCATION-PERMISSION":
             var permissionGranted = isPermissionGranted(body);
             handleGetLocationPermission(body, deferred, permissionGranted)
@@ -553,7 +585,6 @@ function handleAgentFindEmailSend(body, deferred) {
     return deferred.promise;
 }
 
-
 function handleAgentFindByZip(body, deferred) {
     var agentFindSpeechResp = {};
     var result = body.result;
@@ -609,6 +640,115 @@ function getAgentSessionAttributes(contextInfo) {
 
 //#endregion
 
+//#region RetrieveQuote
+function handlerAOSRetrieveInitiate(body, deferred) {
+    var retrieveWelcomeSpeechResp = {};
+    var result = body.result;
+    var retrieveCntx = result.contexts.find(function (curCntx) { return curCntx.name === "aos-retv"; });
+    var sessionAttrs = getRetrieveQuoteSessionAttributes(retrieveCntx);
+
+    aos.handleRetrieveQuoteStart(sessionAttrs)
+        .then(function (retrieveSpeechResponse) {
+            retrieveWelcomeSpeechResp.speech = retrieveSpeechResponse.speechOutput.text;
+            retrieveWelcomeSpeechResp.displayText = retrieveSpeechResponse.speechOutput.text;
+            deferred.resolve(retrieveWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+function handlerAOSRetrieveLastName(body,deferred){
+    var retrieveSpeechResp = {};
+    var result = body.result;
+    var retrieveCntx = result.contexts.find(function (curCntx) { return curCntx.name === "aos-retv"; });
+    var sessionAttrs = getRetrieveQuoteSessionAttributes(retrieveCntx);
+
+    aos.handleRetrieveQuoteLastName(sessionAttrs)
+        .then(function (retrieveSpeechResponse) {
+            retrieveSpeechResp.speech = retrieveSpeechResponse.speechOutput.text;
+            retrieveSpeechResp.displayText = retrieveSpeechResponse.speechOutput.text;
+            deferred.resolve(retrieveSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+function handlerAOSRetrieveDOB(body, deferred) {
+    var retrieveSpeechResp = {};
+    var result = body.result;
+    var retrieveCntx = result.contexts.find(function (curCntx) { return curCntx.name === "aos-retv"; });
+    var sessionAttrs = getRetrieveQuoteSessionAttributes(retrieveCntx);
+
+    aos.handleRetrieveQuoteDOB(sessionAttrs)
+        .then(function (retrievespeechResponse) {
+            retrieveSpeechResp.speech = retrievespeechResponse.speechOutput.text;
+            retrieveSpeechResp.displayText = retrievespeechResponse.speechOutput.text;
+            deferred.resolve(retrieveSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+function handlerAOSRetrieveEmail(body, deferred) {
+    var retrieveSpeechResp = {};
+    var result = body.result;
+    var retrieveCntx = result.contexts.find(function (curCntx) { return curCntx.name === "aos-retv"; });
+    var sessionAttrs = getRetrieveQuoteSessionAttributes(retrieveCntx);
+
+    aos.handleRetrieveQuoteEmail(sessionAttrs)
+        .then(function (retrievespeechResponse) {
+            retrieveSpeechResp.speech = retrievespeechResponse.speechOutput.text;
+            retrieveSpeechResp.displayText = retrievespeechResponse.speechOutput.text;
+            deferred.resolve(retrieveSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+function handlerAOSRetrieveZipCode(body, deferred) {
+    var retrieveSpeechResp = {};
+    var result = body.result;
+    var retrieveCntx = result.contexts.find(function (curCntx) { return curCntx.name === "aos-retv"; });
+    var sessionAttrs = getRetrieveQuoteSessionAttributes(retrieveCntx);
+
+    aos.handleRetrieveQuoteZipCode(sessionAttrs)
+        .then(function (retrievespeechResponse) {
+            retrieveSpeechResp.speech = retrievespeechResponse.speechOutput.text;
+            retrieveSpeechResp.displayText = retrievespeechResponse.speechOutput.text;
+            deferred.resolve(retrieveSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+function getRetrieveQuoteSessionAttributes(contextInfo) {
+    var sessionQuoteAttrs = { "zipcode": undefined, "email": undefined, "lastname": undefined, "dob": undefined, "quotedetails": {} };
+    if (contextInfo) {
+        var zip = contextInfo.parameters["zipcode.original"];
+        if (zip && zip.trim().length > 0) {
+            sessionQuoteAttrs.zipcode = contextInfo.parameters["zipcode"];
+        }
+        var email = contextInfo.parameters["email.original"];
+        if (email && email.trim().length > 0) {
+            sessionQuoteAttrs.email = contextInfo.parameters["email"];
+        }
+         var lastname = contextInfo.parameters["lastname.original"];
+        if (lastname && lastname.trim().length > 0) {
+            sessionQuoteAttrs.lastname = contextInfo.parameters["lastname"];
+        }
+         var dob = contextInfo.parameters["dob.original"];
+        if (dob && dob.trim().length > 0) {
+            sessionQuoteAttrs.dob = contextInfo.parameters["dob"];
+        }
+        if (contextInfo.parameters.quotedetails) {
+            sessionQuoteAttrs.quotedetails = contextInfo.parameters.quotedetails;
+        }
+    }
+
+    return sessionQuoteAttrs;
+}
+
+//#endregion 
 
 //#region Tidepooler
 function handleTDCityIntent(body, deferred) {

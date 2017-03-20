@@ -6,6 +6,7 @@ var agents = require('./../../shared/data-models/agent.js');
 var Session = require('./../../shared/data-models/session.js');
 var Agent = require('./../../shared/data-models/agent.js');
 var Address = require('./../../shared/data-models/address.js');
+var RetrieveQuote = require('./../../shared/data-models/retrieveQuote.js');
 
 var q = require('q');
 var request = require('request');
@@ -21,6 +22,7 @@ var URL_GETAGENTS = URL_COMMON + "api/common/agents";
 var URL_GETSTATE = URL_COMMON + "api/location/{0}/state";
 var URL_RENTERS_BASE = "https://purchase.allstate.com/onlinesalesapp-renters/api";
 var URL_RENTERS_SAVECUSTOMER = URL_RENTERS_BASE + "/renters/customer";
+var URL_RETRIEVEQUOTE = URL_COMMON + "api/quote-repository";
 
 var FROM_EMAIL_ID = "npavangouda@gmail.com";
 var AGENTFINDRESP = [
@@ -265,6 +267,83 @@ AOS.prototype.handleRentersInsuranceInsuredAddrSame = function (sessionAttrs) {
     return deferred.promise;
 };
 //#endregion
+
+//#region PUBLIC RETRIEVEQUOTE
+AOS.prototype.handleRetrieveQuoteStart = function (sessionAttrs) {
+    var deferred = q.defer();
+    var retrieveFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    speechOutput.text = "Let's retrieve your quote. I would need your last name.";
+    retrieveFindSpeechResp.speechOutput = speechOutput;
+    retrieveFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(retrieveFindSpeechResp);
+
+    return deferred.promise;
+}
+
+AOS.prototype.handleRetrieveQuoteLastName = function (sessionAttrs){
+    var deferred = q.defer();
+    var retrieveSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+   
+    speechOutput.text = "Please provide your date of birth.";
+    retrieveSpeechResp.speechOutput = speechOutput;
+    retrieveSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(retrieveSpeechResp);
+
+    return deferred.promise;
+}
+
+AOS.prototype.handleRetrieveQuoteDOB = function (sessionAttrs) {
+    var deferred = q.defer();
+    var retrieveFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    speechOutput.text = "Please provide your email address";
+    retrieveFindSpeechResp.speechOutput = speechOutput;
+    retrieveFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(retrieveFindSpeechResp);
+
+    return deferred.promise;
+};
+
+AOS.prototype.handleRetrieveQuoteEmail = function (sessionAttrs) {
+    var deferred = q.defer();
+    var retrieveFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    speechOutput.text = "Please provide your zip code, or say current location";
+    retrieveFindSpeechResp.speechOutput = speechOutput;
+    retrieveFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(retrieveFindSpeechResp);
+
+    return deferred.promise;
+};
+
+AOS.prototype.handleRetrieveQuoteZipCode = function (sessionAttrs) {
+    var deferred = q.defer();
+    var savedQuoteSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+     if (sessionAttrs.zipcode && sessionAttrs.email && sessionAttrs.dob && sessionAttrs.lastname) {
+         getSavedQuoteResponse(sessionAttrs)
+            .then(function (savedQuoteSpeechOutput) {
+                savedQuoteSpeechResp.speechOutput = savedQuoteSpeechOutput;
+                savedQuoteSpeechResp.repromptOutput = null;
+                savedQuoteSpeechResp.sessionAttrs = sessionAttrs;
+                deferred.resolve(savedQuoteSpeechResp);
+            });
+
+    }
+    return deferred.promise;
+};
+//#endregion
+
 //#endregion
 
 //#region PRIVATE METHODS
@@ -431,6 +510,42 @@ function getCustomerSaveInfo(sessionAttrs, sessionInfo) {
 
 //#endregion
 
+//#region PRIVATE RETRIEVEQUOTE
+function getSavedQuoteResponse(sessionAttrs) {
+    var deferred = q.defer();
+    var finalSpeechOutput = new Speech();
+    var sessionInfo = new Session();
+    sessionInfo.zipcode = sessionAttrs.zipcode;
+    sessionInfo.dob = sessionAttrs.dob;
+    sessionInfo.email = sessionAttrs.email;
+    sessionInfo.lastname = sessionAttrs.lastname;
+    startAOSSession()
+        .then(function (id) {
+            sessionInfo.sessionId = id;
+            return getStateFromZip(sessionInfo.sessionId, sessionInfo.zipcode);
+        }).then(function (state) {
+            sessionInfo.state = state;
+            return getSavedQuote(sessionInfo);
+        }).then(function (quoteResp) {
+            if (quoteResp && quoteResp.quoteList && quoteResp.quoteList.length > 0) {
+                sessionAttrs.quotedetails = quoteResp.quoteList[0];
+                var quoteDetails = quoteResp;
+                finalSpeechOutput.text = "You have saved policy with policy number, " + quoteResp.quoteList[0].policyNumber +
+                    ". You have purchased this policy on " + quoteResp.quoteList[0].startDate +
+                    ". Or, would you like me to email you the quote details?";
+            } else {
+                finalSpeechOutput.text = "sorry! no saved policies are available with these inputs.Would you like to insure for renters?";
+            }
+            deferred.resolve(finalSpeechOutput);
+        }).catch(function (error) {
+            finalSpeechOutput.text = "something went wrong with retrieve quote service. Please try again later.";
+            deferred.resolve(finalSpeechOutput);
+        })
+
+    return deferred.promise;
+};
+
+//#endregion
 //#endregion
 
 //#region AOS API CALLS
@@ -485,6 +600,68 @@ function rentersSaveCustomer(customerSaveInfo, sessionId) {
 
     return deferred.promise;
 }
+
+function getSavedQuote(sessionInfo) {
+    var deferred = q.defer();
+    if(sessionInfo.dob){
+        var dob = DateUtil.getFormattedDate(sessionInfo.dob, "MMDDYYYY");
+        sessionInfo.dob = dob;
+    }
+    request(
+        {
+            method: 'POST',
+            uri: URL_RETRIEVEQUOTE,
+            "content-type": "application/json",
+            headers: { "X-pd": "AUTO", "X-TID": sessionInfo.sessionId },
+            json: true,
+            body: { 
+                "lastName":sessionInfo.lastName,
+                "dateOfBirth":sessionInfo.dob,
+                "emailID":sessionInfo.email,
+                "zipCode":sessionInfo.zipcode
+         }
+        },
+        function (error, response, body) {
+            if (error || response.statusCode !== 200) {
+                errormsg = "Error from server session";
+                deferred.reject(errormsg);
+            } else {
+                var quotes = ProcessQuoteResponse(response.body);
+                deferred.resolve(quotes);
+            }
+        });
+
+    return deferred.promise;
+}
+//#endregion
+
+//#region RESPONSE MAPPERS
+function ProcessQuoteResponse(retrieveQuoteServResp) {
+    var quotes = [];
+    if (retrieveQuoteServResp && retrieveQuoteServResp.quoteList && retrieveQuoteServResp.quoteList.length > 0) {
+        for (var index = 0; index < retrieveQuoteServResp.quoteList.length; index++) {
+            var currSavedQuote = retrieveQuoteServResp.quoteList[index];
+            var savedQuote = new SavedQUote();
+            if(currSavedQuote.policyNumber){
+            savedQuote.policyNumber = currSavedQuote.policyNumber;
+            savedQuote.controlNumber = currSavedQuote.controlNumber;
+            savedQuote.product = currSavedQuote.product;
+            savedQuote.startDate = currSavedQuote.startDate;
+            if(currSavedQuote && currSavedQuote.agentBusinessCard)
+                {
+                    savedQuote.agentName = currSavedQuote.agentBusinessCard.name;  
+                    savedQuote.agentPhoneNumber = currSavedQuote.agentBusinessCard.phoneNumber;  
+                    savedQuote.agentEmailAddress = currSavedQuote.agentBusinessCard.emailAddress;            
+                }       
+            }
+                
+            quotes.push(savedQuote);
+        }
+    }
+
+    return quotes;
+}
+
 //#endregion
 
 module.exports = new AOS();
