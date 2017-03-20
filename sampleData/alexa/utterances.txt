@@ -1,12 +1,6 @@
-GetWeatherForecast weather in {wf_city}
-TDDialogTideIntent {td_city}
-TDDialogTideIntent {td_city} {td_state}
-TDDialogTideIntent {Date}
-TDSupportedCities what cities
-TDSupportedCities what cities are supported
-TDSupportedCities which cities are supported
-TDSupportedCities which cities
-TDSupportedCities which cities do you know
+GeneralOneSlotIntent {value1}
+GeneralTwoSlotIntent {value1} {value2}
+GeneralThreeSlotIntent {value1} {value2} {value3}
 AgentFindByZip I need agent for zip {agent_zip}
 AgentFindByZip I need an agent for zip {agent_zip}
 AgentFind I need help from agent
@@ -23,3 +17,7 @@ AgentFind email would be good.
 AgentFind yes send email
 AgentFind yes email please
 AgentFind yes! email would be great
+AOSRentersInsurance i need quote for my rented house
+AOSRentersInsurance can you provide insurance for rented house
+AOSRentersInsurance I need renters insurance
+AOSRentersInsurance I would like to protect my rented house.

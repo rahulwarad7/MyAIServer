@@ -138,6 +138,12 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
+        case "AOS-RENTERS-CURADDR-LOC":
+            handlerAOSRentersInsuranceAddrCurLoc(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
         case "AOS-RENTERS-CURCITY-ZIP":
             handlerAOSRentersInsuranceCityZip(body, deferred)
                 .then(function (responseInfo) {
@@ -425,6 +431,18 @@ function handlerAOSRentersInsuranceInsuredAddrSame(body, deferred) {
             deferred.resolve(rentersWelcomeSpeechResp);
         });
 
+    return deferred.promise;
+}
+
+function handlerAOSRentersInsuranceAddrCurLoc(body, deferred) {
+    var rentersSpeechResp = {};
+    rentersSpeechResp.speech = "To get your current location";
+    rentersSpeechResp.displayText = "To get your current location";
+    if (!rentersSpeechResp.contextOut) {
+        rentersSpeechResp.contextOut = [];
+    }
+    rentersSpeechResp.contextOut.push({ "name": "PermissionSeekingIntent", "parameters": { "IntentName": "AOS-RENTERS-CURADDR-LOC" } });
+    deferred.resolve(rentersSpeechResp);
     return deferred.promise;
 }
 

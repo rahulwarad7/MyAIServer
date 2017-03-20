@@ -6,7 +6,7 @@ GoogleHome.prototype.processResponse = function (body, respData) {
     if (body.result && body.result.metadata && body.result.metadata.intentName) {
         var intentName = body.result.metadata.intentName;
         switch (intentName.toUpperCase()) {
-            case "AOS-RENTERS-CURADDR":
+            case "AOS-RENTERS-CURADDR-LOC":
                 var permission_object = getCurrentLocationPermissionObject(respData);
                 respData.data = permission_object;
                 if (!respData.contextOut) {

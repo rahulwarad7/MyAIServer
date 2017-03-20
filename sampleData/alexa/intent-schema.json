@@ -1,57 +1,70 @@
 {
     "intents": [
         {
-            "intent": "GetWeatherForecast",
+            "intent": "AgentFind",
             "slots": [
                 {
-                    "name": "wf_city",
-                    "type": "AMAZON.AT_CITY"
+                    "name": "agent_zip",
+                    "type": "AMAZON.NUMBER"
                 }
             ]
         },
         {
-            "intent": "TDDialogTideIntent",
+            "intent": "AgentFindByZip",
             "slots": [
                 {
-                    "name": "td_city",
-                    "type": "TD_LIST_OF_CITIES"
-                },
-                {
-                    "name": "td_state",
-                    "type": "TD_LIST_OF_STATES"
-                },
-                {
-                    "name": "Date",
-                    "type": "AMAZON.DATE"
+                    "name": "agent_zip",
+                    "type": "AMAZON.NUMBER"
                 }
             ]
         },
         {
-            "intent": "TDSupportedCities"
+            "intent": "AgentFindByCurrentLoc"
         },
         {
-            "intent":"AgentFind",
-            "slots":[
-                {
-                    "name":"agent_zip",
-                    "type":"AMAZON.NUMBER"
-                }
-            ]
-        },
-        {
-            "intent":"AgentFindByZip",
-            "slots":[
-                {
-                    "name":"agent_zip",
-                    "type":"AMAZON.NUMBER"
-                }
-            ]
-        },
-        {
-            "intent":"AgentFindByCurrentLoc"
+            "intent": "AOSRentersInsurance"
         },
         {
             "intent": "GetNextEventIntent"
+        },
+        {
+            "intent": "GeneralFirstLastName",
+            "slots": [
+                {
+                    "name": "firstName",
+                    "type": "AMAZON.US_FIRST_NAME"
+                },
+                {
+                    "name": "lastName",
+                    "type": "AMAZON.US_FIRST_NAME"
+                }
+            ]
+        },
+        {
+            "intent": "GeneralCityZipIntent",
+            "slots": [
+                {
+                    "name": "city",
+                    "type": "AMAZON.US_CITY"
+                },
+                {
+                    "name": "zip",
+                    "type": "AMAZON.NUMBER"
+                }
+            ]
+        },
+        {
+            "intent": "GeneralYMMIntent",
+            "slots": [
+                {
+                    "name": "year",
+                    "type": "AMAZON.FOUR_DIGIT_NUMBER"
+                },
+                {
+                    "name": "zip",
+                    "type": "AMAZON.NUMBER"
+                }
+            ]
         },
         {
             "intent": "AMAZON.HelpIntent"
