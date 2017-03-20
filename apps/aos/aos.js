@@ -641,7 +641,7 @@ function ProcessQuoteResponse(retrieveQuoteServResp) {
     if (retrieveQuoteServResp && retrieveQuoteServResp.quoteList && retrieveQuoteServResp.quoteList.length > 0) {
         for (var index = 0; index < retrieveQuoteServResp.quoteList.length; index++) {
             var currSavedQuote = retrieveQuoteServResp.quoteList[index];
-            var savedQuote = new SavedQUote();
+            var savedQuote = new RetrieveQuote();
             if(currSavedQuote.policyNumber){
             savedQuote.policyNumber = currSavedQuote.policyNumber;
             savedQuote.controlNumber = currSavedQuote.controlNumber;
