@@ -105,40 +105,27 @@ function HandleSessionEndedRequest(body, deferred) {
 
 function HanldeIntentRequest(body, deferred) {
     var intentResponseInfo;
+    checkAndUpdateIntentSequence(body);
     var intentName = body.request.intent.name;
-    logging("intent start: " + intentName);
-    updateIntentSequence(body, intentName);
-    switch (intentName) {
-        case "GetWeatherForecast":
-            var speechOutput = new Speech();
-            speechOutput.text = "Today in Boston: Fair, the temperature is 37 degree fahrenheit.";
-            intentResponseInfo = AlexaSkillUtil.tell(speechOutput, body.session);
-            deferred.resolve(intentResponseInfo);
-            break;
-        case "TDSupportedCities":
-            intentResponseInfo = supportedCitiesIntent(body);
-            deferred.resolve(intentResponseInfo);
-            break;
-        case "TDDialogTideIntent":
-            dialogTideIntent(body, deferred)
-                .then(function (output) {
-                    intentResponseInfo = output;
-                    deferred.resolve(intentResponseInfo);
-                });
-            break;
-        case "AgentFind":
+    switch (intentName.toUpperCase()) {
+        case "AGENTFIND":
             handleAgentFindIntent(body, deferred)
                 .then(function (output) {
                     intentResponseInfo = output;
                     deferred.resolve(intentResponseInfo);
                 });
             break;
+        case "AOSRENTERSINSURANCE":
+            handlerAOSRentersInsuranceIntent(body, deferred)
+                .then(function (output) {
+                    intentResponseInfo = output;
+                    deferred.resolve(intentResponseInfo);
+                });
+            break;
         default:
-            logging('no supporting intent implemented. IntentName: ' + intentName);
-            throw 'Unsupported intent: ' + intentName;
+            deferred.reject("Sorry. I am still learning. For now I can't help you with this.");
             break;
     }
-    logging("intent start: " + intentName);
     return deferred.promise;
 }
 
@@ -162,16 +149,39 @@ function checkAppId(currentReqAppId) {
 }
 
 // private intents functions start
+function updateCorrectIntent(body, prevIntentName) {
+    body.request.intent.name = prevIntentName
+    var currentSlots = body.request.intent.slots;
+    var newSlots = {};
+    //write switch case to set currentIntent slot values to previous intent slot value.
+    switch (prevIntentName.toUpperCase()) {
+        case "AGENTFIND":
+            newSlots.agent_zip = { "name": "agent_zip", "value": currentSlots.slotOne.value };
+            break;
+        default:
+            break;
+    };
+    body.request.intent.slots = newSlots;
+}
 
-function updateIntentSequence(body, curIntentName) {
+
+function checkAndUpdateIntentSequence(body) {
+    var curIntentName = body.request.intent.name;
     var intentSeq = body.session.attributes['intentsequence'];
     if (curIntentName) {
-        if (intentSeq) {
-            intentSeq = intentSeq + "|" + curIntentName.toUpperCase();
+        if (curIntentName.toLowerCase().indexOf('general') > -1 &&
+            body.session.attributes && body.session.attributes.intentsequence) {
+            var previousIntentsList = body.session.attributes.intentsequence.split('|');
+            var prevIntentName = previousIntentsList[previousIntentsList.length - 1];
+            updateCorrectIntent(body, prevIntentName);
         } else {
-            intentSeq = curIntentName.toUpperCase();
+            if (intentSeq) {
+                intentSeq = intentSeq + "|" + curIntentName.toUpperCase();
+            } else {
+                intentSeq = curIntentName.toUpperCase();
+            }
+            body.session.attributes['intentsequence'] = intentSeq;
         }
-        body.session.attributes['intentsequence'] = intentSeq;
     }
 }
 
@@ -238,44 +248,61 @@ function processPoolerSpeechResp(poolerDateSpeechResponse, body) {
     return processedResponse;
 }
 
+//#region AGENT
 function handleAgentFindIntent(body, deferred) {
     var findAgentSpeechResponse;
     var intent = body.request.intent;
     var zipValue = intent.slots.agent_zip ? intent.slots.agent_zip.value : undefined;
-    var sessionAttrs = { "zip": zipValue, "agents": [] };;
+    var sessionAttrs = { "zip": zipValue, "agents": [] };
 
     aos.handleAgentFindRequest(sessionAttrs)
         .then(function (handleAgentFindResponse) {
-            findAgentSpeechResponse = proessFindAgentSpeechResp(handleAgentFindResponse, body);
+            findAgentSpeechResponse = proessAlexaSpeechResp(handleAgentFindResponse, body, "Find Agent");
             deferred.resolve(findAgentSpeechResponse);
         });
 
     return deferred.promise;
 }
 
-function proessFindAgentSpeechResp(handleAgentFindResponse, body) {
+function proessAlexaSpeechResp(handleAlexaResponse, body, titleText) {
     var processedResponse;
     var combinedAttributes = Object.assign(
-        handleAgentFindResponse.sessionAttributes ? handleAgentFindResponse.sessionAttributes : {},
+        handleAlexaResponse.sessionAttrs ? handleAlexaResponse.sessionAttrs : {},
         body.session.attributes ? body.session.attributes : {}
     );
-    if (handleAgentFindResponse.repromptOutput) {
+    if (handleAlexaResponse.repromptOutput) {
         //ask for zip
         processedResponse = AlexaSkillUtil.ask(
-            handleAgentFindResponse.speechOutput,
-            handleAgentFindResponse.repromptOutput,
+            handleAlexaResponse.speechOutput,
+            handleAlexaResponse.repromptOutput,
             { "attributes": combinedAttributes });
     } else {
         //tell the final agent status
         processedResponse = AlexaSkillUtil.tellWithCard(
-            handleAgentFindResponse.speechOutput,
+            handleAlexaResponse.speechOutput,
             { "attributes": combinedAttributes },
-            { "title": "Find Agent", "content": handleAgentFindResponse.speechOutput.text }
+            { "title": titleText, "content": handleAlexaResponse.speechOutput.text }
         );
     }
     return processedResponse;
 
 }
+//#endregion
+//#region RENTERS
+function handlerAOSRentersInsuranceIntent(body, deferred) {
+    var rentersInsuranceResponse;
+    var intent = body.request.intent;
+    var sessionAttrs = {};
+    aos.handleRentersInsuranceStart(sessionAttrs)
+        .then(function (handleRentersInsuranceResp) {
+            rentersInsuranceResponse = proessAlexaSpeechResp(handleRentersInsuranceResp, body, "Renters Insurance");
+            deferred.resolve(rentersInsuranceResponse);
+        });
+
+    return deferred.promise;
+}
+
+//#endregion
 // private intents functions end
 
 //private function end

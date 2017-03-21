@@ -28,6 +28,15 @@
             "intent": "GetNextEventIntent"
         },
         {
+            "intent": "GeneralSingleSlot",
+            "slots": [
+                {
+                    "name": "slotOne",
+                    "type": "AMAZON.US_FIRST_NAME"
+                }
+            ]
+        },
+        {
             "intent": "GeneralFirstLastName",
             "slots": [
                 {
@@ -61,8 +70,12 @@
                     "type": "AMAZON.FOUR_DIGIT_NUMBER"
                 },
                 {
-                    "name": "zip",
-                    "type": "AMAZON.NUMBER"
+                    "name": "make",
+                    "type": "AMAZON.PostalAddress"
+                },
+                {
+                    "name": "model",
+                    "type": "AMAZON.PostalAddress"
                 }
             ]
         },

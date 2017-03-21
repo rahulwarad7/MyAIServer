@@ -1,6 +1,7 @@
-GeneralOneSlotIntent {value1}
-GeneralTwoSlotIntent {value1} {value2}
-GeneralThreeSlotIntent {value1} {value2} {value3}
+GeneralSingleSlot {slotOne}
+GeneralFirstLastName {firstName} {lastName}
+GeneralCityZipIntent {city} {zip}
+GeneralYMMIntent {year} {make} {model}
 AgentFindByZip I need agent for zip {agent_zip}
 AgentFindByZip I need an agent for zip {agent_zip}
 AgentFind I need help from agent
@@ -16,7 +17,6 @@ AgentFind email should do
 AgentFind email would be good.
 AgentFind yes send email
 AgentFind yes email please
-AgentFind yes! email would be great
 AOSRentersInsurance i need quote for my rented house
 AOSRentersInsurance can you provide insurance for rented house
 AOSRentersInsurance I need renters insurance
