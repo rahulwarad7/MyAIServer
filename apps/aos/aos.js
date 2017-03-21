@@ -628,7 +628,7 @@ function getSavedQuote(sessionInfo) {
             "content-type": "application/json",
             headers: { "X-pd": "AUTO", "X-TID": sessionInfo.sessionId },
             json: true,
-            body: { "lastName": sessionInfo.lastName,"dateOfBirth": sessionInfo.dob,"emailID": sessionInfo.email,"zipCode": sessionInfo.zipcode }
+            body: { "lastName": sessionInfo.lastname,"dateOfBirth": sessionInfo.dob,"emailID": sessionInfo.email,"zipCode": sessionInfo.zipcode }
         },
         function (error, response, body) {
             if (error || response.statusCode !== 200) {
