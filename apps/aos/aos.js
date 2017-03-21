@@ -18,6 +18,7 @@ var AOSTranData = [];
 //#region CONSTANTS
 var URL_COMMON = "https://purchase.allstate.com/onlinesalesapp-common/";
 var URL_RENTERS_SESSIONID = URL_COMMON + "api/transaction/RENTERS/sessionid";
+var URL_AUTO_SESSIONID = URL_COMMON + "api/transaction/AUTO/sessionid";
 var URL_GETAGENTS = URL_COMMON + "api/common/agents";
 var URL_GETSTATE = URL_COMMON + "api/location/{0}/state";
 var URL_RENTERS_BASE = "https://purchase.allstate.com/onlinesalesapp-renters/api";
@@ -519,7 +520,7 @@ function getSavedQuoteResponse(sessionAttrs) {
     sessionInfo.dob = sessionAttrs.dob;
     sessionInfo.email = sessionAttrs.email;
     sessionInfo.lastname = sessionAttrs.lastname;
-    startAOSSession()
+    startAutoAOSSession()
         .then(function (id) {
             sessionInfo.sessionId = id;
             return getStateFromZip(sessionInfo.sessionId, sessionInfo.zipcode);
@@ -527,12 +528,11 @@ function getSavedQuoteResponse(sessionAttrs) {
             sessionInfo.state = state;
             return getSavedQuote(sessionInfo);
         }).then(function (quoteResp) {
-            if (quoteResp && quoteResp.quoteList && quoteResp.quoteList.length > 0) {
-                sessionAttrs.quotedetails = quoteResp.quoteList[0];
+            if (quoteResp && quoteResp.length > 0) {
+                sessionAttrs.quotedetails = quoteResp;
                 var quoteDetails = quoteResp;
-                finalSpeechOutput.text = "You have saved policy with policy number, " + quoteResp.quoteList[0].policyNumber +
-                    ". You have purchased this policy on " + quoteResp.quoteList[0].startDate +
-                    ". Or, would you like me to email you the quote details?";
+                finalSpeechOutput.text = "You have, " + quoteResp.length + " number of quotes."
+                    ", would you like me to email you the quote details?";
             } else {
                 finalSpeechOutput.text = "sorry! no saved policies are available with these inputs.Would you like to insure for renters?";
             }
@@ -552,6 +552,20 @@ function getSavedQuoteResponse(sessionAttrs) {
 function startAOSSession(zip) {
     var deferred = q.defer();
     request({ method: 'GET', uri: URL_RENTERS_SESSIONID }, function (error, response, body) {
+        if (error || response.statusCode !== 200) {
+            errormsg = "Error from server session";
+            deferred.reject(errormsg);
+        } else {
+            var sessionId = response.headers['x-tid'];
+            deferred.resolve(sessionId);
+        }
+    });
+    return deferred.promise;
+}
+
+function startAutoAOSSession(zip) {
+    var deferred = q.defer();
+    request({ method: 'GET', uri: URL_AUTO_SESSIONID }, function (error, response, body) {
         if (error || response.statusCode !== 200) {
             errormsg = "Error from server session";
             deferred.reject(errormsg);
@@ -614,12 +628,7 @@ function getSavedQuote(sessionInfo) {
             "content-type": "application/json",
             headers: { "X-pd": "AUTO", "X-TID": sessionInfo.sessionId },
             json: true,
-            body: { 
-                "lastName":sessionInfo.lastName,
-                "dateOfBirth":sessionInfo.dob,
-                "emailID":sessionInfo.email,
-                "zipCode":sessionInfo.zipcode
-         }
+            body: { "lastName": sessionInfo.lastName,"dateOfBirth": sessionInfo.dob,"emailID": sessionInfo.email,"zipCode": sessionInfo.zipcode }
         },
         function (error, response, body) {
             if (error || response.statusCode !== 200) {
