@@ -114,6 +114,12 @@ function HanldeIntentRequest(body, deferred) {
                     intentResponseInfo = output;
                     deferred.resolve(intentResponseInfo);
                 });
+        case "AGENTFINDBYZIP":
+            handleAgentFindByZipIntent(body, deferred)
+                .then(function (output) {
+                    intentResponseInfo = output;
+                    deferred.resolve(intentResponseInfo);
+                });
             break;
         case "AOSRENTERSINSURANCE":
             handlerAOSRentersInsuranceIntent(body, deferred)
@@ -121,6 +127,14 @@ function HanldeIntentRequest(body, deferred) {
                     intentResponseInfo = output;
                     deferred.resolve(intentResponseInfo);
                 });
+            break;
+        case "AOSRENTERSNAME":
+        case "AOSRENTERSLASTNAME":
+            handlerAOSRentersInsuranceName(body, deferred)
+                .then(function (output) {
+                    intentResponseInfo = output;
+                    deferred.resolve(intentResponseInfo);
+                })
             break;
         default:
             deferred.reject("Sorry. I am still learning. For now I can't help you with this.");
@@ -149,14 +163,18 @@ function checkAppId(currentReqAppId) {
 }
 
 // private intents functions start
-function updateCorrectIntent(body, prevIntentName) {
-    body.request.intent.name = prevIntentName
+function updateCorrectIntent(body, nextIntentName) {
+    body.request.intent.name = nextIntentName
     var currentSlots = body.request.intent.slots;
     var newSlots = {};
     //write switch case to set currentIntent slot values to previous intent slot value.
-    switch (prevIntentName.toUpperCase()) {
-        case "AGENTFIND":
+    switch (nextIntentName.toUpperCase()) {
+        case "AGENTFINDBYZIP":
             newSlots.agent_zip = { "name": "agent_zip", "value": currentSlots.slotOne.value };
+            break;
+        case "AOSRENTERSNAME":
+            newSlots.firstName = { "name": "firstName", "value": currentSlots.slotOne ? currentSlots.slotOne.value : undefined };
+            newSlots.lastName = { "name": "lastName", "value": currentSlots.slotTwo ? currentSlots.slotTwo.value : undefined };
             break;
         default:
             break;
@@ -170,18 +188,16 @@ function checkAndUpdateIntentSequence(body) {
     var intentSeq = body.session.attributes['intentsequence'];
     if (curIntentName) {
         if (curIntentName.toLowerCase().indexOf('general') > -1 &&
-            body.session.attributes && body.session.attributes.intentsequence) {
-            var previousIntentsList = body.session.attributes.intentsequence.split('|');
-            var prevIntentName = previousIntentsList[previousIntentsList.length - 1];
-            updateCorrectIntent(body, prevIntentName);
-        } else {
-            if (intentSeq) {
-                intentSeq = intentSeq + "|" + curIntentName.toUpperCase();
-            } else {
-                intentSeq = curIntentName.toUpperCase();
-            }
-            body.session.attributes['intentsequence'] = intentSeq;
+            body.session.attributes && body.session.attributes.predictedIntent) {
+            updateCorrectIntent(body, body.session.attributes.predictedIntent);
         }
+        curIntentName = body.request.intent.name;//update the current intent name after intent has been corrected.
+        if (intentSeq) {
+            intentSeq = intentSeq + "|" + curIntentName.toUpperCase();
+        } else {
+            intentSeq = curIntentName.toUpperCase();
+        }
+        body.session.attributes['intentsequence'] = intentSeq;
     }
 }
 
@@ -257,6 +273,41 @@ function handleAgentFindIntent(body, deferred) {
 
     aos.handleAgentFindRequest(sessionAttrs)
         .then(function (handleAgentFindResponse) {
+            body.attributes.predictedIntent = zipValue ? "AGENTFINDEMAIL" : "AGENTFINDBYZIP";
+            findAgentSpeechResponse = proessAlexaSpeechResp(handleAgentFindResponse, body, "Find Agent");
+            deferred.resolve(findAgentSpeechResponse);
+        });
+
+    return deferred.promise;
+}
+
+function handleAgentFindByZipIntent(body, deferred){
+    var findAgentSpeechResponse;
+    var intent = body.request.intent;
+    var zipValue = intent.slots.agent_zip;
+    var sessionAttrs = { "zip": zipValue, "agents": [] };
+
+    aos.handleAgentFindByZipIntent(sessionAttrs)
+        .then(function (handleAgentFindResponse) {
+            body.attributes.predictedIntent = "AGENTFINDEMAIL";
+            findAgentSpeechResponse = proessAlexaSpeechResp(handleAgentFindResponse, body, "Find Agent");
+            deferred.resolve(findAgentSpeechResponse);
+        });
+
+    return deferred.promise;
+}
+
+
+function handleAgentFindByZipIntent(body, deferred) {
+    var findAgentSpeechResponse;
+    var intent = body.request.intent;
+    var zipValue = intent.slots.agent_zip ? intent.slots.agent_zip.value : undefined;
+    var sessionAttrs = { "zip": zipValue, "agents": [] };
+
+    aos.handleAgentFindByZipIntent(sessionAttrs)
+        .then(function (handleAgentFindResponse) {
+            handleAgentFindResponse.sessionAttrs = sessionAttrs;
+            body.attributes.predictedIntent = "AGENTFINDEMAIL";
             findAgentSpeechResponse = proessAlexaSpeechResp(handleAgentFindResponse, body, "Find Agent");
             deferred.resolve(findAgentSpeechResponse);
         });
@@ -292,14 +343,45 @@ function proessAlexaSpeechResp(handleAlexaResponse, body, titleText) {
 function handlerAOSRentersInsuranceIntent(body, deferred) {
     var rentersInsuranceResponse;
     var intent = body.request.intent;
-    var sessionAttrs = {};
+    var sessionAttrs = getAOSRentersSessionAttributes(body);
     aos.handleRentersInsuranceStart(sessionAttrs)
+        .then(function (handleRentersInsuranceResp) {
+            body.attributes.predictedIntent = "AOSRENTERSNAME";
+            rentersInsuranceResponse = proessAlexaSpeechResp(handleRentersInsuranceResp, body, "Renters Insurance");
+            deferred.resolve(rentersInsuranceResponse);
+        });
+    return deferred.promise;
+}
+
+function handlerAOSRentersInsuranceName(body, deferred) {
+    var rentersInsuranceResponse;
+    var intent = body.request.intent;
+    var sessionAttrs = getAOSRentersSessionAttributes(body);
+    aos.handleRentersInsuranceName(sessionAttrs)
         .then(function (handleRentersInsuranceResp) {
             rentersInsuranceResponse = proessAlexaSpeechResp(handleRentersInsuranceResp, body, "Renters Insurance");
             deferred.resolve(rentersInsuranceResponse);
         });
-
     return deferred.promise;
+
+}
+
+
+function getAOSRentersSessionAttributes(body) {
+    var sessionAttrs = {
+        "firstName": undefined,
+        "lastName": undefined,
+        "dob": undefined,
+        "addrLine1": undefined,
+        "city": undefined,
+        "zip": undefined,
+        "IsInsuredAddrSame": undefined
+    };
+    var slots = body.request.intent.slots;
+    sessionAttrs.firstName = slots.firstName.value;
+    sessionAttrs.lastName = slots.lastName.value;
+
+    return sessionAttrs;
 }
 
 //#endregion

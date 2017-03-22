@@ -1,7 +1,12 @@
-GeneralSingleSlot {slotOne}
-GeneralFirstLastName {firstName} {lastName}
-GeneralCityZipIntent {city} {zip}
-GeneralYMMIntent {year} {make} {model}
+GeneralOneSlot {slotOne}
+GeneralTwoSlot {slotOne} {slotTwo}
+GeneralThreeSlot {slotOne} {slotTwo} {slotThree}
+GeneralNoThanks No Thanks
+GeneralNoThanks No that's all.
+GeneralSendEmail email id is {email}
+GeneralSendEmail email is {email}
+GeneralSendEmail my email id is {email}
+GeneralSendEmail my email is {email}
 AgentFindByZip I need agent for zip {agent_zip}
 AgentFindByZip I need an agent for zip {agent_zip}
 AgentFind I need help from agent
@@ -13,11 +18,17 @@ AgentFind zip is {agent_zip}
 AgentFind zipcode is {agent_zip}
 AgentFind my zip is {agent_zip}
 AgentFind my zip code is {agent_zip}
-AgentFind email should do
-AgentFind email would be good.
-AgentFind yes send email
-AgentFind yes email please
+AgentFindEmailYes email should do
+AgentFindEmailYes email would be good.
+AgentFindEmailYes yes send email
+AgentFindEmailYes yes email please
+AgentFindEmailYes email sounds good.
+AgentFindEmailYes yes mail agent details to {email}
+AgentFindEmailYes yes email agent details to {email}
+AgentFindEmailYes yes please email agent details to {email}
 AOSRentersInsurance i need quote for my rented house
 AOSRentersInsurance can you provide insurance for rented house
 AOSRentersInsurance I need renters insurance
 AOSRentersInsurance I would like to protect my rented house.
+AOSRentersName my name is {firstName} {lastName}
+AOSRentersName it's {firstName} {lastName}

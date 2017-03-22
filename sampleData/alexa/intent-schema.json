@@ -19,25 +19,22 @@
             ]
         },
         {
+            "intent": "AgentFindEmailYes",
+            "slots": [
+                {
+                    "name": "email",
+                    "type": "AMAZON.PostalAddress"
+                }
+            ]
+        },
+        {
             "intent": "AgentFindByCurrentLoc"
         },
         {
             "intent": "AOSRentersInsurance"
         },
         {
-            "intent": "GetNextEventIntent"
-        },
-        {
-            "intent": "GeneralSingleSlot",
-            "slots": [
-                {
-                    "name": "slotOne",
-                    "type": "AMAZON.US_FIRST_NAME"
-                }
-            ]
-        },
-        {
-            "intent": "GeneralFirstLastName",
+            "intent": "AOSRentersName",
             "slots": [
                 {
                     "name": "firstName",
@@ -50,32 +47,56 @@
             ]
         },
         {
-            "intent": "GeneralCityZipIntent",
+            "intent": "GetNextEventIntent"
+        },
+        {
+            "intent": "GeneralOneSlot",
             "slots": [
                 {
-                    "name": "city",
-                    "type": "AMAZON.US_CITY"
-                },
-                {
-                    "name": "zip",
-                    "type": "AMAZON.NUMBER"
+                    "name": "slotOne",
+                    "type": "AMAZON.PostalAddress"
                 }
             ]
         },
         {
-            "intent": "GeneralYMMIntent",
+            "intent": "GeneralTwoSlot",
             "slots": [
                 {
-                    "name": "year",
-                    "type": "AMAZON.FOUR_DIGIT_NUMBER"
-                },
-                {
-                    "name": "make",
+                    "name": "slotOne",
                     "type": "AMAZON.PostalAddress"
                 },
                 {
-                    "name": "model",
+                    "name": "slotTwo",
                     "type": "AMAZON.PostalAddress"
+                }
+            ]
+        },
+        {
+            "intent": "GeneralThreeSlot",
+            "slots": [
+                {
+                    "name": "slotOne",
+                    "type": "AMAZON.PostalAddress"
+                },
+                {
+                    "name": "slotTwo",
+                    "type": "AMAZON.PostalAddress"
+                },
+                {
+                    "name": "slotThree",
+                    "type": "AMAZON.PostalAddress"
+                }
+            ]
+        },
+        {
+            "intent": "GeneralNoThanks"
+        },
+        {
+            "intent": "GeneralSendEmail",
+            "slots":[
+                {
+                    "name":"email",
+                    "type":"AMAZON.PostalAddress"
                 }
             ]
         },

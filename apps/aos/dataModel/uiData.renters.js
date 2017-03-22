@@ -6,5 +6,5 @@ function UIRenters(){
     this.primaryAddrInfo = new Address();
     this.customerInfo = new Customer();
     this.insuredAddrInfo = new Address();
-    this.insuredAddrSameAsPrimary = false;
+    this.IsInsuredAddrSame = false;
 }
