@@ -32,6 +32,11 @@ AOSRentersInsurance I need renters insurance
 AOSRentersInsurance I would like to protect my rented house.
 AOSRentersName my name is {firstName} {lastName}
 AOSRentersName it's {firstName} {lastName}
+AOSRentersName firstName is {firstName} and lastName is {lastName}
+AOSRentersName firstName {firstName} and lastName {lastName}
 AOSRentersLastName last name is {lastName}
 AOSRentersLastName last name's {lastName}
 AOSRentersLastName it's {lastName}
+AOSRentersDOB date of birth is {dob}
+AOSRentersDOB birth date is {dob}
+AOSRentersDOB it's {dob}

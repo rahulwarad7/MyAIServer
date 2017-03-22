@@ -56,6 +56,15 @@
             ]
         },
         {
+            "intent": "AOSRentersDOB",
+            "slots": [
+                {
+                    "name": "dob",
+                    "type": "AMAZON.DATE"
+                }
+            ]
+        },
+        {
             "intent": "GetNextEventIntent"
         },
         {
@@ -63,7 +72,7 @@
             "slots": [
                 {
                     "name": "slotOne",
-                    "type": "AMAZON.PostalAddress"
+                    "type": "AMAZON.US_FIRST_NAME"
                 }
             ]
         },
@@ -72,11 +81,11 @@
             "slots": [
                 {
                     "name": "slotOne",
-                    "type": "AMAZON.PostalAddress"
+                    "type": "AMAZON.US_FIRST_NAME"
                 },
                 {
                     "name": "slotTwo",
-                    "type": "AMAZON.PostalAddress"
+                    "type": "AMAZON.US_FIRST_NAME"
                 }
             ]
         },
@@ -85,15 +94,15 @@
             "slots": [
                 {
                     "name": "slotOne",
-                    "type": "AMAZON.PostalAddress"
+                    "type": "AMAZON.US_FIRST_NAME"
                 },
                 {
                     "name": "slotTwo",
-                    "type": "AMAZON.PostalAddress"
+                    "type": "AMAZON.US_FIRST_NAME"
                 },
                 {
                     "name": "slotThree",
-                    "type": "AMAZON.PostalAddress"
+                    "type": "AMAZON.US_FIRST_NAME"
                 }
             ]
         },

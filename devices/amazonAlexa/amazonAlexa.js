@@ -145,6 +145,13 @@ function HanldeIntentRequest(body, deferred) {
                     deferred.resolve(intentResponseInfo);
                 })
             break;
+        case "AOSRENTERSDOB":
+            handlerAOSRentersInsuranceDOB(body, deferred)
+                .then(function (output) {
+                    intentResponseInfo = output;
+                    deferred.resolve(intentResponseInfo);
+                })
+            break;
         default:
             deferred.reject("Sorry. I am still learning. For now I can't help you with this.");
             break;
@@ -395,11 +402,25 @@ function handlerAOSRentersInsuranceName(body, deferred) {
     var sessionAttrs = getAOSRentersSessionAttributes(body);
     aos.handleRentersInsuranceName(sessionAttrs)
         .then(function (handleRentersInsuranceResp) {
+            body.session.attributes.predictedIntent = sessionAttrs.lastName ? "AOSRENTERSDOB" : "AOSRENTERSLASTNAME";
             rentersInsuranceResponse = proessAlexaSpeechResp(handleRentersInsuranceResp, body, "Renters Insurance");
             deferred.resolve(rentersInsuranceResponse);
         });
     return deferred.promise;
+}
 
+function handlerAOSRentersInsuranceDOB(body, deferred) {
+    var rentersInsuranceResponse;
+    var intent = body.request.intent;
+    var sessionAttrs = getAOSRentersSessionAttributes(body);
+    aos.handleRentersInsuranceDOB(sessionAttrs)
+        .then(function (handleRentersInsuranceResp) {
+            body.session.attributes.predictedIntent = "AOSRENTERSCURADDR";
+            rentersInsuranceResponse = proessAlexaSpeechResp(handleRentersInsuranceResp, body, "Renters Insurance");
+            deferred.resolve(rentersInsuranceResponse);
+        });
+
+    return deferred.promise;
 }
 
 
