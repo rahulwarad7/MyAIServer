@@ -123,6 +123,13 @@ function HanldeIntentRequest(body, deferred) {
                     deferred.resolve(intentResponseInfo);
                 });
             break;
+        case "AgentFindEmailYes":
+            handleAgentFindEmailYesIntent(body, deferred)
+                .then(function(output){
+                    intentResponseInfo = output;
+                    deferred.resolve(intentResponseInfo);
+                });
+            break;
         case "AOSRENTERSINSURANCE":
             handlerAOSRentersInsuranceIntent(body, deferred)
                 .then(function (output) {
@@ -300,6 +307,13 @@ function handleAgentFindByZipIntent(body, deferred) {
             findAgentSpeechResponse = proessAlexaSpeechResp(handleAgentFindResponse, body, "Find Agent");
             deferred.resolve(findAgentSpeechResponse);
         });
+
+    return deferred.promise;
+}
+
+function handleAgentFindEmailYesIntent(body, deferred){
+    var findAgentSpeechResponse;
+    var intent = body.request.intent;
 
     return deferred.promise;
 }

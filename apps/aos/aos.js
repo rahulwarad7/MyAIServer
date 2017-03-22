@@ -84,7 +84,7 @@ AOS.prototype.handleAgentFindByZipIntent = function (sessionAttrs) {
     getFinalAgentFindResponse(sessionAttrs)
         .then(function (agentSpeechOutput) {
             agentFindSpeechResp.speechOutput = agentSpeechOutput;
-            agentFindSpeechResp.repromptOutput = null;
+            agentFindSpeechResp.repromptOutput = agentSpeechOutput;
             agentFindSpeechResp.sessionAttrs = sessionAttrs;
             deferred.resolve(agentFindSpeechResp);
         });
@@ -415,33 +415,6 @@ function getFinalAgentFindResponse(sessionAttrs) {
     return deferred.promise;
 };
 
-function getAgents(sessionInfo) {
-    var deferred = q.defer();
-    request(
-        {
-            method: 'POST',
-            url: URL_GETAGENTS,
-            "content-type": "application/json",
-            headers: {
-                "X-TID": sessionInfo.sessionId,
-                "X-ST": sessionInfo.state
-            },
-            json: true,
-            body: { "zipCode": sessionInfo.zip }
-        },
-        function (error, response, body) {
-            if (error || response.statusCode !== 200) {
-                errormsg = "Error from server session";
-                deferred.reject(errormsg);
-            } else {
-                var agents = ProcessAgentResponse(response.body);
-                deferred.resolve(agents);
-            }
-        });
-
-    return deferred.promise;
-}
-
 function ProcessAgentResponse(agentServResp) {
     var agents = [];
     if (agentServResp && agentServResp.agentAvailable && agentServResp.agents.length > 0) {
@@ -637,6 +610,33 @@ function getSavedQuote(sessionInfo) {
             } else {
                 var quotes = ProcessQuoteResponse(response.body);
                 deferred.resolve(quotes);
+            }
+        });
+
+    return deferred.promise;
+}
+
+function getAgents(sessionInfo) {
+    var deferred = q.defer();
+    request(
+        {
+            method: 'POST',
+            url: URL_GETAGENTS,
+            "content-type": "application/json",
+            headers: {
+                "X-TID": sessionInfo.sessionId,
+                "X-ST": sessionInfo.state
+            },
+            json: true,
+            body: { "zipCode": sessionInfo.zip }
+        },
+        function (error, response, body) {
+            if (error || response.statusCode !== 200) {
+                errormsg = "Error from server session";
+                deferred.reject(errormsg);
+            } else {
+                var agents = ProcessAgentResponse(response.body);
+                deferred.resolve(agents);
             }
         });
 
