@@ -1,6 +1,4 @@
-module.exports = function () {
-    this.isQuoteActive;
-    this.isRecordFound;
+module.exports = function () {    
     this.policyNumber;
     this.controlNumber;
     this.product;

@@ -341,6 +341,12 @@ AOS.prototype.handleRetrieveQuoteZipCode = function (sessionAttrs) {
             });
 
     }
+    else{
+                savedQuoteSpeechResp.speechOutput = "Something went wrong while retrieving please try later.";
+                savedQuoteSpeechResp.repromptOutput = null;
+                savedQuoteSpeechResp.sessionAttrs = sessionAttrs;
+                deferred.resolve(savedQuoteSpeechResp);
+    }
     return deferred.promise;
 };
 //#endregion
@@ -504,8 +510,7 @@ function getSavedQuoteResponse(sessionAttrs) {
             if (quoteResp && quoteResp.length > 0) {
                 sessionAttrs.quotedetails = quoteResp;
                 var quoteDetails = quoteResp;
-                finalSpeechOutput.text = "You have, " + quoteResp.length + " number of quotes."
-                    ", would you like me to email you the quote details?";
+                finalSpeechOutput.text = retrieveSpeachOutText(quoteResp);
             } else {
                 finalSpeechOutput.text = "sorry! no saved policies are available with these inputs.Would you like to insure for renters?";
             }
@@ -517,6 +522,31 @@ function getSavedQuoteResponse(sessionAttrs) {
 
     return deferred.promise;
 };
+
+function retrieveSpeachOutText(quotes) {
+    var textOut = null;
+    if(quotes) {
+        if(quotes.length == 1) {        
+            if(quote[0].policyNumber){
+                textOut = "You have a," + quotes[0].product + "policy with policy number," + quote[0].policyNumber
+                    +" and the policy was purchased on," + quotes[0].startDate;
+            }             
+    }
+    else if(quotes.length > 1) {
+        textOut = "Great!! you have multiple policies with,";
+            for (var index = 0; index < quotes.length; index++) {
+                if(quote[index].policyNumber){
+                    textOut  = textOut +  quotes[index].product + ", policy with the policy number," + quotes[index].policyNumber + " ,and the policy was purchased on," +quotes[index].startDate;                                
+                }                        
+            }
+        }
+        textOut = textOut + ", would you like me to email you the quote details?";
+    }
+    else{
+        textOut = "I see that you do not have any purchased policies with these inputs.";
+    }
+    return textOut;
+}
 
 //#endregion
 //#endregion
