@@ -382,7 +382,7 @@ function handlerAOSRentersInsuranceIntent(body, deferred) {
     var sessionAttrs = getAOSRentersSessionAttributes(body);
     aos.handleRentersInsuranceStart(sessionAttrs)
         .then(function (handleRentersInsuranceResp) {
-            body.attributes.predictedIntent = "AOSRENTERSNAME";
+            body.session.attributes.predictedIntent = "AOSRENTERSNAME";
             rentersInsuranceResponse = proessAlexaSpeechResp(handleRentersInsuranceResp, body, "Renters Insurance");
             deferred.resolve(rentersInsuranceResponse);
         });
@@ -414,8 +414,8 @@ function getAOSRentersSessionAttributes(body) {
         "IsInsuredAddrSame": undefined
     };
     var slots = body.request.intent.slots;
-    sessionAttrs.firstName = slots.firstName.value;
-    sessionAttrs.lastName = slots.lastName.value;
+    sessionAttrs.firstName = slots.firstName ? slots.firstName.value : body.session.attributes.firstName;
+    sessionAttrs.lastName = slots.lastName ? slots.lastName.value : body.session.attributes.lastName;
 
     return sessionAttrs;
 }
