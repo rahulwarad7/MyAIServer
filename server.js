@@ -42,6 +42,7 @@ appRouter.route('/ai/voice/amzn-alexa')
     .post(function (req, res) {
         var body = req.body;
         var context = {};
+        console.log(JSON.stringify(req.body));
         var allstate = new AllstateAlexa();
         allstate.execute(body, context)
             .then(function (response) {

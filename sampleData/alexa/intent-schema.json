@@ -47,6 +47,15 @@
             ]
         },
         {
+            "intent": "AOSRentersLastName",
+            "slots": [
+                {
+                    "name": "lastName",
+                    "type": "AMAZON.US_FIRST_NAME"
+                }
+            ]
+        },
+        {
             "intent": "GetNextEventIntent"
         },
         {
