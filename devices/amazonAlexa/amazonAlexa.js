@@ -123,9 +123,9 @@ function HanldeIntentRequest(body, deferred) {
                     deferred.resolve(intentResponseInfo);
                 });
             break;
-        case "AgentFindEmailYes":
+        case "AGENTFINDEMAILYES":
             handleAgentFindEmailYesIntent(body, deferred)
-                .then(function(output){
+                .then(function (output) {
                     intentResponseInfo = output;
                     deferred.resolve(intentResponseInfo);
                 });
@@ -299,7 +299,7 @@ function handleAgentFindByZipIntent(body, deferred) {
     var findAgentSpeechResponse;
     var intent = body.request.intent;
     var zipValue = intent.slots.agent_zip;
-    var sessionAttrs = { "zip": zipValue, "agents": [] };
+    var sessionAttrs = { "zip": zipValue };
 
     aos.handleAgentFindByZipIntent(sessionAttrs)
         .then(function (handleAgentFindResponse) {
@@ -311,9 +311,24 @@ function handleAgentFindByZipIntent(body, deferred) {
     return deferred.promise;
 }
 
-function handleAgentFindEmailYesIntent(body, deferred){
+function handleAgentFindEmailYesIntent(body, deferred) {
     var findAgentSpeechResponse;
     var intent = body.request.intent;
+    var emailSlot = intent.slots.email;
+    var sessionAttrs = {
+        "zip": body.session.attributes.zip,
+        "agent": body.session.attributes.agent,
+        "email": emailSlot.value
+    };
+
+
+    aos.handleAgentFindEmailYesIntent(sessionAttrs)
+        .then(function (handleAgentFindResponse) {
+            body.session.attributes.predictedIntent = sessionAttrs.email ? undefined : "GENERALSENDEMAIL";
+            findAgentSpeechResponse = proessAlexaSpeechResp(handleAgentFindResponse, body, "Find Agent");
+            deferred.resolve(findAgentSpeechResponse);
+        });
+
 
     return deferred.promise;
 }
