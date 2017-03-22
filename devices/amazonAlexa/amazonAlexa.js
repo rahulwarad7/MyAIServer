@@ -115,6 +115,7 @@ function HanldeIntentRequest(body, deferred) {
                     intentResponseInfo = output;
                     deferred.resolve(intentResponseInfo);
                 });
+            break;
         case "AGENTFINDBYZIP":
             handleAgentFindByZipIntent(body, deferred)
                 .then(function (output) {
@@ -183,8 +184,8 @@ function updateCorrectIntent(body, nextIntentName) {
     body.request.intent.slots = newSlots;
 }
 
-function checkBodyAttributes(body){
-    if(!body.attributes){
+function checkBodyAttributes(body) {
+    if (!body.attributes) {
         body.attributes = [];
     }
 }
@@ -279,7 +280,7 @@ function handleAgentFindIntent(body, deferred) {
 
     aos.handleAgentFindRequest(sessionAttrs)
         .then(function (handleAgentFindResponse) {
-            body.attributes.predictedIntent = zipValue ? "AGENTFINDEMAIL" : "AGENTFINDBYZIP";
+            body.session.attributes.predictedIntent = zipValue ? "AGENTFINDEMAIL" : "AGENTFINDBYZIP";
             findAgentSpeechResponse = proessAlexaSpeechResp(handleAgentFindResponse, body, "Find Agent");
             deferred.resolve(findAgentSpeechResponse);
         });
@@ -287,7 +288,7 @@ function handleAgentFindIntent(body, deferred) {
     return deferred.promise;
 }
 
-function handleAgentFindByZipIntent(body, deferred){
+function handleAgentFindByZipIntent(body, deferred) {
     var findAgentSpeechResponse;
     var intent = body.request.intent;
     var zipValue = intent.slots.agent_zip;
@@ -295,7 +296,7 @@ function handleAgentFindByZipIntent(body, deferred){
 
     aos.handleAgentFindByZipIntent(sessionAttrs)
         .then(function (handleAgentFindResponse) {
-            body.attributes.predictedIntent = "AGENTFINDEMAIL";
+            body.session.attributes.predictedIntent = "AGENTFINDEMAIL";
             findAgentSpeechResponse = proessAlexaSpeechResp(handleAgentFindResponse, body, "Find Agent");
             deferred.resolve(findAgentSpeechResponse);
         });
@@ -313,7 +314,7 @@ function handleAgentFindByZipIntent(body, deferred) {
     aos.handleAgentFindByZipIntent(sessionAttrs)
         .then(function (handleAgentFindResponse) {
             handleAgentFindResponse.sessionAttrs = sessionAttrs;
-            body.attributes.predictedIntent = "AGENTFINDEMAIL";
+            body.session.attributes.predictedIntent = "AGENTFINDEMAIL";
             findAgentSpeechResponse = proessAlexaSpeechResp(handleAgentFindResponse, body, "Find Agent");
             deferred.resolve(findAgentSpeechResponse);
         });
