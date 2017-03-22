@@ -105,6 +105,7 @@ function HandleSessionEndedRequest(body, deferred) {
 
 function HanldeIntentRequest(body, deferred) {
     var intentResponseInfo;
+    checkBodyAttributes(body);
     checkAndUpdateIntentSequence(body);
     var intentName = body.request.intent.name;
     switch (intentName.toUpperCase()) {
@@ -182,6 +183,11 @@ function updateCorrectIntent(body, nextIntentName) {
     body.request.intent.slots = newSlots;
 }
 
+function checkBodyAttributes(body){
+    if(!body.attributes){
+        body.attributes = [];
+    }
+}
 
 function checkAndUpdateIntentSequence(body) {
     var curIntentName = body.request.intent.name;
