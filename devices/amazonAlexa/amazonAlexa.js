@@ -414,9 +414,10 @@ function getAOSRentersSessionAttributes(body) {
         "IsInsuredAddrSame": undefined
     };
     var slots = body.request.intent.slots;
-    sessionAttrs.firstName = slots.firstName ? slots.firstName.value : body.session.attributes.firstName;
-    sessionAttrs.lastName = slots.lastName ? slots.lastName.value : body.session.attributes.lastName;
-
+    if (slots) {
+        sessionAttrs.firstName = slots.firstName ? slots.firstName.value : body.session.attributes.firstName;
+        sessionAttrs.lastName = slots.lastName ? slots.lastName.value : body.session.attributes.lastName;
+    }
     return sessionAttrs;
 }
 
