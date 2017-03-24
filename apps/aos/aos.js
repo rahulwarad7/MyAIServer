@@ -584,7 +584,7 @@ function retrieveSpeachOutText(quotes) {
     if(quotes) {
         if(quotes.length == 1) {        
             if(quotes[0].policyNumber){
-                textOut = "You have a " + quotes[0].product + " policy with policy number," + quotes[0].policyNumber
+                textOut = "You have a " + quotes[0].product + " policy with policy number," + ""quotes[0].policyNumber
                     +" and the policy was purchased on," + quotes[0].startDate;
             }             
     }
@@ -592,7 +592,7 @@ function retrieveSpeachOutText(quotes) {
         textOut = "Great!! you have multiple policies with,";
             for (var index = 0; index < quotes.length; index++) {
                 if(quotes[index].policyNumber){
-                    textOut  = textOut +  quotes[index].product + ", policy with the policy number," + quotes[index].policyNumber + " ,and the policy was purchased on," +quotes[index].startDate;                                
+                    textOut  = textOut +  quotes[index].product + ", policy with the policy number," +"<say-as interpret-as="characters">"+ quotes[index].policyNumber+"</say-as>" + " ,and the policy was purchased on," +quotes[index].startDate;                                
                 }                        
             }
         }
