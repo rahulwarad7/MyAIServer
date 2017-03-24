@@ -584,7 +584,7 @@ function retrieveSpeachOutText(quotes) {
     if(quotes) {
         if(quotes.length == 1) {        
             if(quotes[0].policyNumber){
-                textOut = "You have a " + quotes[0].product + " policy with policy number," + "<say-as interpret-as=\"characters\">"+quotes[0].policyNumber+"</say-as>"
+                textOut = "You have a " + quotes[0].product + " policy with policy number," + "<speak><say-as interpret-as=\"characters\">"+quotes[0].policyNumber+"</say-as></speak>"
                     +" and the policy was purchased on," + quotes[0].startDate;
             }             
     }
