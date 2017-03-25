@@ -511,6 +511,9 @@ function getAOSRentersSessionAttributes(contextInfo) {
         if (firstName && firstName.trim().length > 0) {
             sessionAttrs.firstName = contextInfo.parameters["given-name"];
         }
+        if(firstName && firstName.length>1){
+            sessionAttrs.lastName = contextInfo.parameters["given-name.original"][1];
+        }
         var lastName = contextInfo.parameters["last-name.original"];
         if (lastName && lastName.trim().length > 0) {
             sessionAttrs.lastName = contextInfo.parameters["last-name"];
