@@ -588,7 +588,7 @@ AOS.prototype.handlerAOSRentersPersonalItemsValue = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    //if (sessionAttrs.transactionToken) {
+    if (sessionAttrs.transactionToken) {
         getRentersQuoteResponse(sessionAttrs)
             .then(function (quoteDetailsSpeechOutput) {
                 rentersQuoteSpeechResp.speechOutput = quoteDetailsSpeechOutput;
@@ -596,11 +596,11 @@ AOS.prototype.handlerAOSRentersPersonalItemsValue = function (sessionAttrs) {
                 rentersQuoteSpeechResp.sessionAttrs = sessionAttrs;
                 deferred.resolve(rentersQuoteSpeechResp);
             });
-    // } else {
-    //     speechOutput.text = "Please login to retrieve quote to see your saved quote. Login details are sent to your registered email id.";
-    //     rentersQuoteSpeechResp.speechOutput = speechOutput;
-    //     rentersQuoteSpeechResp.repromptOutput = speechOutput;
-    // }
+     } else {
+         speechOutput.text = "Please login to retrieve quote to see your saved quote. Login details are sent to your registered email id.";
+         rentersQuoteSpeechResp.speechOutput = speechOutput;
+         rentersQuoteSpeechResp.repromptOutput = speechOutput;
+     }
 
     return deferred.promise;
 };
