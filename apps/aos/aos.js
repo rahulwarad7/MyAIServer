@@ -8,7 +8,6 @@ var Agent = require('./../../shared/data-models/agent.js');
 var Address = require('./../../shared/data-models/address.js');
 var RetrieveQuote = require('./../../shared/data-models/retrieveQuote.js');
 var Resident = require('./../../shared/data-models/resident.js');
-var ResidenceInfo = require('./../../shared/data-models/residenceInfo.js');
 var ContactInfo = require('./../../shared/data-models/contactInfo.js');
 
 var q = require('q');
