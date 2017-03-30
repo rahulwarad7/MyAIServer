@@ -250,13 +250,13 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
-        case "AOS-RENTERS-IsBUSINESSOPERATED-YES":
+        case "AOS-RENTERS-ISBUSINESSOPERATED-YES":
             handlerAOSRentersIsBusinessOperatedYes(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
                 });
             break;
-        case "AOS-RENTERS-IsBUSINESSOPERATED-NO":
+        case "AOS-RENTERS-ISBUSINESSOPERATED-NO":
             handlerAOSRentersIsBusinessOperatedNo(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
