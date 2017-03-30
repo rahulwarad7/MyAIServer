@@ -587,7 +587,14 @@ AOS.prototype.handlerAOSRentersPersonalItemsValue = function (sessionAttrs) {
     var rentersQuoteSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-
+    // if(!sessionAttrs.transactionToken) {
+    //     var transactionToken = {}
+    //     transactionToken.sessionID = "d7e78084-193d-4bb8-9dd7-a4f86251cce4:636264758372216473";
+    //     transactionToken.controlNumber = "402170890785714";
+    //     transactionToken.zipcode = "60060";
+    //     transactionToken.state = "IL";
+    //     sessionAttrs.transactionToken = transactionToken;
+    // }
     if (sessionAttrs.transactionToken) {
         getRentersQuoteResponse(sessionAttrs)
             .then(function (quoteDetailsSpeechOutput) {
@@ -596,11 +603,11 @@ AOS.prototype.handlerAOSRentersPersonalItemsValue = function (sessionAttrs) {
                 rentersQuoteSpeechResp.sessionAttrs = sessionAttrs;
                 deferred.resolve(rentersQuoteSpeechResp);
             });
-     } else {
-         speechOutput.text = "Please login to retrieve quote to see your saved quote. Login details are sent to your registered email id.";
-         rentersQuoteSpeechResp.speechOutput = speechOutput;
-         rentersQuoteSpeechResp.repromptOutput = speechOutput;
-     }
+    } else {
+        speechOutput.text = "Please login to retrieve quote to see your saved quote. Login details are sent to your registered email id.";
+        rentersQuoteSpeechResp.speechOutput = speechOutput;
+        rentersQuoteSpeechResp.repromptOutput = speechOutput;
+    }
 
     return deferred.promise;
 };
@@ -931,7 +938,7 @@ function mapRentersInfo(sessionAttrs) {
         rentersInfoData.isAgreeForTelemarketingCalls=true; //add question to user
        
     }    
-    return JSON.stringify(rentersInfoData);
+    return rentersInfoData;
 }
 
 function mapResident(rentersInfoData, sessionAttrs){
@@ -991,7 +998,7 @@ function mapResidenceInfo(sessionAttrs,residenceInfo) {
             residenceInfo.residenceDetails.personalItemsValue = sessionAttrs.personalItemsValue;
         }
     }      
-    return JSON.stringify(residenceInfo);
+    return residenceInfo;
 }
 
 function initializeRentersInfoRequest() {
@@ -1197,6 +1204,7 @@ function getRentersInfo(rentersInfo, transactionToken) {
         {
             method: "POST",
             uri: URL_RENTERS_RENTERSINFO,
+            "content-type": "application/json",
             json: rentersInfo,
             headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/occupants/primary/" }
         },
@@ -1218,7 +1226,8 @@ function getResidenceInfo(transactionToken) {
     request(
         {
             method: "GET",
-            uri: URL_RENTERS_RESIDENCEINFO,            
+            uri: URL_RENTERS_RESIDENCEINFO, 
+            "content-type": "application/json",           
             headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/residence-info/" }
         },
         function (error, response, body) {
@@ -1241,6 +1250,7 @@ function postResidenceInfo(residenceInfoObject, transactionToken) {
         {
             method: "POST",
             uri: URL_RENTERS_RESIDENCEINFO,
+            "content-type": "application/json",
             json: residenceInfoObject,
             headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/residence-info/" }
         },
