@@ -18,7 +18,7 @@ var AOS = function () { };
 var AOSTranData = [];
 
 //#region CONSTANTS
-var URL_COMMON = "https://purchase.allstate.com/onlinesalesapp-common/";
+var URL_COMMON = "https://purchase-stest.allstate.com/onlinesalesapp-common/";
 var URL_RENTERS_SESSIONID = URL_COMMON + "api/transaction/RENTERS/sessionid";
 var URL_AUTO_SESSIONID = URL_COMMON + "api/transaction/AUTO/sessionid";
 var URL_GETAGENTS = URL_COMMON + "api/common/agents";
