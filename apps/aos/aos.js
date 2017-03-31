@@ -23,7 +23,7 @@ var URL_RENTERS_SESSIONID = URL_COMMON + "api/transaction/RENTERS/sessionid";
 var URL_AUTO_SESSIONID = URL_COMMON + "api/transaction/AUTO/sessionid";
 var URL_GETAGENTS = URL_COMMON + "api/common/agents";
 var URL_GETSTATE = URL_COMMON + "api/location/{0}/state";
-var URL_RENTERS_BASE = "https://purchase.allstate.com/onlinesalesapp-renters/api";
+var URL_RENTERS_BASE = "https://purchase-stest.allstate.com/onlinesalesapp-renters/api";
 var URL_RENTERS_SAVECUSTOMER = URL_RENTERS_BASE + "/renters/customer";
 var URL_RENTERS_RENTERSINFO = URL_RENTERS_BASE + "/renters/renter-information";
 var URL_RENTERS_CONFIRMPROFILE = URL_RENTERS_BASE + "/renters/renter-information/confirm-profile";
@@ -397,11 +397,19 @@ AOS.prototype.handlerRentersLivedMoreThanTwoYrsYes = function (sessionAttrs) {
     var deferred = q.defer();
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
-    var repromptOutput = new Speech();      
+    var repromptOutput = new Speech();
+    //  if(!sessionAttrs.transactionToken) {
+    //      var transactionToken = {}
+    //      transactionToken.sessionID = "lm5vp/jmfJIjF9LLaXwDRtEkvGYfTFPe9/H1UmqzUKyW+HIdJKBBib8r5a68D2PFAElWNhJXvGw=";
+    //      transactionToken.controlNumber = "198170908931655";
+    //      transactionToken.zipcode = "60060";
+    //      transactionToken.state = "IL";
+    //      sessionAttrs.transactionToken = transactionToken;
+    // }      
     if (sessionAttrs.transactionToken) {
         getRentersInfoResponse(sessionAttrs)
             .then(function (rentersInfoSpeechOutput) {
-                 rentersFindSpeechResp.speechOutput = rentersInfoSpeechOutput;
+                rentersFindSpeechResp.speechOutput = rentersInfoSpeechOutput;
                 rentersFindSpeechResp.repromptOutput = null;
                 rentersFindSpeechResp.sessionAttrs = sessionAttrs;
                 deferred.resolve(rentersFindSpeechResp);
@@ -411,8 +419,6 @@ AOS.prototype.handlerRentersLivedMoreThanTwoYrsYes = function (sessionAttrs) {
         rentersFindSpeechResp.speechOutput = speechOutput;
         rentersFindSpeechResp.repromptOutput = speechOutput;
     }
-
-    
     deferred.resolve(rentersFindSpeechResp);
 
     return deferred.promise;
