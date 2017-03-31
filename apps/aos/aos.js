@@ -901,10 +901,10 @@ function getRentersSaveCustomerResponse(sessionAttrs) {
 function getRentersInfoResponse(sessionAttrs) {
     var deferred = q.defer();
     var rentersInfoSpeechOutput = new Speech();
-    sessionAttrs.sessionID = "n3TBWqGlfl+rOYWw21UaXZNBnIaSxFoBo+Xph4A255doxzJg7uKa7Q7am3BwE3sfal8rsrguLi4=";
-    sessionAttrs.controlNumber = "198170908933559";
-    sessionAttrs.zip = "60060";
-    sessionAttrs.state = "IL";      
+    // sessionAttrs.sessionID = "n3TBWqGlfl+rOYWw21UaXZNBnIaSxFoBo+Xph4A255doxzJg7uKa7Q7am3BwE3sfal8rsrguLi4=";
+    // sessionAttrs.controlNumber = "198170908933559";
+    // sessionAttrs.zip = "60060";
+    // sessionAttrs.state = "IL";      
     if (sessionAttrs) {
         var rentersInfo = mapRentersInfo(sessionAttrs);
         saveRentersInfo(rentersInfo, sessionAttrs)
