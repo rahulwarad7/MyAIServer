@@ -992,7 +992,20 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "addrLine1": undefined,
         "city": undefined,
         "zip": undefined,
-        "IsInsuredAddrSame": undefined
+        "IsInsuredAddrSame": undefined,
+        "phoneNumber" : undefined,
+        "emailAddress" : undefined,
+        "businessoutofresidence" : undefined,
+        "employmentStatus" : undefined,
+        "unitsInBuilding" : undefined,
+        "locatedInDormOrMilitaryBarracks" : undefined,
+        "residenceBuildingType" : undefined,
+        "primaryResidence" : undefined,
+        "isCurrentAddressSameAsInsuredAddress" : undefined,
+        "gender" : undefined,
+        "livedmorethantwo" : undefined,
+        "transactionToken" : {},
+        "IsInsuredAddrSame" :undefined
     };
 
     if (contextInfo) {
