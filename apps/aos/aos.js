@@ -26,6 +26,7 @@ var URL_GETSTATE = URL_COMMON + "api/location/{0}/state";
 var URL_RENTERS_BASE = "https://purchase.allstate.com/onlinesalesapp-renters/api";
 var URL_RENTERS_SAVECUSTOMER = URL_RENTERS_BASE + "/renters/customer";
 var URL_RENTERS_RENTERSINFO = URL_RENTERS_BASE + "/renters/renter-information";
+var URL_RENTERS_CONFIRMPROFILE = URL_RENTERS_BASE + "/renters/renter-information/confirm-profile";
 var URL_RENTERS_RESIDENCEINFO = URL_RENTERS_BASE + "/renters/residence-information";
 var URL_RENTERS_ORDERQUOTE = URL_RENTERS_BASE + "/renters/quote";
 var URL_RETRIEVEQUOTE = URL_COMMON + "api/quote-repository";
@@ -397,10 +398,29 @@ AOS.prototype.handlerRentersLivedMoreThanTwoYrsYes = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
+    //  if(!sessionAttrs.transactionToken) {
+    //      var transactionToken = {}
+    //      transactionToken.sessionID = "d7e78084-193d-4bb8-9dd7-a4f86251cce4:636264758372216473";
+    //      transactionToken.controlNumber = "402170890785714";
+    //      transactionToken.zipcode = "60060";
+    //      transactionToken.state = "IL";
+    //      sessionAttrs.transactionToken = transactionToken;
+    //  }
+    if (sessionAttrs.transactionToken) {
+        getRentersInfoResponse(sessionAttrs)
+            .then(function (rentersInfoSpeechOutput) {
+                 rentersFindSpeechResp.speechOutput = rentersInfoSpeechOutput;
+                rentersFindSpeechResp.repromptOutput = null;
+                rentersFindSpeechResp.sessionAttrs = sessionAttrs;
+                deferred.resolve(rentersFindSpeechResp);
+            });
+    } else {
+        speechOutput.text = "Please login to retrieve quote to see your saved quote. Login details are sent to your registered email id.";
+        rentersFindSpeechResp.speechOutput = speechOutput;
+        rentersFindSpeechResp.repromptOutput = speechOutput;
+    }
 
-    speechOutput.text = "Great! Now is the residence you are wanting to insure your primary or secondary residence? ";
-    rentersFindSpeechResp.speechOutput = speechOutput;
-    rentersFindSpeechResp.repromptOutput = speechOutput;
+    
     deferred.resolve(rentersFindSpeechResp);
 
     return deferred.promise;
@@ -874,15 +894,36 @@ function getRentersSaveCustomerResponse(sessionAttrs) {
     return deferred.promise;
 }
 
+function getRentersInfoResponse(sessionAttrs){
+    var deferred = q.defer();
+    var rentersInfoSpeechOutput = new Speech();    
+    if(sessionAttrs.transactionToken){    
+     var rentersInfo = mapRentersInfo(sessionAttrs);
+     getRentersInfo(rentersInfo,sessionAttrs.transactionToken)
+        .then(function (result) {
+            if(result){
+                if(!result.creditHit && !result.isRenterReOrderData){
+                    var confirmProfileInfo = mapRentersConfirmProfile(sessionAttrs);
+                    return postConfirmProfile(confirmProfileInfo, sessionAttrs);
+                    }
+                }        
+        }).then(function (result) {
+            rentersInfoSpeechOutput.text = "Great! Now is the residence you are wanting to insure your primary or secondary residence? ";                
+            deferred.resolve(rentersInfoSpeechOutput);
+        }).catch(function (error) {
+            rentersInfoSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
+            deferred.resolve(rentersInfoSpeechOutput);
+        });
+    }
+}
+
+
 function getRentersQuoteResponse(sessionAttrs){
     var deferred = q.defer();
     var quoteSpeechOutput = new Speech();    
     if(sessionAttrs.transactionToken){    
-     var rentersInfo = mapRentersInfo(sessionAttrs);
-     getRentersInfo(rentersInfo,sessionAttrs.transactionToken)
-        .then(function (result) {                       
-            return getResidenceInfo(sessionAttrs.transactionToken);
-        }).then(function (response) {
+     getResidenceInfo(sessionAttrs.transactionToken)
+        .then(function (response) {
             var residenceInfoObject = response;
              residenceInfoObject = mapResidenceInfo(sessionAttrs,JSON.parse(residenceInfoObject));
              return postResidenceInfo(residenceInfoObject,sessionAttrs.transactionToken);            
@@ -939,6 +980,49 @@ function mapRentersInfo(sessionAttrs) {
        
     }    
     return rentersInfoData;
+}
+
+function mapRentersConfirmProfile(sessionAttrs) {
+    var confProfileData = {}; 
+    confProfileData.profiles = getProfiles(sessionAttrs);
+    confProfileData.addresses= getAddresses(sessionAttrs);  
+    return confProfileData;
+}
+
+function getProfiles(sessionAttrs){
+  var profiles = [];
+  var profile = {}; 
+  profile.driverGUID = null;
+  profile.driverNumber = null;
+  profile.relationshipToPrimaryDriver = "SA";
+  profile.firstName = sessionAttrs.firstName;  
+  profile.middleName = null;  
+  profile.lastName = sessionAttrs.lastName;  
+  profile.suffix = null;  
+  profile.dateOfBirth = sessionAttrs.dob;  
+  profile.id = "dvEditPrimary";  
+  profiles.push(profile);   
+  return profiles; 
+}
+
+function getAddresses(sessionAttrs){
+ var addresses = []; 
+ var addrs = {};
+  addrs.address = {};
+  addrs.address.addressLine1 = sessionAttrs.addrLine1;
+  addrs.address.aptOrUnit = null;
+  addrs.address.city = sessionAttrs.city;
+  addrs.address.state = "IL";
+  addrs.address.zipCode = sessionAttrs.zip;
+  addrs.address.stateReadOnly = true;
+  addrs.address.zipCodeReadOnly = true;
+  addrs.invalidZipCode = false;
+  addrs.isPreviousAddress = false;
+  addrs.headerText = "Current Address";
+  addrs.id = "dvEditAddress";
+  addrs.editHeader = "Edit Primary Address";
+  addresses.push(addrs);
+  return addresses; 
 }
 
 function mapResident(rentersInfoData, sessionAttrs){
@@ -1207,6 +1291,30 @@ function getRentersInfo(rentersInfo, transactionToken) {
             "content-type": "application/json",
             json: rentersInfo,
             headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/occupants/primary/" }
+        },
+        function (error, response, body) {
+            if (error || response.statusCode !== 200) {
+                errormsg = "Error from server session";
+                deferred.reject(errormsg);
+            } else {
+                var responseJson = response.body;
+                deferred.resolve(responseJson);
+            }
+        });
+
+    return deferred.promise;
+}
+
+function postConfirmProfile(confirmInfo, transactionToken) {
+    var deferred = q.defer();
+    console.log(confirmInfo);
+    request(
+        {
+            method: "POST",
+            uri: URL_RENTERS_CONFIRMPROFILE,
+            "content-type": "application/json",
+            json: confirmInfo,
+            headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/confirm-profile" }
         },
         function (error, response, body) {
             if (error || response.statusCode !== 200) {
