@@ -398,18 +398,10 @@ AOS.prototype.handlerRentersLivedMoreThanTwoYrsYes = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    //  if(!sessionAttrs.transactionToken) {
-    //      var transactionToken = {}
-    //      transactionToken.sessionID = "lm5vp/jmfJIjF9LLaXwDRtEkvGYfTFPe9/H1UmqzUKyW+HIdJKBBib8r5a68D2PFAElWNhJXvGw=";
-    //      transactionToken.controlNumber = "198170908931655";
-    //      transactionToken.zipcode = "60060";
-    //      transactionToken.state = "IL";
-    //      sessionAttrs.transactionToken = transactionToken;
-    // }      
     if (sessionAttrs.transactionToken) {
         getRentersInfoResponse(sessionAttrs)
-            .then(function (rentersInfoSpeechOutput) {
-                rentersFindSpeechResp.speechOutput = rentersInfoSpeechOutput;
+            .then(function (confirmProfileSpeechOutput) {
+                rentersFindSpeechResp.speechOutput = confirmProfileSpeechOutput;
                 rentersFindSpeechResp.repromptOutput = null;
                 rentersFindSpeechResp.sessionAttrs = sessionAttrs;
                 deferred.resolve(rentersFindSpeechResp);
@@ -419,8 +411,7 @@ AOS.prototype.handlerRentersLivedMoreThanTwoYrsYes = function (sessionAttrs) {
         rentersFindSpeechResp.speechOutput = speechOutput;
         rentersFindSpeechResp.repromptOutput = speechOutput;
     }
-    deferred.resolve(rentersFindSpeechResp);
-
+    
     return deferred.promise;
 };
 
@@ -873,6 +864,7 @@ function getRentersSaveCustomerResponse(sessionAttrs) {
         }).then(function (saveResp) {
             if (saveResp && saveResp.transactionToken) {
                 sessionAttrs.transactionToken = saveResp.transactionToken;
+                saveCustSpeechOutput.sessionAttrs = sessionAttrs;
                 saveCustSpeechOutput.text = "Great! Next I'll need to know a little about your employment status. Are you employed, self employed, unemployed, student, retired, home maker or military";
             }
             deferred.resolve(saveCustSpeechOutput);
@@ -898,13 +890,14 @@ function getRentersInfoResponse(sessionAttrs){
                     }
                 }        
         }).then(function (result) {
-            rentersInfoSpeechOutput.text = "Great! Now is the residence you are wanting to insure your primary or secondary residence? ";                
+            rentersInfoSpeechOutput.text = "Great! Now is the residence you are wanting to insure your primary residence? ";                
             deferred.resolve(rentersInfoSpeechOutput);
         }).catch(function (error) {
             rentersInfoSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
             deferred.resolve(rentersInfoSpeechOutput);
         });
     }
+    return deferred.promise;
 }
 
 
@@ -936,6 +929,7 @@ function getRentersQuoteResponse(sessionAttrs){
             deferred.resolve(quoteSpeechOutput);
         });
     }
+    return deferred.promise;
 }
 
 function getCustomerSaveInfo(sessionAttrs, sessionInfo) {
