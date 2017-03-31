@@ -397,7 +397,8 @@ AOS.prototype.handlerRentersLivedMoreThanTwoYrsYes = function (sessionAttrs) {
     var deferred = q.defer();
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
-    var repromptOutput = new Speech();     
+    var repromptOutput = new Speech();
+    console.log(sessionAttrs.transactionToken);     
     if (sessionAttrs.transactionToken) {
         getRentersInfoResponse(sessionAttrs)
             .then(function (rentersInfoSpeechOutput) {
@@ -900,7 +901,10 @@ function getRentersSaveCustomerResponse(sessionAttrs) {
 function getRentersInfoResponse(sessionAttrs) {
     var deferred = q.defer();
     var rentersInfoSpeechOutput = new Speech();
+    console.log("aos inside");
     if (sessionAttrs.transactionToken) {
+        console.log("aos transactiontoken");
+        console.log(sessionAttrs.transactionToken);
         var rentersInfo = mapRentersInfo(sessionAttrs);
         saveRentersInfo(rentersInfo, sessionAttrs.transactionToken)
             .then(function (result) {                
@@ -921,6 +925,7 @@ function getRentersInfoResponse(sessionAttrs) {
 function confirmProfileResponse(sessionAttrs) {
     var deferred = q.defer();
     var rentersInfoSpeechOutput = new Speech();
+    console.log(sessionAttrs.transactionToken);
     if (sessionAttrs.transactionToken) {
         var confirmProfileInfo = mapRentersConfirmProfile(sessionAttrs);
         if(sessionAttrs && !sessionAttrs.creditHit && !sessionAttrs.isRenterReOrderData){
