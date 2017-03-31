@@ -398,14 +398,14 @@ AOS.prototype.handlerRentersLivedMoreThanTwoYrsYes = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    if (!sessionAttrs.transactionToken) {
-        var transactionToken = {}
-        transactionToken.sessionID = "YZ3m+yTLhgVrnqJAd1B6rQzSc+/TpFYPvhVmBY4icjbaWPge4Fv+d3Gu1UbwOHSAxBn8jNdDRps=";
-        transactionToken.controlNumber = "198170908932403";
-        transactionToken.zipcode = "60060";
-        transactionToken.state = "IL";
-        sessionAttrs.transactionToken = transactionToken;
-    }
+    // if (!sessionAttrs.transactionToken) {
+    //     var transactionToken = {}
+    //     transactionToken.sessionID = "iUf+Ns6UXTH10KGVR9N0ywT82lBoyUwfz20RWnD4bELMEXFTrCPLsMn1LiJuo4dgD76nyIyGNpw=";
+    //     transactionToken.controlNumber = "198170908932955";
+    //     transactionToken.zipcode = "60060";
+    //     transactionToken.state = "IL";
+    //     sessionAttrs.transactionToken = transactionToken;
+    // }
     if (sessionAttrs.transactionToken) {
         getRentersInfoResponse(sessionAttrs)
             .then(function (rentersInfoSpeechOutput) {
@@ -428,6 +428,14 @@ AOS.prototype.handlerRentersResidence = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();    
+    // if (!sessionAttrs.transactionToken) {
+    //     var transactionToken = {}
+    //     transactionToken.sessionID = "iUf+Ns6UXTH10KGVR9N0ywT82lBoyUwfz20RWnD4bELMEXFTrCPLsMn1LiJuo4dgD76nyIyGNpw=";
+    //     transactionToken.controlNumber = "198170908932955";
+    //     transactionToken.zipcode = "60060";
+    //     transactionToken.state = "IL";
+    //     sessionAttrs.transactionToken = transactionToken;
+    // }
     if (sessionAttrs.transactionToken) {
         confirmProfileResponse(sessionAttrs)
             .then(function (confProfileSpeechOutput) {
@@ -1312,7 +1320,7 @@ function rentersSaveCustomer(customerSaveInfo, sessionId) {
 
 function saveRentersInfo(rentersInfo, transactionToken) {
     var deferred = q.defer();
-    console.log(rentersInfo);
+    //console.log(rentersInfo);
     request(
         {
             method: "POST",
@@ -1336,7 +1344,7 @@ function saveRentersInfo(rentersInfo, transactionToken) {
 
 function postConfirmProfile(confirmInfo, transactionToken) {
     var deferred = q.defer();
-    console.log(confirmInfo);
+    //console.log(confirmInfo);
     request(
         {
             method: "POST",
@@ -1382,7 +1390,7 @@ function getResidenceInfo(transactionToken) {
 
 function postResidenceInfo(residenceInfoObject, transactionToken) {
     var deferred = q.defer();
-    console.log(residenceInfoObject);
+    //console.log(residenceInfoObject);
     request(
         {
             method: "POST",
