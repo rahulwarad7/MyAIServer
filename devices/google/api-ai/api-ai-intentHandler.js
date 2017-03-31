@@ -207,6 +207,12 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
+         case "AOS-RENTERS-RESIDENCEPROCEED":
+            handlerAOSRentersResidence(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
         case "AOS-RENTERS-LIVEDMORETHANTWOYRS-NO":
             handlerAOSRentersLivedMoreThanTwoYrsNo(body, deferred)
                 .then(function (responseInfo) {
@@ -750,6 +756,22 @@ function handlerAOSRentersLivedMoreThanTwoYrsYes(body, deferred) {
 
 }
 
+function handlerAOSRentersResidence(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handlerRentersResidence(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+
+}
 
 function handlerAOSRentersLivedMoreThanTwoYrsNo(body, deferred) {
     var rentersWelcomeSpeechResp = {};
