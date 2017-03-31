@@ -1099,6 +1099,9 @@ function getAOSRentersSessionAttributes(contextInfo) {
         if (livedmorethantwo && livedmorethantwo.trim().length > 0) {
             sessionAttrs.livedmorethantwo = contextInfo.parameters["livedmorethantwo"];           
         }
+        if (contextInfo.parameters.transactionToken) {
+            sessionAttrs.transactionToken = contextInfo.parameters.transactionToken;
+        }
         sessionAttrs.IsInsuredAddrSame = contextInfo.parameters["IsInsuredAddrSame"] === "true" ? true : false;
 
     }
