@@ -900,7 +900,11 @@ function getRentersSaveCustomerResponse(sessionAttrs) {
 
 function getRentersInfoResponse(sessionAttrs) {
     var deferred = q.defer();
-    var rentersInfoSpeechOutput = new Speech();      
+    var rentersInfoSpeechOutput = new Speech();
+    sessionAttrs.sessionID = "n3TBWqGlfl+rOYWw21UaXZNBnIaSxFoBo+Xph4A255doxzJg7uKa7Q7am3BwE3sfal8rsrguLi4=";
+    sessionAttrs.controlNumber = "198170908933559";
+    sessionAttrs.zip = "60060";
+    sessionAttrs.state = "IL";      
     if (sessionAttrs) {
         var rentersInfo = mapRentersInfo(sessionAttrs);
         saveRentersInfo(rentersInfo, sessionAttrs)
@@ -1312,7 +1316,7 @@ function saveRentersInfo(rentersInfo, sessionAttrs) {
             uri: URL_RENTERS_RENTERSINFO,
             "content-type": "application/json",
             json: rentersInfo,
-            headers: { "X-TID": sessionAttrs.sessionID, "X-PD": "RENTERS", "X-ZP": sessionAttrs.zip, "X-CN": sessionAttrs.controlNumber, "X-ST": sessionAttrs.state, "X-VID": "/occupants/primary/" }
+            headers: { "X-TID": sessionAttrs.sessionID, "X-PD": "RENTERS", "X-ZP": sessionAttrs.zip, "X-CN": sessionAttrs.controlNumber, "X-ST": "IL", "X-VID": "/occupants/primary/" }
         },
         function (error, response, body) {
             if (error || response.statusCode !== 200) {
@@ -1336,7 +1340,7 @@ function postConfirmProfile(confirmInfo, sessionAttrs) {
             uri: URL_RENTERS_CONFIRMPROFILE,
             "content-type": "application/json",
             json: confirmInfo,
-            headers: { "X-TID": sessionAttrs.sessionID, "X-PD": "RENTERS", "X-ZP": sessionAttrs.zip, "X-CN": sessionAttrs.controlNumber, "X-ST": sessionAttrs.state, "X-VID": "/confirm-profile" }
+            headers: { "X-TID": sessionAttrs.sessionID, "X-PD": "RENTERS", "X-ZP": sessionAttrs.zip, "X-CN": sessionAttrs.controlNumber, "X-ST": "IL", "X-VID": "/confirm-profile" }
         },
         function (error, response, body) {
             if (error || response.statusCode !== 200) {
@@ -1358,7 +1362,7 @@ function getResidenceInfo(sessionAttrs) {
             method: "GET",
             uri: URL_RENTERS_RESIDENCEINFO,
             "content-type": "application/json",
-            headers: { "X-TID": sessionAttrs.sessionID, "X-PD": "RENTERS", "X-ZP": sessionAttrs.zip, "X-CN": sessionAttrs.controlNumber, "X-ST": sessionAttrs.state, "X-VID": "/residence-info/" }
+            headers: { "X-TID": sessionAttrs.sessionID, "X-PD": "RENTERS", "X-ZP": sessionAttrs.zip, "X-CN": sessionAttrs.controlNumber, "X-ST": "IL", "X-VID": "/residence-info/" }
         },
         function (error, response, body) {
             if (error || response.statusCode !== 200) {
@@ -1382,7 +1386,7 @@ function postResidenceInfo(residenceInfoObject, sessionAttrs) {
             uri: URL_RENTERS_RESIDENCEINFO,
             "content-type": "application/json",
             json: residenceInfoObject,
-            headers: { "X-TID": sessionAttrs.sessionID, "X-PD": "RENTERS", "X-ZP": sessionAttrs.zip, "X-CN": sessionAttrs.controlNumber, "X-ST": sessionAttrs.state, "X-VID": "/residence-info/" }
+            headers: { "X-TID": sessionAttrs.sessionID, "X-PD": "RENTERS", "X-ZP": sessionAttrs.zip, "X-CN": sessionAttrs.controlNumber, "X-ST": "IL", "X-VID": "/residence-info/" }
         },
         function (error, response, body) {
             if (error || response.statusCode !== 200) {
@@ -1403,7 +1407,7 @@ function orderQuote(sessionAttrs) {
         {
             method: "POST",
             uri: URL_RENTERS_ORDERQUOTE,
-            headers: { "X-TID": sessionAttrs.sessionID, "X-PD": "RENTERS", "X-ZP": sessionAttrs.zip, "X-CN": sessionAttrs.controlNumber, "X-ST": sessionAttrs.state, "X-VID": "/residence-info/" }
+            headers: { "X-TID": sessionAttrs.sessionID, "X-PD": "RENTERS", "X-ZP": sessionAttrs.zip, "X-CN": sessionAttrs.controlNumber, "X-ST": "IL", "X-VID": "/residence-info/" }
         },
         function (error, response, body) {
             if (error || response.statusCode !== 200) {
