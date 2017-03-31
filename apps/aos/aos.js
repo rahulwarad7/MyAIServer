@@ -398,7 +398,15 @@ AOS.prototype.handlerRentersLivedMoreThanTwoYrsYes = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    if (sessionAttrs) {
+     if (!sessionAttrs.transactionToken) {
+         var transactionToken = {}
+         transactionToken.sessionID = "n3TBWqGlfl+rOYWw21UaXZNBnIaSxFoBo+Xph4A255doxzJg7uKa7Q7am3BwE3sfal8rsrguLi4=";
+         transactionToken.controlNumber = "198170908933559";
+         transactionToken.zipcode = "60060";
+         transactionToken.state = "IL";
+         sessionAttrs.transactionToken = transactionToken;
+     }
+    if (sessionAttrs.transactionToken) {
         getRentersInfoResponse(sessionAttrs)
             .then(function (rentersInfoSpeechOutput) {
                 rentersFindSpeechResp.speechOutput = rentersInfoSpeechOutput;
@@ -420,7 +428,15 @@ AOS.prototype.handlerRentersResidence = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    if (sessionAttrs) {
+    if (!sessionAttrs.transactionToken) {
+         var transactionToken = {}
+         transactionToken.sessionID = "n3TBWqGlfl+rOYWw21UaXZNBnIaSxFoBo+Xph4A255doxzJg7uKa7Q7am3BwE3sfal8rsrguLi4=";
+         transactionToken.controlNumber = "198170908933559";
+         transactionToken.zipcode = "60060";
+         transactionToken.state = "IL";
+         sessionAttrs.transactionToken = transactionToken;
+     }
+    if (sessionAttrs.transactionToken) {
         confirmProfileResponse(sessionAttrs)
             .then(function (confProfileSpeechOutput) {
                 rentersFindSpeechResp.speechOutput = confProfileSpeechOutput;
@@ -617,7 +633,7 @@ AOS.prototype.handlerAOSRentersPersonalItemsValue = function (sessionAttrs) {
     var rentersQuoteSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    if (sessionAttrs) {
+    if (sessionAttrs.transactionToken) {
         getRentersQuoteResponse(sessionAttrs)
             .then(function (quoteDetailsSpeechOutput) {
                 rentersQuoteSpeechResp.speechOutput = quoteDetailsSpeechOutput;
@@ -884,8 +900,7 @@ function getRentersSaveCustomerResponse(sessionAttrs) {
             return rentersSaveCustomer(customerSaveInfo, sessionInfo.sessionId);
         }).then(function (saveResp) {
             if (saveResp && saveResp.transactionToken) {
-                sessionAttrs.controlNumber = saveResp.transactionToken.controlNumber;
-                sessionAttrs.sessionID = saveResp.transactionToken.sessionID;
+                sessionAttrs.transactionToken = saveResp.transactionToken;
                 saveCustSpeechOutput.sessionAttrs = sessionAttrs;
                 saveCustSpeechOutput.text = "Great! Next I'll need to know a little about your employment status. Are you employed, self employed, unemployed, student, retired, home maker or military";
             }
@@ -901,13 +916,9 @@ function getRentersSaveCustomerResponse(sessionAttrs) {
 function getRentersInfoResponse(sessionAttrs) {
     var deferred = q.defer();
     var rentersInfoSpeechOutput = new Speech();
-    // sessionAttrs.sessionID = "n3TBWqGlfl+rOYWw21UaXZNBnIaSxFoBo+Xph4A255doxzJg7uKa7Q7am3BwE3sfal8rsrguLi4=";
-    // sessionAttrs.controlNumber = "198170908933559";
-    // sessionAttrs.zip = "60060";
-    // sessionAttrs.state = "IL";      
-    if (sessionAttrs) {
+    if (sessionAttrs.transactionToken) {
         var rentersInfo = mapRentersInfo(sessionAttrs);
-        saveRentersInfo(rentersInfo, sessionAttrs)
+        saveRentersInfo(rentersInfo, sessionAttrs.transactionToken)
             .then(function (result) {                
                         sessionAttrs.creditHit = result.creditHit;
                         sessionAttrs.isRenterReOrderData = result.creditHit;
@@ -926,10 +937,10 @@ function getRentersInfoResponse(sessionAttrs) {
 function confirmProfileResponse(sessionAttrs) {
     var deferred = q.defer();
     var rentersInfoSpeechOutput = new Speech();
-    if (sessionAttrs) {
+    if (sessionAttrs.transactionToken) {
         var confirmProfileInfo = mapRentersConfirmProfile(sessionAttrs);
         if(sessionAttrs && !sessionAttrs.creditHit && !sessionAttrs.isRenterReOrderData){
-             postConfirmProfile(confirmProfileInfo, sessionAttrs)                        
+             postConfirmProfile(confirmProfileInfo, sessionAttrs.transactionToken)                        
             .then(function (result) {
                 rentersInfoSpeechOutput.text = "Great! Now is the residence you are wanting to insure your primary or secondary residence? ";
                 deferred.resolve(rentersInfoSpeechOutput);
@@ -949,19 +960,19 @@ function confirmProfileResponse(sessionAttrs) {
 function getRentersQuoteResponse(sessionAttrs) {
     var deferred = q.defer();
     var quoteSpeechOutput = new Speech();
-    if (sessionAttrs) {
-        getResidenceInfo(sessionAttrs)
+    if (sessionAttrs.transactionToken) {
+        getResidenceInfo(sessionAttrs.transactionToken)
             .then(function (response) {
                 var residenceInfoObject = response;
                 residenceInfoObject = mapResidenceInfo(sessionAttrs, JSON.parse(residenceInfoObject));
-                return postResidenceInfo(residenceInfoObject, sessionAttrs);
+                return postResidenceInfo(residenceInfoObject, sessionAttrs.transactionToken);
             }).then(function (response) {
                 if (response) {
-                    return orderQuote(sessionAttrs);
+                    return orderQuote(sessionAttrs.transactionToken);
                 }
             }).then(function (quoteResp) {
                 if (quoteResp && quoteResp.quoteList) {
-                    //sessionAttrs = saveResp;
+                    sessionAttrs.transactionToken = saveResp.transactionToken;
                     quoteSpeechOutput.text = "Okay, thanks for all the info! Here's your renters quote. ";
                     quoteSpeechOutput.text = quoteSpeechOutput.text + "Total payable amount " + quoteResp.paymentInfo.paymentAmount;
                     quoteSpeechOutput.text = quoteSpeechOutput.text + "Per month would cost " + quoteResp.paymentInfo.monthlyPaymentAmount;
@@ -1307,7 +1318,7 @@ function rentersSaveCustomer(customerSaveInfo, sessionId) {
     return deferred.promise;
 }
 
-function saveRentersInfo(rentersInfo, sessionAttrs) {
+function saveRentersInfo(rentersInfo, transactionToken) {
     var deferred = q.defer();
     //console.log(rentersInfo);
     request(
@@ -1316,7 +1327,7 @@ function saveRentersInfo(rentersInfo, sessionAttrs) {
             uri: URL_RENTERS_RENTERSINFO,
             "content-type": "application/json",
             json: rentersInfo,
-            headers: { "X-TID": sessionAttrs.sessionID, "X-PD": "RENTERS", "X-ZP": sessionAttrs.zip, "X-CN": sessionAttrs.controlNumber, "X-ST": "IL", "X-VID": "/occupants/primary/" }
+            headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/occupants/primary/" }
         },
         function (error, response, body) {
             if (error || response.statusCode !== 200) {
@@ -1331,7 +1342,7 @@ function saveRentersInfo(rentersInfo, sessionAttrs) {
     return deferred.promise;
 }
 
-function postConfirmProfile(confirmInfo, sessionAttrs) {
+function postConfirmProfile(confirmInfo, transactionToken) {
     var deferred = q.defer();
     //console.log(confirmInfo);
     request(
@@ -1340,7 +1351,7 @@ function postConfirmProfile(confirmInfo, sessionAttrs) {
             uri: URL_RENTERS_CONFIRMPROFILE,
             "content-type": "application/json",
             json: confirmInfo,
-            headers: { "X-TID": sessionAttrs.sessionID, "X-PD": "RENTERS", "X-ZP": sessionAttrs.zip, "X-CN": sessionAttrs.controlNumber, "X-ST": "IL", "X-VID": "/confirm-profile" }
+            headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/confirm-profile" }
         },
         function (error, response, body) {
             if (error || response.statusCode !== 200) {
@@ -1355,14 +1366,14 @@ function postConfirmProfile(confirmInfo, sessionAttrs) {
     return deferred.promise;
 }
 
-function getResidenceInfo(sessionAttrs) {
+function getResidenceInfo(transactionToken) {
     var deferred = q.defer();
     request(
         {
             method: "GET",
             uri: URL_RENTERS_RESIDENCEINFO,
             "content-type": "application/json",
-            headers: { "X-TID": sessionAttrs.sessionID, "X-PD": "RENTERS", "X-ZP": sessionAttrs.zip, "X-CN": sessionAttrs.controlNumber, "X-ST": "IL", "X-VID": "/residence-info/" }
+            headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/residence-info/" }
         },
         function (error, response, body) {
             if (error || response.statusCode !== 200) {
@@ -1377,7 +1388,7 @@ function getResidenceInfo(sessionAttrs) {
     return deferred.promise;
 }
 
-function postResidenceInfo(residenceInfoObject, sessionAttrs) {
+function postResidenceInfo(residenceInfoObject, transactionToken) {
     var deferred = q.defer();
     //console.log(residenceInfoObject);
     request(
@@ -1386,7 +1397,7 @@ function postResidenceInfo(residenceInfoObject, sessionAttrs) {
             uri: URL_RENTERS_RESIDENCEINFO,
             "content-type": "application/json",
             json: residenceInfoObject,
-            headers: { "X-TID": sessionAttrs.sessionID, "X-PD": "RENTERS", "X-ZP": sessionAttrs.zip, "X-CN": sessionAttrs.controlNumber, "X-ST": "IL", "X-VID": "/residence-info/" }
+            headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/residence-info/" }
         },
         function (error, response, body) {
             if (error || response.statusCode !== 200) {
@@ -1401,13 +1412,13 @@ function postResidenceInfo(residenceInfoObject, sessionAttrs) {
     return deferred.promise;
 }
 
-function orderQuote(sessionAttrs) {
+function orderQuote(transactionToken) {
     var deferred = q.defer();
     request(
         {
             method: "POST",
             uri: URL_RENTERS_ORDERQUOTE,
-            headers: { "X-TID": sessionAttrs.sessionID, "X-PD": "RENTERS", "X-ZP": sessionAttrs.zip, "X-CN": sessionAttrs.controlNumber, "X-ST": "IL", "X-VID": "/residence-info/" }
+            headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/residence-info/" }
         },
         function (error, response, body) {
             if (error || response.statusCode !== 200) {
