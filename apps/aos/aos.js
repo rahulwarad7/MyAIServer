@@ -416,28 +416,6 @@ AOS.prototype.handlerRentersLivedMoreThanTwoYrsYes = function (sessionAttrs) {
     return deferred.promise;
 };
 
-AOS.prototype.handlerRentersResidence = function (sessionAttrs) {
-    var deferred = q.defer();
-    var rentersFindSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-    if (sessionAttrs.transactionToken) {
-        confirmProfileResponse(sessionAttrs)
-            .then(function (confProfileSpeechOutput) {
-                rentersFindSpeechResp.speechOutput = confProfileSpeechOutput;
-                rentersFindSpeechResp.repromptOutput = null;
-                rentersFindSpeechResp.sessionAttrs = sessionAttrs;
-                deferred.resolve(rentersFindSpeechResp);
-            });
-    } else {
-        speechOutput.text = "Please login to retrieve quote to see your saved quote. Login details are sent to your registered email id.";
-        rentersFindSpeechResp.speechOutput = speechOutput;
-        rentersFindSpeechResp.repromptOutput = speechOutput;
-    }
-
-    return deferred.promise;
-};
-
 AOS.prototype.handlerRentersLivedMoreThanTwoYrsNo = function (sessionAttrs) {
     var deferred = q.defer();
     var rentersFindSpeechResp = new SpeechResponse();
@@ -900,51 +878,55 @@ function getRentersSaveCustomerResponse(sessionAttrs) {
 
 function getRentersInfoResponse(sessionAttrs) {
     var deferred = q.defer();
-    var rentersInfoSpeechOutput = new Speech();
-    console.log("aos inside");
+    var rentersInfoSpeechOutput = new Speech();	
     if (sessionAttrs.transactionToken) {
         console.log("aos transactiontoken");
         console.log(sessionAttrs.transactionToken);
         var rentersInfo = mapRentersInfo(sessionAttrs);
         saveRentersInfo(rentersInfo, sessionAttrs.transactionToken)
-            .then(function (result) {                
-                        sessionAttrs.creditHit = result.creditHit;
-                        sessionAttrs.isRenterReOrderData = result.creditHit;
-            }).then(function (result) {
-                rentersInfoSpeechOutput.text = "Thank you for the basic renters information. Would you like to proceed."
-                deferred.resolve(rentersInfoSpeechOutput);
-            }).catch(function (error) {
-                rentersInfoSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
-                deferred.resolve(rentersInfoSpeechOutput);
-            });
-    }
-    return deferred.promise;
-}
-
-
-function confirmProfileResponse(sessionAttrs) {
-    var deferred = q.defer();
-    var rentersInfoSpeechOutput = new Speech();
-    console.log(sessionAttrs.transactionToken);
-    if (sessionAttrs.transactionToken) {
-        var confirmProfileInfo = mapRentersConfirmProfile(sessionAttrs);
-        if(sessionAttrs && !sessionAttrs.creditHit && !sessionAttrs.isRenterReOrderData){
-             postConfirmProfile(confirmProfileInfo, sessionAttrs.transactionToken)                        
             .then(function (result) {
+                    if(result && result.creditHit && result.isRenterReOrderData){
+                        var confirmProfileInfo = mapRentersConfirmProfile(sessionAttrs);
+                        postConfirmProfile(confirmProfileInfo, sessionAttrs.transactionToken)
+                    }
+                    else{
+                        deferred.resolve();
+                    }
+            }).then(function (result) {
                 rentersInfoSpeechOutput.text = "Great! Now is the residence you are wanting to insure your primary or secondary residence? ";
                 deferred.resolve(rentersInfoSpeechOutput);
             }).catch(function (error) {
                 rentersInfoSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
                 deferred.resolve(rentersInfoSpeechOutput);
             });
-        }
-        else{
-            rentersInfoSpeechOutput.text = "Great! Now is the residence you are wanting to insure your primary or secondary residence? ";
-            deferred.resolve(rentersInfoSpeechOutput);
-        }       
     }
     return deferred.promise;
 }
+
+
+// function confirmProfileResponse(sessionAttrs) {
+//     var deferred = q.defer();
+//     var rentersInfoSpeechOutput = new Speech();
+//     console.log(sessionAttrs.transactionToken);
+//     if (sessionAttrs.transactionToken) {
+//         var confirmProfileInfo = mapRentersConfirmProfile(sessionAttrs);
+//         if(sessionAttrs && !sessionAttrs.creditHit && !sessionAttrs.isRenterReOrderData){
+//              postConfirmProfile(confirmProfileInfo, sessionAttrs.transactionToken)                        
+//             .then(function (result) {
+//                 rentersInfoSpeechOutput.text = "Great! Now is the residence you are wanting to insure your primary or secondary residence? ";
+//                 deferred.resolve(rentersInfoSpeechOutput);
+//             }).catch(function (error) {
+//                 rentersInfoSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
+//                 deferred.resolve(rentersInfoSpeechOutput);
+//             });
+//         }
+//         else{
+//             rentersInfoSpeechOutput.text = "Great! Now is the residence you are wanting to insure your primary or secondary residence? ";
+//             deferred.resolve(rentersInfoSpeechOutput);
+//         }       
+//     }
+//     return deferred.promise;
+// }
 
 function getRentersQuoteResponse(sessionAttrs) {
     var deferred = q.defer();
