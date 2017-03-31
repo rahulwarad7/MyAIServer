@@ -397,15 +397,7 @@ AOS.prototype.handlerRentersLivedMoreThanTwoYrsYes = function (sessionAttrs) {
     var deferred = q.defer();
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-     if (!sessionAttrs.transactionToken) {
-         var transactionToken = {}
-         transactionToken.sessionID = "n3TBWqGlfl+rOYWw21UaXZNBnIaSxFoBo+Xph4A255doxzJg7uKa7Q7am3BwE3sfal8rsrguLi4=";
-         transactionToken.controlNumber = "198170908933559";
-         transactionToken.zipcode = "60060";
-         transactionToken.state = "IL";
-         sessionAttrs.transactionToken = transactionToken;
-     }
+    var repromptOutput = new Speech();     
     if (sessionAttrs.transactionToken) {
         getRentersInfoResponse(sessionAttrs)
             .then(function (rentersInfoSpeechOutput) {
@@ -428,14 +420,6 @@ AOS.prototype.handlerRentersResidence = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    if (!sessionAttrs.transactionToken) {
-         var transactionToken = {}
-         transactionToken.sessionID = "n3TBWqGlfl+rOYWw21UaXZNBnIaSxFoBo+Xph4A255doxzJg7uKa7Q7am3BwE3sfal8rsrguLi4=";
-         transactionToken.controlNumber = "198170908933559";
-         transactionToken.zipcode = "60060";
-         transactionToken.state = "IL";
-         sessionAttrs.transactionToken = transactionToken;
-     }
     if (sessionAttrs.transactionToken) {
         confirmProfileResponse(sessionAttrs)
             .then(function (confProfileSpeechOutput) {
