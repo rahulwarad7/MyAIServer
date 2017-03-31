@@ -397,15 +397,7 @@ AOS.prototype.handlerRentersLivedMoreThanTwoYrsYes = function (sessionAttrs) {
     var deferred = q.defer();
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-    //  if(!sessionAttrs.transactionToken) {
-    //      var transactionToken = {}
-    //      transactionToken.sessionID = "d7e78084-193d-4bb8-9dd7-a4f86251cce4:636264758372216473";
-    //      transactionToken.controlNumber = "402170890785714";
-    //      transactionToken.zipcode = "60060";
-    //      transactionToken.state = "IL";
-    //      sessionAttrs.transactionToken = transactionToken;
-    //  }
+    var repromptOutput = new Speech();      
     if (sessionAttrs.transactionToken) {
         getRentersInfoResponse(sessionAttrs)
             .then(function (rentersInfoSpeechOutput) {
@@ -606,15 +598,7 @@ AOS.prototype.handlerAOSRentersPersonalItemsValue = function (sessionAttrs) {
     var deferred = q.defer();
     var rentersQuoteSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-    // if(!sessionAttrs.transactionToken) {
-    //     var transactionToken = {}
-    //     transactionToken.sessionID = "d7e78084-193d-4bb8-9dd7-a4f86251cce4:636264758372216473";
-    //     transactionToken.controlNumber = "402170890785714";
-    //     transactionToken.zipcode = "60060";
-    //     transactionToken.state = "IL";
-    //     sessionAttrs.transactionToken = transactionToken;
-    // }
+    var repromptOutput = new Speech();    
     if (sessionAttrs.transactionToken) {
         getRentersQuoteResponse(sessionAttrs)
             .then(function (quoteDetailsSpeechOutput) {
@@ -904,7 +888,7 @@ function getRentersInfoResponse(sessionAttrs){
             if(result){
                 if(!result.creditHit && !result.isRenterReOrderData){
                     var confirmProfileInfo = mapRentersConfirmProfile(sessionAttrs);
-                    return postConfirmProfile(confirmProfileInfo, sessionAttrs);
+                    return postConfirmProfile(confirmProfileInfo, sessionAttrs.transactionToken);
                     }
                 }        
         }).then(function (result) {
@@ -999,7 +983,7 @@ function getProfiles(sessionAttrs){
   profile.middleName = null;  
   profile.lastName = sessionAttrs.lastName;  
   profile.suffix = null;  
-  profile.dateOfBirth = sessionAttrs.dob;  
+  profile.dateOfBirth = DateUtil.getFormattedDate(sessionAttrs.dob, "MMDDYYYY");;  
   profile.id = "dvEditPrimary";  
   profiles.push(profile);   
   return profiles; 
