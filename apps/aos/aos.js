@@ -472,7 +472,7 @@ AOS.prototype.handlerRentersDiffAddress = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    speechOutput.text = "Now is the residence you are wanting to insure your primary or secondary residence? ";
+    speechOutput.text = "Now is the residence you are wanting to insure your primary residence? ";
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     deferred.resolve(rentersFindSpeechResp);
@@ -926,7 +926,7 @@ function confirmProfileResponse(sessionAttrs) {
         if(sessionAttrs && !sessionAttrs.creditHit && !sessionAttrs.isRenterReOrderData){
              postConfirmProfile(confirmProfileInfo, sessionAttrs.transactionToken)                        
             .then(function (result) {
-                rentersInfoSpeechOutput.text = "Great! Now is the residence you are wanting to insure your primary or secondary residence? ";
+                rentersInfoSpeechOutput.text = "Great! Now is the residence you are wanting to insure your primary residence? ";
                 deferred.resolve(rentersInfoSpeechOutput);
             }).catch(function (error) {
                 rentersInfoSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
@@ -934,7 +934,7 @@ function confirmProfileResponse(sessionAttrs) {
             });
         }
         else{
-            rentersInfoSpeechOutput.text = "Great! Now is the residence you are wanting to insure your primary or secondary residence? ";
+            rentersInfoSpeechOutput.text = "Now is the residence you are wanting to insure your primary residence? ";
             deferred.resolve(rentersInfoSpeechOutput);
         }       
     }
