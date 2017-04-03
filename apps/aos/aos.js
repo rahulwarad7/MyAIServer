@@ -956,12 +956,12 @@ function getRentersQuoteResponse(sessionAttrs) {
                 }
             }).then(function (quoteResp) {
                 if (quoteResp && quoteResp.quoteList) {
-                    sessionAttrs.transactionToken = saveResp.transactionToken;
+                    //sessionAttrs.transactionToken = saveResp.transactionToken;
                     quoteSpeechOutput.text = "Okay, thanks for all the info! Here's your renters quote. ";
-                    quoteSpeechOutput.text = quoteSpeechOutput.text + "Total payable amount " + quoteResp.paymentInfo.paymentAmount;
-                    quoteSpeechOutput.text = quoteSpeechOutput.text + "Per month would cost " + quoteResp.paymentInfo.monthlyPaymentAmount;
-                    quoteSpeechOutput.text = quoteSpeechOutput.text + "Your down payment would be " + quoteResp.paymentInfo.inDownPaymentAmount;
-                    quoteSpeechOutput.text = quoteSpeechOutput.text + "Someone will be in touch with you shortly, but in the meantime would you like me to email your quote to you or connect you with a nearby agent?";
+                    quoteSpeechOutput.text = quoteSpeechOutput.text + "Total payable amount " + quoteResp.quoteList[0].paymentInfo.paymentAmount;
+                    quoteSpeechOutput.text = quoteSpeechOutput.text + ".Per month would cost " + quoteResp.quoteList[0].paymentInfo.monthlyPaymentAmount;
+                    quoteSpeechOutput.text = quoteSpeechOutput.text + " .Your down payment would be " + quoteResp.quoteList[0].paymentInfo.inDownPaymentAmount;
+                    quoteSpeechOutput.text = quoteSpeechOutput.text + " .Someone will be in touch with you shortly, but in the meantime would you like me to email your quote to you or connect you with a nearby agent?";
                 }
                 deferred.resolve(quoteSpeechOutput);
             }).catch(function (error) {
@@ -1304,7 +1304,6 @@ function rentersSaveCustomer(customerSaveInfo, sessionId) {
 
 function saveRentersInfo(rentersInfo, transactionToken) {
     var deferred = q.defer();
-    //console.log(rentersInfo);
     request(
         {
             method: "POST",
@@ -1328,7 +1327,6 @@ function saveRentersInfo(rentersInfo, transactionToken) {
 
 function postConfirmProfile(confirmInfo, transactionToken) {
     var deferred = q.defer();
-    //console.log(confirmInfo);
     request(
         {
             method: "POST",
@@ -1374,7 +1372,6 @@ function getResidenceInfo(transactionToken) {
 
 function postResidenceInfo(residenceInfoObject, transactionToken) {
     var deferred = q.defer();
-    //console.log(residenceInfoObject);
     request(
         {
             method: "POST",
@@ -1409,7 +1406,7 @@ function orderQuote(transactionToken) {
                 errormsg = "Error from server session";
                 deferred.reject(errormsg);
             } else {
-                var responseJson = response.body;
+                var responseJson = JSON.parse(response.body);
                 deferred.resolve(responseJson);
             }
         });
