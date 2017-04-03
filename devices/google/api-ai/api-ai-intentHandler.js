@@ -770,7 +770,7 @@ function handlerAOSRentersResidence(body, deferred) {
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
             rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
-            rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
+            //rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
             deferred.resolve(rentersWelcomeSpeechResp);
         });
 
@@ -968,8 +968,8 @@ function handlerAOSRentersIsFiveOrMoreUnitsYes(body, deferred) {
     var result = body.result;
     //var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
     var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
-    rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
-    //var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+    //rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
 
     aos.handlerRentersIsFiveOrMoreUnitsYes(sessionAttrs)
         .then(function (renterspeechResponse) {
