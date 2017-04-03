@@ -770,7 +770,7 @@ function handlerAOSRentersResidence(body, deferred) {
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
             rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
-            rentersWelcomeSpeechResp.contextOut = [{ "name": "uirenters", "parameters": sessionAttrs }];
+            rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
             deferred.resolve(rentersWelcomeSpeechResp);
         });
 
@@ -1140,6 +1140,12 @@ function getAOSRentersSessionAttributes(contextInfo) {
         }
         if (contextInfo.parameters.transactionToken) {
             sessionAttrs.transactionToken = contextInfo.parameters.transactionToken;
+        }
+         if (contextInfo.parameters.creditHit) {
+            sessionAttrs.creditHit = contextInfo.parameters.creditHit;
+        }
+         if (contextInfo.parameters.isRenterReOrderData) {
+            sessionAttrs.isRenterReOrderData = contextInfo.parameters.isRenterReOrderData;
         }
         sessionAttrs.IsInsuredAddrSame = contextInfo.parameters["IsInsuredAddrSame"] === "true" ? true : false;
 
