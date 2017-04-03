@@ -613,7 +613,7 @@ AOS.prototype.handlerRentersIsFiveOrMoreUnitsNo = function (sessionAttrs) {
     return deferred.promise;
 };
 
-AOS.prototype.handlerAOSRentersPersonalItemsValue = function (sessionAttrs) {
+AOS.prototype.handlerRentersPersonalItemsValue = function (sessionAttrs) {
     var deferred = q.defer();
     var rentersQuoteSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
@@ -626,6 +626,36 @@ AOS.prototype.handlerAOSRentersPersonalItemsValue = function (sessionAttrs) {
                 rentersQuoteSpeechResp.sessionAttrs = sessionAttrs;
                 deferred.resolve(rentersQuoteSpeechResp);
             });
+    } else {
+        speechOutput.text = "Please login to retrieve quote to see your saved quote. Login details are sent to your registered email id.";
+        rentersQuoteSpeechResp.speechOutput = speechOutput;
+        rentersQuoteSpeechResp.repromptOutput = speechOutput;
+    }
+
+    return deferred.promise;
+};
+
+AOS.prototype.handlerRenterValidCustomer = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersQuoteSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+    if (sessionAttrs.transactionToken) {
+        if(sessionAttrs.isValidRenterCustomer) {
+            quoteResponse(sessionAttrs)
+            .then(function (quoteDetailsSpeechOutput) {
+                rentersQuoteSpeechResp.speechOutput = quoteDetailsSpeechOutput;
+                rentersQuoteSpeechResp.repromptOutput = null;
+                rentersQuoteSpeechResp.sessionAttrs = sessionAttrs;
+                deferred.resolve(rentersQuoteSpeechResp);
+            });
+        }
+        else {
+            speechOutput.text = "Thank you for the inputs, Near by agent will contact you for further information";
+            rentersQuoteSpeechResp.speechOutput = speechOutput;
+            rentersQuoteSpeechResp.repromptOutput = speechOutput;
+        }
+        
     } else {
         speechOutput.text = "Please login to retrieve quote to see your saved quote. Login details are sent to your registered email id.";
         rentersQuoteSpeechResp.speechOutput = speechOutput;
@@ -952,11 +982,25 @@ function getRentersQuoteResponse(sessionAttrs) {
                 return postResidenceInfo(residenceInfoObject, sessionAttrs.transactionToken);
             }).then(function (response) {
                 if (response) {
-                    return orderQuote(sessionAttrs.transactionToken);
+                    sessionAttrs.isValidRenterCustomer = result.isValidRenterCustomer;
+                    quoteSpeechOutput.text = "Thank you for the inputs, Your details has been validated. would you like to get quote details? ";                    
                 }
-            }).then(function (quoteResp) {
+                deferred.resolve(quoteSpeechOutput);   
+            }).catch(function (error) {
+                quoteSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
+                deferred.resolve(quoteSpeechOutput);
+            });
+    }
+    return deferred.promise;
+}
+
+function quoteResponse(sessionAttrs) {
+    var deferred = q.defer();
+    var quoteSpeechOutput = new Speech();
+    if (sessionAttrs.transactionToken) {
+        orderQuote(sessionAttrs.transactionToken)
+            .then(function (quoteResp) {
                 if (quoteResp && quoteResp.quoteList) {
-                    //sessionAttrs.transactionToken = saveResp.transactionToken;
                     quoteSpeechOutput.text = "Okay, thanks for all the info! Here's your renters quote. ";
                     quoteSpeechOutput.text = quoteSpeechOutput.text + "Total payable amount " + quoteResp.quoteList[0].paymentInfo.paymentAmount;
                     quoteSpeechOutput.text = quoteSpeechOutput.text + ".Per month would cost " + quoteResp.quoteList[0].paymentInfo.monthlyPaymentAmount;
@@ -971,6 +1015,10 @@ function getRentersQuoteResponse(sessionAttrs) {
     }
     return deferred.promise;
 }
+
+
+
+
 
 function getCustomerSaveInfo(sessionAttrs, sessionInfo) {
     var customerData = {};
