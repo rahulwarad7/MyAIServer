@@ -982,7 +982,7 @@ function getRentersQuoteResponse(sessionAttrs) {
                 return postResidenceInfo(residenceInfoObject, sessionAttrs.transactionToken);
             }).then(function (response) {
                 if (response) {
-                    sessionAttrs.isValidRenterCustomer = result.isValidRenterCustomer;
+                    sessionAttrs.isValidRenterCustomer = response.isValidRenterCustomer;
                     quoteSpeechOutput.text = "Thank you for the inputs, Your details has been validated. would you like to get quote details? ";                    
                 }
                 deferred.resolve(quoteSpeechOutput);   
