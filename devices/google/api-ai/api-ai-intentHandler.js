@@ -1141,10 +1141,10 @@ function getAOSRentersSessionAttributes(contextInfo) {
         if (contextInfo.parameters.transactionToken) {
             sessionAttrs.transactionToken = contextInfo.parameters.transactionToken;
         }
-         if (contextInfo.parameters.creditHit) {
+         if (contextInfo.parameters.creditHit != null) {
             sessionAttrs.creditHit = contextInfo.parameters.creditHit;
         }
-         if (contextInfo.parameters.isRenterReOrderData) {
+         if (contextInfo.parameters.isRenterReOrderData != null) {
             sessionAttrs.isRenterReOrderData = contextInfo.parameters.isRenterReOrderData;
         }
         sessionAttrs.IsInsuredAddrSame = contextInfo.parameters["IsInsuredAddrSame"] === "true" ? true : false;
