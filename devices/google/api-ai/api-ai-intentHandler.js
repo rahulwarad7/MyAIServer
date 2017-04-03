@@ -612,7 +612,7 @@ function handlerAOSRentersInsuranceInsuredAddrSame(body, deferred) {
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
             rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
-            rentersWelcomeSpeechResp.contextOut = [{ "name": "uirenters", "parameters": sessionAttrs }];
+            rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
             deferred.resolve(rentersWelcomeSpeechResp);
         });
 
@@ -707,9 +707,9 @@ function handlerAOSRentersDiffAddress(body, deferred) {
 function handlerAOSRentersEmpStatus(body, deferred) {
     var rentersWelcomeSpeechResp = {};
     var result = body.result;
-    var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
+    //var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
     var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
-    rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
+   // rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
     var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
     aos.handlerRentersEmpStatus(sessionAttrs)
         .then(function (renterspeechResponse) {
@@ -725,9 +725,9 @@ function handlerAOSRentersEmpStatus(body, deferred) {
 function handlerAOSRentersGender(body, deferred) {
     var rentersWelcomeSpeechResp = {};
     var result = body.result;
-    var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
+    //var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
     var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
-    rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
+    //rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
     var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
     aos.handlerRentersGender(sessionAttrs)
         .then(function (renterspeechResponse) {
@@ -743,15 +743,15 @@ function handlerAOSRentersGender(body, deferred) {
 function handlerAOSRentersLivedMoreThanTwoYrsYes(body, deferred) {
     var rentersWelcomeSpeechResp = {};
     var result = body.result;
-    var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
-   var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
-    rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
+    //var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    //rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
     var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
     aos.handlerRentersLivedMoreThanTwoYrsYes(sessionAttrs)
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
             rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
-            rentersWelcomeSpeechResp.contextOut = [{ "name": "uirenters", "parameters": sessionAttrs }];
+            rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
             deferred.resolve(rentersWelcomeSpeechResp);
         });
 
@@ -762,9 +762,9 @@ function handlerAOSRentersLivedMoreThanTwoYrsYes(body, deferred) {
 function handlerAOSRentersResidence(body, deferred) {
     var rentersWelcomeSpeechResp = {};
     var result = body.result;
-    var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
+    //var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
     var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
-    rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
+    //rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
     var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
     aos.handlerRentersResidence(sessionAttrs)
         .then(function (renterspeechResponse) {
@@ -781,9 +781,9 @@ function handlerAOSRentersResidence(body, deferred) {
 function handlerAOSRentersLivedMoreThanTwoYrsNo(body, deferred) {
     var rentersWelcomeSpeechResp = {};
     var result = body.result;
-    var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
+    //var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
     var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
-    rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
+    //rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
     var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
 
     aos.handlerRentersLivedMoreThanTwoYrsNo(sessionAttrs)
@@ -800,9 +800,9 @@ function handlerAOSRentersLivedMoreThanTwoYrsNo(body, deferred) {
 function handlerAOSRentersPrevCityZip(body, deferred) {
     var rentersWelcomeSpeechResp = {};
     var result = body.result;
-    var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
+    //var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
     var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
-    rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
+    //rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
     var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
     aos.handlerRentersPrevCityZip(sessionAttrs)
         .then(function (renterspeechResponse) {
@@ -818,9 +818,9 @@ function handlerAOSRentersPrevCityZip(body, deferred) {
 function handlerAOSRentersPrevStreetAddrs(body, deferred) {
     var rentersWelcomeSpeechResp = {};
     var result = body.result;
-    var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
+    //var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
     var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
-    rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
+    //rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
     var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
     aos.handlerRentersPrevStreetAddrs(sessionAttrs)
         .then(function (renterspeechResponse) {
@@ -854,9 +854,9 @@ function handlerAOSRentersIsPrimaryResYes(body, deferred) {
 function handlerAOSRentersIsPrimaryResNo(body, deferred) {
     var rentersWelcomeSpeechResp = {};
     var result = body.result;
-    var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
+    //var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
     var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
-    rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
+    //rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
     var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
     aos.handlerRentersIsPrimaryResNo(sessionAttrs)
         .then(function (renterspeechResponse) {
@@ -890,9 +890,9 @@ function handlerAOSRentersResidenceLocYes(body, deferred) {
 function handlerAOSRentersResidenceLocNo(body, deferred) {
     var rentersWelcomeSpeechResp = {};
     var result = body.result;
-    var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
+    //var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
     var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
-    rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
+    //rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
     var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
 
     aos.handlerRentersResidenceLocNo(sessionAttrs)
@@ -909,9 +909,9 @@ function handlerAOSRentersResidenceLocNo(body, deferred) {
 function handlerAOSRentersIsBusinessOperatedYes(body, deferred) {
     var rentersWelcomeSpeechResp = {};
     var result = body.result;
-    var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
+    //var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
     var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
-    rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
+    //rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
     var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
 
     aos.handlerRentersIsBusinessOperatedYes(sessionAttrs)
@@ -928,9 +928,9 @@ function handlerAOSRentersIsBusinessOperatedYes(body, deferred) {
 function handlerAOSRentersIsBusinessOperatedNo(body, deferred) {
     var rentersWelcomeSpeechResp = {};
     var result = body.result;
-    var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
+    //var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
     var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
-    rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
+    //rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
     var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
 
     aos.handlerRentersIsBusinessOperatedNo(sessionAttrs)
@@ -947,9 +947,9 @@ function handlerAOSRentersIsBusinessOperatedNo(body, deferred) {
 function handlerAOSRentersResidenceType(body, deferred) {
     var rentersWelcomeSpeechResp = {};
     var result = body.result;
-    var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
+    //var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
     var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
-    rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
+    //rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
     var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
 
     aos.handlerRentersResidenceType(sessionAttrs)
@@ -966,10 +966,10 @@ function handlerAOSRentersResidenceType(body, deferred) {
 function handlerAOSRentersIsFiveOrMoreUnitsYes(body, deferred) {
     var rentersWelcomeSpeechResp = {};
     var result = body.result;
-    var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
+    //var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
     var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
     rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
-    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+    //var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
 
     aos.handlerRentersIsFiveOrMoreUnitsYes(sessionAttrs)
         .then(function (renterspeechResponse) {
@@ -985,9 +985,9 @@ function handlerAOSRentersIsFiveOrMoreUnitsYes(body, deferred) {
 function handlerAOSRentersIsFiveOrMoreUnitsNo(body, deferred) {
     var rentersWelcomeSpeechResp = {};
     var result = body.result;
-    var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
+    //var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
     var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
-    rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
+    //rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
     var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
 
     aos.handlerRentersIsFiveOrMoreUnitsNo(sessionAttrs)
@@ -1004,9 +1004,9 @@ function handlerAOSRentersIsFiveOrMoreUnitsNo(body, deferred) {
 function handlerAOSRentersPersonalItemsValue(body, deferred) {
     var rentersWelcomeSpeechResp = {};
     var result = body.result;
-    var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
+    //var rentersTranCntx = result.contexts.find(function (curCntx) { return curCntx.name === "uirenters"; });
     var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
-    rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
+    //rentersCntx = getAOSRentersTransactionAttributes(rentersCntx, rentersTranCntx);
     var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
 
     aos.handlerAOSRentersPersonalItemsValue(sessionAttrs)
@@ -1148,12 +1148,12 @@ function getAOSRentersSessionAttributes(contextInfo) {
     return sessionAttrs;
 }
 
-function getAOSRentersTransactionAttributes(renterscontextInfo, trasactionContextInfo){
-    if (trasactionContextInfo.parameters.transactionToken) {
-            renterscontextInfo.parameters.transactionToken = trasactionContextInfo.parameters.transactionToken;
-        }
-     return renterscontextInfo;
-}
+// function getAOSRentersTransactionAttributes(renterscontextInfo, trasactionContextInfo){
+//     if (trasactionContextInfo.parameters.transactionToken) {
+//             renterscontextInfo.parameters.transactionToken = trasactionContextInfo.parameters.transactionToken;
+//         }
+//      return renterscontextInfo;
+// }
 //#endregion
 
 
