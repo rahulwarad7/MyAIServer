@@ -1064,7 +1064,11 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "livedmorethantwo" : undefined,
         "transactionToken" : {},
         "IsInsuredAddrSame" :undefined,
-        "agentDetails" : {}
+        "spousefirstName": undefined,
+        "spouselastName": undefined,
+        "spouseDob": undefined,
+         "spouseEmpStatus" : undefined,
+         "spouseGender" : undefined,
     };
 
     if (contextInfo) {
@@ -1101,24 +1105,6 @@ function getAOSRentersSessionAttributes(contextInfo) {
         if (city && city.trim().length > 0) {
             sessionAttrs.city = contextInfo.parameters["geo-city"];
         }
-        var newaddrLine1 = contextInfo.parameters["newaddress.original"];
-        if (newaddrLine1 && newaddrLine1.trim().length > 0) {
-            sessionAttrs.newaddrLine1 = contextInfo.parameters["newaddress"];
-        }
-        var newcity = contextInfo.parameters["newgeo-city.original"];
-        if (newcity && newcity.trim().length > 0) {
-            sessionAttrs.newcity = contextInfo.parameters["newgeo-city"];
-        }
-        var newzip = contextInfo.parameters["newzip.original"];
-        if (newzip && newzip.trim().length > 0) {
-            sessionAttrs.newzip = contextInfo.parameters["newzip"];
-            if (sessionAttrs.newzip.length === 4) {
-                sessionAttrs.newzip = "0" + sessionAttrs.newzip;
-            }
-        }
-        // if (city && city.trim().length > 0) {
-        //     sessionAttrs.city = contextInfo.parameters["geo-city"];
-        // }
         var phoneNumber = contextInfo.parameters["phone-number.original"];
         if (phoneNumber && phoneNumber.trim().length > 0) {
             sessionAttrs.phoneNumber = contextInfo.parameters["phone-number"];           
@@ -1170,9 +1156,6 @@ function getAOSRentersSessionAttributes(contextInfo) {
         if (contextInfo.parameters.transactionToken) {
             sessionAttrs.transactionToken = contextInfo.parameters.transactionToken;
         }
-        if (contextInfo.parameters.agentDetails) {
-            sessionAttrs.agentDetails = contextInfo.parameters.agentDetails;
-        }
          if (contextInfo.parameters.creditHit != null) {
             sessionAttrs.creditHit = contextInfo.parameters.creditHit;
         }
@@ -1182,13 +1165,37 @@ function getAOSRentersSessionAttributes(contextInfo) {
          if (contextInfo.parameters.isValidRenterCustomer != null) {
             sessionAttrs.isValidRenterCustomer = contextInfo.parameters.isValidRenterCustomer;
         }
-        sessionAttrs.IsInsuredAddrSame = contextInfo.parameters["IsInsuredAddrSame"] === "false" ? false : true;
+        sessionAttrs.IsInsuredAddrSame = contextInfo.parameters["IsInsuredAddrSame"] === "true" ? true : false;
+
+
+        var spousefirstName = contextInfo.parameters["given-name.original"];
+        if (spousefirstName && spousefirstName.length > 0) {
+            sessionAttrs.spousefirstName = contextInfo.parameters["given-name"];
+        }
+        if(spousefirstName && spousefirstName.length>1){
+            sessionAttrs.spouselastName = contextInfo.parameters["given-name.original"][1];
+        }
+        var spouselastName = contextInfo.parameters["last-name.original"];
+        if (spouselastName && spouselastName.trim().length > 0) {
+            sessionAttrs.spouselastName = contextInfo.parameters["last-name"];
+        }
+        var spouseDob = contextInfo.parameters["dob.original"];
+        if (spouseDob && spouseDob.trim().length > 0) {
+            sessionAttrs.spouseDob = contextInfo.parameters["dob"];
+        }
+        var spouseEmpStatus = contextInfo.parameters["aos-renters-employmentType.original"];
+        if (spouseEmpStatus && spouseEmpStatus.trim().length > 0) {
+            sessionAttrs.spouseEmpStatus = contextInfo.parameters["aos-renters-employmentType"];           
+        }
+        var spouseGender = contextInfo.parameters["aos-gender.original"];
+        if (spouseGender && spouseGender.trim().length > 0) {
+            sessionAttrs.spouseGender = contextInfo.parameters["aos-gender"];           
+        }    
 
     }
 
     return sessionAttrs;
 }
-
 
 //#endregion
 
