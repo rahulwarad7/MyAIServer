@@ -1627,7 +1627,7 @@ AOS.prototype.handlerRentersSpouseEmpStatus = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    speechOutput.text = "Now please mention your gender ";
+    speechOutput.text = "Now please mention your spouse's gender ";
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     deferred.resolve(rentersFindSpeechResp);
