@@ -493,7 +493,12 @@ AOS.prototype.handlerRentersIsPrimaryResNo = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. Here is the agent close to you:  ";
+    if(sessionAttrs && sessionAttrs.agentDetails){
+        speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. Here is agent close to you: " + sessionAttrs.agentDetails.name + " , you can contact him at " + sessionAttrs.agentDetails.phoneNumber + " , and email at " + sessionAttrs.agentDetails.emailAddress ;
+    }
+    else {
+        speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. ";
+    }
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     deferred.resolve(rentersFindSpeechResp);
@@ -507,7 +512,12 @@ AOS.prototype.handlerRentersResidenceLocYes = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. Here are a few agents close to you: ";
+    if(sessionAttrs && sessionAttrs.agentDetails){
+        speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. Here is agent close to you: " + sessionAttrs.agentDetails.name + " , you can contact him at " + sessionAttrs.agentDetails.phoneNumber + " , and email at " + sessionAttrs.agentDetails.emailAddress ;
+    }
+    else {
+        speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. ";
+    }
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     deferred.resolve(rentersFindSpeechResp);
@@ -535,7 +545,12 @@ AOS.prototype.handlerRentersIsBusinessOperatedYes = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. Here are a few agents close to you: ";
+    if(sessionAttrs && sessionAttrs.agentDetails){
+        speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. Here is agent close to you: " + sessionAttrs.agentDetails.name + " , you can contact him at " + sessionAttrs.agentDetails.phoneNumber + " , and email at " + sessionAttrs.agentDetails.emailAddress ;
+    }
+    else {
+        speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. ";
+    }
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     deferred.resolve(rentersFindSpeechResp);
