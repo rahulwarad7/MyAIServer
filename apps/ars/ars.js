@@ -1,7 +1,7 @@
-var SpeechResponse = require('./../../shared/data-models/speechResponse.js');
-var Speech = require('./../../shared/data-models/speech');
-var Utilities = require('./../../shared/utilities/utilities.js');
-var Session = require('./../../shared/data-models/session.js');
+var SpeechResponse = require('./../../sampleData/shared/data-models/speechResponse.js');
+var Speech = require('./../../sampleData/shared/data-models/speech');
+var Utilities = require('./../../sampleData/shared/utilities/utilities.js');
+var Session = require('./../../sampleData/shared/data-models/session.js');
 
 var q = require('q');
 var request = require('request');
@@ -202,7 +202,7 @@ function askForCostAgreement(serviceCostInfo, sessionAttrs) {
     repromptOutput.text = speechOutput.text;
     locationServSpeechResp.speechOutput = speechOutput;
     locationServSpeechResp.repromptOutput = repromptOutput;
-    locationServSpeechResp.sessionAttrs = sessionAttrs;
+    //locationServSpeechResp.sessionAttrs = sessionAttrs;
     return locationServSpeechResp;
 }
 
@@ -219,6 +219,7 @@ function askVehicleYear(sessionAttrs) {
 }
 
 function askVehicleYMM(sessionAttrs) {
+    //var ARSSpeechResp = new SpeechResponse();
     var locationServSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
@@ -255,6 +256,7 @@ function askVehicleModel(sessionAttrs) {
 }
 
 function askLocation(sessionAttrs) {
+    var ARSSpeechResp = new SpeechResponse();
     var locationServSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
@@ -262,6 +264,7 @@ function askLocation(sessionAttrs) {
     repromptOutput.text = "Please provide your vehicle's location, or you can say 'current location'";;
     locationServSpeechResp.speechOutput = speechOutput;
     locationServSpeechResp.repromptOutput = repromptOutput;
+    ARSSpeechResp.sessionAttrs = sessionAttrs;
     return locationServSpeechResp;
 }
 
@@ -275,6 +278,7 @@ function askKeyLocation(sessionAttrs) {
     locationServSpeechResp.repromptOutput = repromptOutput;
     locationServSpeechResp.sessionAttrs = sessionAttrs;
     return locationServSpeechResp;
+
 }
 
 function getServiceCosts() {
