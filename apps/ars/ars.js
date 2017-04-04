@@ -119,24 +119,24 @@ function hanldeLockoutService(sessionAttrs, roadServiceSpeechResp) {
     if (!sessionAttrs.vehicleYear && !sessionAttrs.vehicleMake && !sessionAttrs.vehicleModel) {
         if (sessionAttrs.keyLocation) {
             if (sessionAttrs.vehicleLocation) {
-                roadServiceSpeechResp = askVehicleYMM();
+                roadServiceSpeechResp = askVehicleYMM(sessionAttrs);
             } else {
-                roadServiceSpeechResp = askLocation();
+                roadServiceSpeechResp = askLocation(sessionAttrs);
             }
         } else {
             //ask current Location.
-            roadServiceSpeechResp = askKeyLocation();
+            roadServiceSpeechResp = askKeyLocation(sessionAttrs);
         }
         deferred.resolve(roadServiceSpeechResp);
     } else {
         if (!sessionAttrs.vehicleYear) {
-            roadServiceSpeechResp = askVehicleYear();
+            roadServiceSpeechResp = askVehicleYear(sessionAttrs);
             deferred.resolve(roadServiceSpeechResp);
         } else if (!sessionAttrs.vehicleModel) {
-            roadServiceSpeechResp = askVehicleModel();
+            roadServiceSpeechResp = askVehicleModel(sessionAttrs);
             deferred.resolve(roadServiceSpeechResp);
         } else if (!sessionAttrs.vehicleMake) {
-            roadServiceSpeechResp = askVehicleMake();
+            roadServiceSpeechResp = askVehicleMake(sessionAttrs);
             deferred.resolve(roadServiceSpeechResp);
         } else {
             getServiceCosts()
@@ -144,7 +144,7 @@ function hanldeLockoutService(sessionAttrs, roadServiceSpeechResp) {
                     //provide esitmated cost and get agreement.
                     var costsRespJSON = JSON.parse(costsResp);
                     var serviceCostInfo = getServiceTypeCostInfo(costsRespJSON, "LOCKOUT");
-                    roadServiceSpeechResp = askForCostAgreement(serviceCostInfo);
+                    roadServiceSpeechResp = askForCostAgreement(serviceCostInfo, sessionAttrs);
                     deferred.resolve(roadServiceSpeechResp);
                 });
         }
@@ -194,7 +194,7 @@ function getServiceTypeCostInfo(costResp, serviceTypeName) {
     return srvTypeInfo;
 }
 
-function askForCostAgreement(serviceCostInfo) {
+function askForCostAgreement(serviceCostInfo, sessionAttrs) {
     var locationServSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
@@ -202,6 +202,7 @@ function askForCostAgreement(serviceCostInfo) {
     repromptOutput.text = speechOutput.text;
     locationServSpeechResp.speechOutput = speechOutput;
     locationServSpeechResp.repromptOutput = repromptOutput;
+    locationServSpeechResp.sessionAttrs = sessionAttrs;
     return locationServSpeechResp;
 }
 
@@ -213,6 +214,7 @@ function askVehicleYear(sessionAttrs) {
     repromptOutput.text = speechOutput.text;
     locationServSpeechResp.speechOutput = speechOutput;
     locationServSpeechResp.repromptOutput = repromptOutput;
+    locationServSpeechResp.sessionAttrs = sessionAttrs;
     return locationServSpeechResp;
 }
 
@@ -224,6 +226,7 @@ function askVehicleYMM(sessionAttrs) {
     repromptOutput.text = speechOutput.text;
     locationServSpeechResp.speechOutput = speechOutput;
     locationServSpeechResp.repromptOutput = repromptOutput;
+    locationServSpeechResp.sessionAttrs = sessionAttrs;
     return locationServSpeechResp;
 }
 
@@ -235,6 +238,7 @@ function askVehicleMake(sessionAttrs) {
     repromptOutput.text = "What's the make?";;
     locationServSpeechResp.speechOutput = speechOutput;
     locationServSpeechResp.repromptOutput = repromptOutput;
+    locationServSpeechResp.sessionAttrs = sessionAttrs;
     return locationServSpeechResp;
 }
 
@@ -246,10 +250,11 @@ function askVehicleModel(sessionAttrs) {
     repromptOutput.text = "vehicle's model please";;
     locationServSpeechResp.speechOutput = speechOutput;
     locationServSpeechResp.repromptOutput = repromptOutput;
+    locationServSpeechResp.sessionAttrs = sessionAttrs;
     return locationServSpeechResp;
 }
 
-function askLocation() {
+function askLocation(sessionAttrs) {
     var locationServSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
@@ -260,7 +265,7 @@ function askLocation() {
     return locationServSpeechResp;
 }
 
-function askKeyLocation() {
+function askKeyLocation(sessionAttrs) {
     var locationServSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
@@ -268,6 +273,7 @@ function askKeyLocation() {
     repromptOutput.text = speechOutput.text;
     locationServSpeechResp.speechOutput = speechOutput;
     locationServSpeechResp.repromptOutput = repromptOutput;
+    locationServSpeechResp.sessionAttrs = sessionAttrs;
     return locationServSpeechResp;
 }
 
