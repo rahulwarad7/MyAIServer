@@ -247,7 +247,6 @@ AOS.prototype.handleRentersInsuranceCityZip = function (sessionAttrs) {
     }
 
     deferred.resolve(rentersFindSpeechResp);
-
     return deferred.promise;
 };
 
@@ -307,12 +306,10 @@ AOS.prototype.handlerRentersInsuranceInsuredAddrDiff = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    rentersFindSpeechResp.contextOut = [];
-    if (sessionAttrs.addrLine1) {
-        speechOutput.text = "Okay, ! Now I need know What's the CITY and ZIP code you want to insure for?";
-        rentersFindSpeechResp.speechOutput = speechOutput;
-        rentersFindSpeechResp.repromptOutput = speechOutput;
-    }
+    rentersFindSpeechResp.contextOut = [];    
+    speechOutput.text = "Okay, ! Now I need know What is the CITY and ZIP code you want to insure for?";
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;    
     deferred.resolve(rentersFindSpeechResp);
 
     return deferred.promise;
@@ -324,7 +321,7 @@ AOS.prototype.handlerRentersNewCityZip = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    speechOutput.text = "Now what's street address to insure? ";
+    speechOutput.text = "Now what is the street address to insure? ";
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     deferred.resolve(rentersFindSpeechResp);
@@ -338,7 +335,7 @@ AOS.prototype.handlerRentersDiffAddress = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    if (sessionAttrs.IsInsuredAddrSame == true) {
+    if (sessionAttrs.IsInsuredAddrSame == false) {
         getRentersSaveCustomerResponse(sessionAttrs)
             .then(function (saveCustSpeechOutput) {
                 rentersFindSpeechResp.speechOutput = saveCustSpeechOutput;
@@ -347,8 +344,7 @@ AOS.prototype.handlerRentersDiffAddress = function (sessionAttrs) {
                 deferred.resolve(rentersFindSpeechResp);
             });
     }
-    else if (sessionAttrs.IsInsuredAddrSame == true) {
-        //pending:map new city, zip and street address
+    else if (sessionAttrs.IsInsuredAddrSame == false) {
         getRentersSaveCustomerResponse(sessionAttrs)
             .then(function (saveCustSpeechOutput) {
                 rentersFindSpeechResp.speechOutput = saveCustSpeechOutput;
@@ -459,20 +455,6 @@ AOS.prototype.handlerRentersPrevCityZip = function (sessionAttrs) {
     var repromptOutput = new Speech();
 
     speechOutput.text = "Now what's street address? ";
-    rentersFindSpeechResp.speechOutput = speechOutput;
-    rentersFindSpeechResp.repromptOutput = speechOutput;
-    deferred.resolve(rentersFindSpeechResp);
-
-    return deferred.promise;
-};
-
-AOS.prototype.handlerRentersDiffAddress = function (sessionAttrs) {
-    var deferred = q.defer();
-    var rentersFindSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-
-    speechOutput.text = "Now is the residence you are wanting to insure your primary residence? ";
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     deferred.resolve(rentersFindSpeechResp);
@@ -904,13 +886,18 @@ function getRentersSaveCustomerResponse(sessionAttrs) {
     var saveCustSpeechOutput = new Speech();
     var sessionInfo = new Session();
     sessionInfo.zip = sessionAttrs.zip;
+    sessionInfo.newzip = sessionAttrs.newzip;
     startAOSSession()
         .then(function (id) {
             sessionInfo.sessionId = id;
             return getStateFromZip(sessionInfo.sessionId, sessionInfo.zip);
         }).then(function (state) {
-            sessionInfo.state = state;
             sessionAttrs.state = state;
+            if(sessionAttrs.newzip){
+             return getStateFromZip(sessionInfo.sessionId, sessionInfo.newzip);
+            }
+         }).then(function (newstate) {
+            sessionAttrs.newstate = newstate;
             var customerSaveInfo = getCustomerSaveInfo(sessionAttrs, sessionInfo);
             return rentersSaveCustomer(customerSaveInfo, sessionInfo.sessionId);
         }).then(function (saveResp) {
@@ -1027,11 +1014,19 @@ function getCustomerSaveInfo(sessionAttrs, sessionInfo) {
     customerData.dateOfBirth = DateUtil.getFormattedDate(sessionAttrs.dob, "MMDDYYYY");
     customerData.mailingAddress = sessionAttrs.addrLine1;
     customerData.city = sessionAttrs.city;
-    customerData.state = sessionInfo.state;
+    customerData.state = sessionAttrs.state;
     customerData.zipCode = sessionAttrs.zip;
     customerData.aWSFlag = "N";
     customerData.affinity = {};
     customerData.insuredAddress = new Address();
+    if(!sessionAttrs.IsInsuredAddrSame){
+        if(customerData.insuredAddress){
+            customerData.insuredAddress.addressLine1 = sessionAttrs.newaddrLine1;
+            customerData.insuredAddress.city =  sessionAttrs.newcity;
+            customerData.insuredAddress.state =   sessionAttrs.newstate;
+            customerData.insuredAddress.zipCode =   sessionAttrs.newzip;
+        }
+    }
     customerData.isInsuredAddressSameAsCurrent = sessionAttrs.IsInsuredAddrSame;
     return customerData;
 }
