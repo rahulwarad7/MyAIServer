@@ -1552,4 +1552,103 @@ function ProcessQuoteResponse(retrieveQuoteServResp) {
 
 //#endregion
 
+//#region SPOUSE
+
+AOS.handlerAOSRentersIsSpouseYes = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+
+speechOutput.text = "Sure thing! I'll just need some basic info first. Please give your spouse's full name.";
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
+
+    return deferred.promise;
+}
+
+
+
+AOS.prototype.handleRentersSpouseInsuranceName = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    if (sessionAttrs.lastName) {
+        speechOutput.text = "Please, Provide your spouse's date of birth";
+        rentersFindSpeechResp.speechOutput = speechOutput;
+        rentersFindSpeechResp.repromptOutput = speechOutput;
+    } else {
+        speechOutput.text = sessionAttrs.firstName + ", please provide your spouse's last name.";
+        rentersFindSpeechResp.speechOutput = speechOutput;
+        rentersFindSpeechResp.repromptOutput = speechOutput;
+    }
+    deferred.resolve(rentersFindSpeechResp);
+
+
+
+    return deferred.promise;
+}
+AOS.prototype.handleRentersSpouseInsuranceDOB = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    speechOutput.text = "Great! Next I'll need to know a little about your spouse's employment status. Like employed, self employed, unemployed, student, retired, home maker or military";
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
+
+    return deferred.promise;
+};
+
+AOS.prototype.handlerRentersSpouseEmpStatus = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    speechOutput.text = "Now please mention your gender ";
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
+
+    return deferred.promise;
+};
+
+AOS.prototype.handlerRentersSpouseGender = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    speechOutput.text = "Thanks! Have you lived in your residence for more than two years? ";
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
+
+    return deferred.promise;
+};
+
+AOS.handlerAOSRentersIsSpouseNo = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    speechOutput.text = "OK! Have you lived in your residence for more than two years? ";
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
+
+    return deferred.promise;
+};
+
+
+//#endregion
+
 module.exports = new AOS();
