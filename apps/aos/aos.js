@@ -392,7 +392,7 @@ AOS.prototype.handlerRentersGender = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    speechOutput.text = "Have you lived in your residence for more than two years? ";
+    speechOutput.text = "Thanks. Would you like to add a spouse to your quote? ";
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     deferred.resolve(rentersFindSpeechResp);
