@@ -18,12 +18,12 @@ var AOS = function () { };
 var AOSTranData = [];
 
 //#region CONSTANTS
-var URL_COMMON = "https://purchase-itest1.allstate.com/onlinesalesapp-common/";
+var URL_COMMON = "https://purchase.allstate.com/onlinesalesapp-common/";
 var URL_RENTERS_SESSIONID = URL_COMMON + "api/transaction/RENTERS/sessionid";
 var URL_AUTO_SESSIONID = URL_COMMON + "api/transaction/AUTO/sessionid";
 var URL_GETAGENTS = URL_COMMON + "api/common/agents";
 var URL_GETSTATE = URL_COMMON + "api/location/{0}/state";
-var URL_RENTERS_BASE = "https://purchase-itest1.allstate.com/onlinesalesapp-renters/api";
+var URL_RENTERS_BASE = "https://purchase.allstate.com/onlinesalesapp-renters/api";
 var URL_RENTERS_SAVECUSTOMER = URL_RENTERS_BASE + "/renters/customer";
 var URL_RENTERS_RENTERSINFO = URL_RENTERS_BASE + "/renters/renter-information";
 var URL_RENTERS_CONFIRMPROFILE = URL_RENTERS_BASE + "/renters/renter-information/confirm-profile";
