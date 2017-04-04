@@ -151,8 +151,34 @@ function HanldeIntentRequest(body, deferred) {
                     intentResponseInfo = output;
                     deferred.resolve(intentResponseInfo);
                 })
+            break;         
+            case "ARS_SERVICE_START":
+        case "ARS_SERVICE_LOCATION":
+            handleARSStart(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
             break;
-        default:
+
+        case "ARS_SERVICE_VEHICLE_YEAR":
+        case "ARS_SERVICE_VEHICLE_MAKE":
+        case "ARS_SERVICE_VEHICLE_MODEL":
+        case "ARS_SERVICE_VEHICLE_YMM":
+            handleARSVehicleYMM(body, deferred)
+                .then(function (output) {
+                    intentResponseInfo = output;
+                    deferred.resolve(intentResponseInfo);
+                });
+                break;
+
+        case "ARS_SERVICE_PRICE_AGREE":
+            handleARSAgreement(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+            
+            default:
             deferred.reject("Sorry. I am still learning. For now I can't help you with this.");
             break;
     }
@@ -191,7 +217,7 @@ function updateCorrectIntent(body, nextIntentName) {
         case "AOSRENTERSNAME":
             newSlots.firstName = { "name": "firstName", "value": currentSlots.slotOne ? currentSlots.slotOne.value : undefined };
             newSlots.lastName = { "name": "lastName", "value": currentSlots.slotTwo ? currentSlots.slotTwo.value : undefined };
-            break;
+            break;                    
         default:
             break;
     };
@@ -446,6 +472,89 @@ function getAOSRentersSessionAttributes(body) {
 // private intents functions end
 
 //private function end
+
+//#region ARS
+function handleARSStart(body, deferred) {
+
+    var ARSResponse;
+    var intent = body.request.intent;
+    var result = body.result;
+   
+    var sessionAttrs = getARSSessionAttributes(body);
+    
+
+    ars.handleRoadServiceHandler(sessionAttrs)
+        .then(function (handleARSResp) {
+            body.session.attributes.predictedIntent = "ARS_SERVICE_VEHICLE_YMM";
+            ARSResponse = proessAlexaSpeechResp(handleARSResp, body, "Road Side Service");
+            deferred.resolve(ARSResponse);
+        });
+
+    return deferred.promise;
+}
+
+function handleARSVehicleYMM(body, deferred) {
+
+    var ARSResponse;
+    var intent = body.request.intent;
+    
+    var sessionAttrs = getARSSessionAttributes(body);
+
+    ars.handleRoadServiceYMMHandler(sessionAttrs)
+        .then(function (handleARSResp) {
+            body.session.attributes.predictedIntent = "ARS_SERVICE_PRICE_AGREE";
+            ARSResponse = proessAlexaSpeechResp(handleARSResp, body, "Road Side Service");
+            deferred.resolve(ARSResponse);
+        });
+
+    return deferred.promise;
+}
+
+
+function handleARSAgreement(body, deferred) {
+
+    var ARSResponse;
+    var intent = body.request.intent;
+
+    var sessionAttrs = getARSSessionAttributes(body);
+
+    ars.handleRoadServiceAgreementHandler(sessionAttrs)
+        .then(function (handleARSResp) {
+            body.session.attributes.predictedIntent = "";
+            ARSResponse = proessAlexaSpeechResp(handleARSResp, body, "Road Side Service");
+            deferred.resolve(ARSResponse);
+        });
+    return deferred.promise;
+}
+
+
+
+function getARSSessionAttributes(body) {
+    var sessionAttrs = {
+        "serviceType": undefined,
+        "cost": undefined,
+        "keyLocation": undefined,
+        "vehicle": {},
+        "vehicleLocation": undefined        
+
+    };
+
+    var slots = body.request.intent.slots;
+    if (slots) {
+        sessionAttrs.serviceType = slots.lockout ? slots.lockout.name : body.session.attributes.serviceType;
+        sessionAttrs.keyLocation = slots.lockout ? slots.lockout.value : body.session.attributes.keyLocation;
+        sessionAttrs.vehicleLocation = slots.vehicle_location ? slots.vehicle_location.value : body.session.attributes.vehicleLocation;
+        sessionAttrs.vehicleYear = slots.vehicle_year ? slots.vehicle_year.value : body.session.attributes.vehicleYear;
+        sessionAttrs.vehicleMake = slots.vehicle_make ? slots.vehicle_make.value : body.session.attributes.vehicleMake;
+        sessionAttrs.vehicleModel = slots.vehicle_model ? slots.vehicle_model.value : body.session.attributes.vehicleModel;
+
+    }
+
+
+    return sessionAttrs;
+}
+
+//#endregion
 
 module.exports = Allstate;
 
