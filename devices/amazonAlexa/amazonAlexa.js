@@ -172,9 +172,8 @@ function HanldeIntentRequest(body, deferred) {
                     intentResponseInfo = output;
                     deferred.resolve(intentResponseInfo);
                 })
-            break;
             break;         
-            case "ARS_SERVICE_START":
+         case "ARS_SERVICE_START":
         case "ARS_SERVICE_LOCATION":
             handleARSStart(body, deferred)
                 .then(function (responseInfo) {
