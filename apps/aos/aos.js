@@ -365,13 +365,24 @@ AOS.prototype.handlerRentersEmpStatus = function (sessionAttrs) {
     var deferred = q.defer();
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
+    var sessionInfo = new Session();
+    
     var repromptOutput = new Speech();
-
-    speechOutput.text = "Now please mention your gender ";
-    rentersFindSpeechResp.speechOutput = speechOutput;
-    rentersFindSpeechResp.repromptOutput = speechOutput;
-    deferred.resolve(rentersFindSpeechResp);
-
+    if (sessionAttrs.transactionToken) {
+        sessionInfo.sessionId = sessionAttrs.transactionToken.sessionID;
+        sessionInfo.state = sessionAttrs.transactionToken.state;
+        sessionInfo.zip = sessionAttrs.transactionToken.zipCode;
+        getAgents(sessionInfo)
+            .then(function (agentDetails) {
+                if(agentDetails && agentDetails.length > 0 ){
+                    sessionAttrs.agentDetails = agentDetails[0];
+                }                
+                speechOutput.text = "Now please mention your gender ";
+                rentersFindSpeechResp.speechOutput = speechOutput;
+                rentersFindSpeechResp.repromptOutput = speechOutput;
+                deferred.resolve(rentersFindSpeechResp);
+            });
+    }
     return deferred.promise;
 };
 
