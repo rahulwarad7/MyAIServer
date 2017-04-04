@@ -1569,7 +1569,7 @@ function ProcessQuoteResponse(retrieveQuoteServResp) {
 
 //#region SPOUSE
 
-AOS.handlerAOSRentersIsSpouseYes = function (sessionAttrs) {
+AOS.prototype.handlerAOSRentersIsSpouseYes = function (sessionAttrs) {
     var deferred = q.defer();
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
@@ -1649,7 +1649,7 @@ AOS.prototype.handlerRentersSpouseGender = function (sessionAttrs) {
     return deferred.promise;
 };
 
-AOS.handlerAOSRentersIsSpouseNo = function (sessionAttrs) {
+AOS.prototype.handlerAOSRentersIsSpouseNo = function (sessionAttrs) {
     var deferred = q.defer();
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
