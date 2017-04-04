@@ -346,6 +346,49 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
+            
+            case "AOS-RENTERS-ISSPOUSEADDED-YES":
+               handlerAOSRentersIsSpouseYes(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+          break;
+
+          case "AOS-RENTERS-ISSPOUSEADDED-NO":
+                handlerAOSRentersIsSpouseNo(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+
+          break;
+
+        case "AOS-RENTERS-SPOUSE-NAME":
+        case "AOS-RENTERS-SPOUSE-LASTNAME":
+            handlerAOSRentersSpouseInsuranceName(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AOS-RENTERS-SPOUSE-DOB":
+            handlerAOSRentersSpouseInsuranceDOB(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+
+         case "AOS-RENTERS-SPOUSE-EMPSTATUS":
+            handlerAOSRentersSpouseEmpStatus(body, deferred)
+                .then(function (responseInfo) {
+                    //employed, self employed, student, retired, unemployed, homemaker,military
+                    deferred.resolve(responseInfo);
+                });
+            break;
+      case "AOS-RENTERS-SPOUSE-GENDER":
+            handlerAOSRentersSpouseGender(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
 
         case "GET-LOCATION-PERMISSION":
             var permissionGranted = isPermissionGranted(body);
@@ -354,6 +397,8 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
+            
+            
         case "HELPINTENT":
         default:
             var message = "You can say hello to me!";
@@ -1522,6 +1567,105 @@ function processPoolerSpeechResp(poolerDateSpeechResponse, body) {
 }
 //#endregion
 
+//#region SPOUSE
+
+function handlerAOSRentersIsSpouseYes(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handlerAOSRentersIsSpouseYes(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            //rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+
+function handlerAOSRentersSpouseInsuranceName(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handleRentersSpouseInsuranceName(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+}
+function handlerAOSRentersSpouseInsuranceDOB(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handleRentersSpouseInsuranceDOB(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+function handlerAOSRentersSpouseEmpStatus(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+    aos.handlerRentersSpouseEmpStatus(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+function handlerAOSRentersSpouseGender(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+    aos.handlerRentersSpouseGender(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+function handlerAOSRentersIsSpouseNo(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handlerAOSRentersIsSpouseNo(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            //rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+//#endregion
 
 
 
