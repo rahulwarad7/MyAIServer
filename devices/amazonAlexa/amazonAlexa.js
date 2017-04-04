@@ -151,6 +151,28 @@ function HanldeIntentRequest(body, deferred) {
                     intentResponseInfo = output;
                     deferred.resolve(intentResponseInfo);
                 })
+            case "AOSRENTERADD":
+            handlerAOSRentersInsuranceAddr(body, deferred)
+                .then(function (output) {
+                    intentResponseInfo = output;
+                    deferred.resolve(intentResponseInfo);
+                })
+            break;
+        case "AOSRENTERZIPCITY":
+            handlerAOSRentersInsuranceCityZip(body, deferred)
+                .then(function (output) {
+                    intentResponseInfo = output;
+                    deferred.resolve(intentResponseInfo);
+                })
+            break;
+        case "AOSRENTERINSADDRSAMENO":
+        case "AOSRENTERINSADDRSAMEYES":
+            handlerAOSRentersInsuranceInsuredAddrSame(body, deferred)
+                .then(function (output) {
+                    intentResponseInfo = output;
+                    deferred.resolve(intentResponseInfo);
+                })
+            break;
             break;         
             case "ARS_SERVICE_START":
         case "ARS_SERVICE_LOCATION":
@@ -450,6 +472,48 @@ function handlerAOSRentersInsuranceDOB(body, deferred) {
 }
 
 
+function handlerAOSRentersInsuranceAddr(body, deferred) {
+    var rentersInsuranceResponse;
+    var intent = body.request.intent;
+    var sessionAttrs = getAOSRentersSessionAttributes(body);
+    aos.handleRentersInsuranceAddr(sessionAttrs)
+        .then(function (handleRentersInsuranceResp) {
+            body.session.attributes.predictedIntent = "AOSRENTERZIPCITY";
+            rentersInsuranceResponse = proessAlexaSpeechResp(handleRentersInsuranceResp, body, "Renters Insurance");
+            deferred.resolve(rentersInsuranceResponse);
+        });
+    return deferred.promise;
+}
+function handlerAOSRentersInsuranceCityZip(body, deferred) {
+    var rentersInsuranceResponse;
+    var intent = body.request.intent;
+    var sessionAttrs = getAOSRentersSessionAttributes(body);
+    aos.handleRentersInsuranceCityZip(sessionAttrs)
+        .then(function (handleRentersInsuranceResp) {
+            body.session.attributes.predictedIntent = "AOSRENTERSINSADDRSAMEYES ";
+            rentersInsuranceResponse = proessAlexaSpeechResp(handleRentersInsuranceResp, body, "Renters Insurance");
+            deferred.resolve(rentersInsuranceResponse);
+        });
+
+
+    return deferred.promise;
+}
+
+function handlerAOSRentersInsuranceInsuredAddrSame(body, deferred) {
+    var rentersInsuranceResponse;
+    var intent = body.request.intent;
+    var sessionAttrs = getAOSRentersSessionAttributes(body);
+    aos.handleRentersInsuranceInsuredAddrSame(sessionAttrs)
+        .then(function (handleRentersInsuranceResp) {
+            body.session.attributes.predictedIntent = " ";
+            rentersInsuranceResponse = proessAlexaSpeechResp(handleRentersInsuranceResp, body, "Renters Insurance");
+            deferred.resolve(rentersInsuranceResponse);
+        });
+
+
+    return deferred.promise;
+}
+
 function getAOSRentersSessionAttributes(body) {
     var sessionAttrs = {
         "firstName": undefined,
@@ -464,6 +528,11 @@ function getAOSRentersSessionAttributes(body) {
     if (slots) {
         sessionAttrs.firstName = slots.firstName ? slots.firstName.value : body.session.attributes.firstName;
         sessionAttrs.lastName = slots.lastName ? slots.lastName.value : body.session.attributes.lastName;
+        sessionAttrs.dob = slots.dob ? slots.dob.value : body.session.attributes.dob;
+        sessionAttrs.addrLine1 = slots.addrLine ? slots.addrLine.value : body.session.attributes.addrLine1;
+        sessionAttrs.city = slots.city ? slots.city.value : body.session.attributes.city;
+        sessionAttrs.zip = slots.zip ? slots.zip.value : body.session.attributes.zip;
+        sessionAttrs.IsInsuredAddrSame = true;
     }
     return sessionAttrs;
 }
