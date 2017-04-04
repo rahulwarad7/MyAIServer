@@ -712,6 +712,7 @@ function handlerAOSRentersEmpStatus(body, deferred) {
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
             rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
             deferred.resolve(rentersWelcomeSpeechResp);
         });
 
@@ -1017,7 +1018,8 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "gender" : undefined,
         "livedmorethantwo" : undefined,
         "transactionToken" : {},
-        "IsInsuredAddrSame" :undefined
+        "IsInsuredAddrSame" :undefined,
+        "agentDetails" : {}
     };
 
     if (contextInfo) {
@@ -1122,6 +1124,9 @@ function getAOSRentersSessionAttributes(contextInfo) {
         }
         if (contextInfo.parameters.transactionToken) {
             sessionAttrs.transactionToken = contextInfo.parameters.transactionToken;
+        }
+        if (contextInfo.parameters.agentDetails) {
+            sessionAttrs.agentDetails = contextInfo.parameters.agentDetails;
         }
          if (contextInfo.parameters.creditHit != null) {
             sessionAttrs.creditHit = contextInfo.parameters.creditHit;
