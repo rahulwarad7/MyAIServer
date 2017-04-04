@@ -1,7 +1,7 @@
-var SpeechResponse = require('./../../sampleData/shared/data-models/speechResponse.js');
-var Speech = require('./../../sampleData/shared/data-models/speech');
-var Utilities = require('./../../sampleData/shared/utilities/utilities.js');
-var Session = require('./../../sampleData/shared/data-models/session.js');
+var SpeechResponse = require('./../../shared/data-models/speechResponse.js');
+var Speech = require('./../../shared/data-models/speech');
+var Utilities = require('./../../shared/utilities/utilities.js');
+var Session = require('./../../shared/data-models/session.js');
 
 var q = require('q');
 var request = require('request');
