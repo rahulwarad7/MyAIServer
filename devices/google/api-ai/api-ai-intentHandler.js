@@ -696,6 +696,7 @@ function handlerAOSRentersDiffAddress(body, deferred) {
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
             rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
             deferred.resolve(rentersWelcomeSpeechResp);
         });
 
@@ -1053,6 +1054,24 @@ function getAOSRentersSessionAttributes(contextInfo) {
         if (city && city.trim().length > 0) {
             sessionAttrs.city = contextInfo.parameters["geo-city"];
         }
+        var newaddrLine1 = contextInfo.parameters["newaddress.original"];
+        if (newaddrLine1 && newaddrLine1.trim().length > 0) {
+            sessionAttrs.newaddrLine1 = contextInfo.parameters["newaddress"];
+        }
+        var newcity = contextInfo.parameters["newgeo-city.original"];
+        if (newcity && newcity.trim().length > 0) {
+            sessionAttrs.newcity = contextInfo.parameters["newgeo-city"];
+        }
+        var newzip = contextInfo.parameters["newzip.original"];
+        if (newzip && newzip.trim().length > 0) {
+            sessionAttrs.newzip = contextInfo.parameters["newzip"];
+            if (sessionAttrs.newzip.length === 4) {
+                sessionAttrs.newzip = "0" + sessionAttrs.newzip;
+            }
+        }
+        // if (city && city.trim().length > 0) {
+        //     sessionAttrs.city = contextInfo.parameters["geo-city"];
+        // }
         var phoneNumber = contextInfo.parameters["phone-number.original"];
         if (phoneNumber && phoneNumber.trim().length > 0) {
             sessionAttrs.phoneNumber = contextInfo.parameters["phone-number"];           
@@ -1113,7 +1132,7 @@ function getAOSRentersSessionAttributes(contextInfo) {
          if (contextInfo.parameters.isValidRenterCustomer != null) {
             sessionAttrs.isValidRenterCustomer = contextInfo.parameters.isValidRenterCustomer;
         }
-        sessionAttrs.IsInsuredAddrSame = contextInfo.parameters["IsInsuredAddrSame"] === "true" ? true : false;
+        sessionAttrs.IsInsuredAddrSame = contextInfo.parameters["IsInsuredAddrSame"] === "false" ? false : true;
 
     }
 
