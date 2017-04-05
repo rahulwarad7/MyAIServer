@@ -191,7 +191,6 @@ function intentHandlers(body) {
          case "AOS-RENTERS-EMPSTATUS":
             handlerAOSRentersEmpStatus(body, deferred)
                 .then(function (responseInfo) {
-                    //employed, self employed, student, retired, unemployed, homemaker,military
                     deferred.resolve(responseInfo);
                 });
             break;
@@ -1067,8 +1066,11 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "spousefirstName": undefined,
         "spouselastName": undefined,
         "spouseDob": undefined,
-         "spouseEmpStatus" : undefined,
-         "spouseGender" : undefined,
+        "spouseEmpStatus" : undefined,
+        "spouseGender" : undefined,
+        "newcity" : undefined,
+        "newzip" : undefined,
+        "newaddrLine1" : undefined
     };
 
     if (contextInfo) {
@@ -1102,8 +1104,20 @@ function getAOSRentersSessionAttributes(contextInfo) {
                 sessionAttrs.zip = "0" + sessionAttrs.zip;
             }
         }
-        if (city && city.trim().length > 0) {
-            sessionAttrs.city = contextInfo.parameters["geo-city"];
+        var newaddrLine1 = contextInfo.parameters["newaddress.original"];
+        if (newaddrLine1 && newaddrLine1.trim().length > 0) {
+            sessionAttrs.newaddrLine1 = contextInfo.parameters["newaddress"];
+        }
+        var newcity = contextInfo.parameters["newgeo-city.original"];
+        if (newcity && newcity.trim().length > 0) {
+            sessionAttrs.newcity = contextInfo.parameters["newgeo-city"];
+        }
+        var newzip = contextInfo.parameters["newzip.original"];
+        if (newzip && newzip.trim().length > 0) {
+            sessionAttrs.newzip = contextInfo.parameters["newzip"];
+            if (sessionAttrs.newzip.length === 4) {
+                sessionAttrs.newzip = "0" + sessionAttrs.newzip;
+            }
         }
         var phoneNumber = contextInfo.parameters["phone-number.original"];
         if (phoneNumber && phoneNumber.trim().length > 0) {
@@ -1165,32 +1179,31 @@ function getAOSRentersSessionAttributes(contextInfo) {
          if (contextInfo.parameters.isValidRenterCustomer != null) {
             sessionAttrs.isValidRenterCustomer = contextInfo.parameters.isValidRenterCustomer;
         }
-        sessionAttrs.IsInsuredAddrSame = contextInfo.parameters["IsInsuredAddrSame"] === "true" ? true : false;
-
-
-        var spousefirstName = contextInfo.parameters["given-name.original"];
+         var spousefirstName = contextInfo.parameters["spousefirstName.original"];
         if (spousefirstName && spousefirstName.length > 0) {
-            sessionAttrs.spousefirstName = contextInfo.parameters["given-name"];
+            sessionAttrs.spousefirstName = contextInfo.parameters["spousefirstName"];
         }
         if(spousefirstName && spousefirstName.length>1){
-            sessionAttrs.spouselastName = contextInfo.parameters["given-name.original"][1];
+            sessionAttrs.spouselastName = contextInfo.parameters["spousefirstName.original"][1];
         }
-        var spouselastName = contextInfo.parameters["last-name.original"];
+        var spouselastName = contextInfo.parameters["spouselastName.original"];
         if (spouselastName && spouselastName.trim().length > 0) {
-            sessionAttrs.spouselastName = contextInfo.parameters["last-name"];
+            sessionAttrs.spouselastName = contextInfo.parameters["spouselastName"];
         }
-        var spouseDob = contextInfo.parameters["dob.original"];
+        var spouseDob = contextInfo.parameters["spouseDob.original"];
         if (spouseDob && spouseDob.trim().length > 0) {
-            sessionAttrs.spouseDob = contextInfo.parameters["dob"];
+            sessionAttrs.spouseDob = contextInfo.parameters["spouseDob"];
         }
-        var spouseEmpStatus = contextInfo.parameters["aos-renters-employmentType.original"];
+        var spouseEmpStatus = contextInfo.parameters["spouseEmpStatus.original"];
         if (spouseEmpStatus && spouseEmpStatus.trim().length > 0) {
-            sessionAttrs.spouseEmpStatus = contextInfo.parameters["aos-renters-employmentType"];           
+            sessionAttrs.spouseEmpStatus = contextInfo.parameters["spouseEmpStatus"];           
         }
-        var spouseGender = contextInfo.parameters["aos-gender.original"];
+        var spouseGender = contextInfo.parameters["spouseGender.original"];
         if (spouseGender && spouseGender.trim().length > 0) {
-            sessionAttrs.spouseGender = contextInfo.parameters["aos-gender"];           
+            sessionAttrs.spouseGender = contextInfo.parameters["spouseGender"];           
         }    
+
+        sessionAttrs.IsInsuredAddrSame = contextInfo.parameters["IsInsuredAddrSame"] === "true" ? true : false;
 
     }
 
