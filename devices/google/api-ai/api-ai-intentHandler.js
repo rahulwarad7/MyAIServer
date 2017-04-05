@@ -1205,9 +1205,12 @@ function getAOSRentersSessionAttributes(contextInfo) {
         if (spouseGender && spouseGender.trim().length > 0) {
             sessionAttrs.spouseGender = contextInfo.parameters["spouseGender"];           
         }    
-
-        sessionAttrs.IsInsuredAddrSame = contextInfo.parameters["IsInsuredAddrSame"] === false ? false : true;
-
+        if(contextInfo.parameters["IsInsuredAddrSame"] === false || contextInfo.parameters["IsInsuredAddrSame"] === "false" ){
+            sessionAttrs.IsInsuredAddrSame = false;
+        }
+        else{
+            sessionAttrs.IsInsuredAddrSame = true;
+        }
     }
 
     return sessionAttrs;
