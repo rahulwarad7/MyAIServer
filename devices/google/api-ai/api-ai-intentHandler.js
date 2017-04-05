@@ -1103,12 +1103,22 @@ function getAOSRentersSessionAttributes(contextInfo) {
     };
 
     if (contextInfo) {
-        var firstName = contextInfo.parameters["given-name.original"];
-        if (firstName && firstName.length > 0) {
-            sessionAttrs.firstName = contextInfo.parameters["given-name"];
-        }
-        if(firstName && firstName.length>1){
-            sessionAttrs.lastName = contextInfo.parameters["given-name.original"][1];
+//         var firstName = contextInfo.parameters["given-name.original"];
+//         if (firstName && firstName.length > 0) {
+//             sessionAttrs.firstName = contextInfo.parameters["given-name"];
+//         }
+//         if(firstName && firstName.length>1){
+//             sessionAttrs.lastName = contextInfo.parameters["given-name.original"][1];
+//         }
+        
+        var Name = contextInfo.parameters["language.original"];
+        if (Name && Name.length > 0) {
+            Name = contextInfo.parameters["language"];
+            var arr = Name.split(" ");
+            if(arr){
+            sessionAttrs.firstName = arr[0];
+            sessionAttrs.lastName = arr[1];
+           }
         }
         var lastName = contextInfo.parameters["last-name.original"];
         if (lastName && lastName.trim().length > 0) {
