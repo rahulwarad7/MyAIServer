@@ -157,6 +157,13 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
+        case "AOS-RENTERS-PHONENUMBER-AUTHORIZE-NO":
+        case "AOS-RENTERS-PHONENUMBER-AUTHORIZE-YES":
+                handlerAOSRentersPhoneNumberAuthorize(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
         case "AOS-RENTERS-EMAILADDRESS":
             handlerAOSRentersEmailAddress(body, deferred)
                 .then(function (responseInfo) {
@@ -681,6 +688,21 @@ function handlerAOSRentersPhoneNumber(body, deferred) {
 
     return deferred.promise;
 }
+function handlerAOSRentersPhoneNumberAuthorize(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+   
+    aos.handlerRentersPhoneNumberAuthorize(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+}
 
 function handlerAOSRentersEmailAddress(body, deferred) {
     var rentersWelcomeSpeechResp = {};
@@ -1052,6 +1074,7 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "zip": undefined,
         "IsInsuredAddrSame": undefined,
         "phoneNumber" : undefined,
+        "isAuthorize" : undefined,
         "emailAddress" : undefined,
         "businessoutofresidence" : undefined,
         "employmentStatus" : undefined,
@@ -1128,6 +1151,10 @@ function getAOSRentersSessionAttributes(contextInfo) {
         var phoneNumber = contextInfo.parameters["phone-number.original"];
         if (phoneNumber && phoneNumber.trim().length > 0) {
             sessionAttrs.phoneNumber = contextInfo.parameters["phone-number"];           
+        }
+         var isAuthorize = contextInfo.parameters["isAuthorize.original"];
+        if (isAuthorize && isAuthorize.trim().length > 0) {
+            sessionAttrs.isAuthorize = contextInfo.parameters["isAuthorize"];           
         }
          var emailAddress = contextInfo.parameters["email.original"];
         if (emailAddress && emailAddress.trim().length > 0) {
