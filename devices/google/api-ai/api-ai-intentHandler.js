@@ -1062,6 +1062,7 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "gender" : undefined,
         "livedmorethantwo" : undefined,
         "transactionToken" : {},
+        "agentDetails" :{},
         "spousefirstName": undefined,
         "spouselastName": undefined,
         "spouseDob": undefined,
@@ -1168,6 +1169,9 @@ function getAOSRentersSessionAttributes(contextInfo) {
         }
         if (contextInfo.parameters.transactionToken) {
             sessionAttrs.transactionToken = contextInfo.parameters.transactionToken;
+        }
+        if (contextInfo.parameters.agentDetails) {
+            sessionAttrs.agentDetails = contextInfo.parameters.agentDetails;
         }
          if (contextInfo.parameters.creditHit != null) {
             sessionAttrs.creditHit = contextInfo.parameters.creditHit;
