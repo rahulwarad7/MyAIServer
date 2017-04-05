@@ -1091,6 +1091,7 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "isSpouseAdded" : undefined,
         "spousefirstName": undefined,
         "spouselastName": undefined,
+        "spousemiddleName":undefined,
         "spouseDob": undefined,
         "spouseEmpStatus" : undefined,
         "spouseGender" : undefined,
@@ -1235,13 +1236,28 @@ function getAOSRentersSessionAttributes(contextInfo) {
         if (isSpouseAdded && isSpouseAdded.trim().length > 0) {
             sessionAttrs.isSpouseAdded = contextInfo.parameters["isSpouseAdded"];           
         }
-         var spousefirstName = contextInfo.parameters["spousefirstName.original"];
-        if (spousefirstName && spousefirstName.length > 0) {
-            sessionAttrs.spousefirstName = contextInfo.parameters["spousefirstName"];
+//          var spousefirstName = contextInfo.parameters["spousefirstName.original"];
+//         if (spousefirstName && spousefirstName.length > 0) {
+//             sessionAttrs.spousefirstName = contextInfo.parameters["spousefirstName"];
+//         }
+//         if(spousefirstName && spousefirstName.length>1){
+//             sessionAttrs.spouselastName = contextInfo.parameters["spousefirstName.original"][1];
+//         }
+        var spouseName = contextInfo.parameters["spouse-name.original"];
+        if (spouseName && spouseName.length > 0) {
+            spouseName = contextInfo.parameters["spouse-name"];
+            var arr = spouseName.split(" ");
+            if(arr.length <=2){
+            sessionAttrs.spousefirstName = arr[0];
+            sessionAttrs.spouselastName = arr[1];
+           }
+           else{
+               sessionAttrs.spousefirstName = arr.[0];
+               sessionAttrs.spouselastName = arr.[2];
+               sessionAttrs.spousemiddleName = arr[1];
+           }
         }
-        if(spousefirstName && spousefirstName.length>1){
-            sessionAttrs.spouselastName = contextInfo.parameters["spousefirstName.original"][1];
-        }
+        
         var spouselastName = contextInfo.parameters["spouselastName.original"];
         if (spouselastName && spouselastName.trim().length > 0) {
             sessionAttrs.spouselastName = contextInfo.parameters["spouselastName"];
