@@ -278,14 +278,42 @@ AOS.prototype.handlerRentersPhoneNumber = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-
-    speechOutput.text = "Now, email address. ";
+    if(sessionAttrs.phoneNumber.length == 10)
+    {
+    speechOutput.text = "I agree that Allstate can call me at the provided phone number regarding my insurance quote request."+ 
+    "I understand the call may be automatically dialed, that my consent is not a condition of any purchase, and that I can revoke my "+
+    "consent at any time. say OK to authorize" ;
+}
+else{
+    speechOutput.text = "Please provide the valid phone number";
+}
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     deferred.resolve(rentersFindSpeechResp);
 
     return deferred.promise;
 };
+
+
+AOS.prototype.handlerRentersPhoneNumberAuthorize = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+    if(sessionAttrs.isAuthorize == true)
+    {
+    speechOutput.text = "Now, i need your email address" ;
+}
+else{
+    speechOutput.text = "you need to authorize to move further so say \"authorize\"";
+}
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
+
+    return deferred.promise;
+};
+
 
 AOS.prototype.handlerRentersEmailAddress = function (sessionAttrs) {
     var deferred = q.defer();
