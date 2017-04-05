@@ -1100,6 +1100,18 @@ function getProfiles(sessionAttrs) {
     profile.dateOfBirth = DateUtil.getFormattedDate(sessionAttrs.dob, "MMDDYYYY");;
     profile.id = "dvEditPrimary";
     profiles.push(profile);
+    if(sessionAttrs.spouseAdded){
+        profile.driverGUID = null;
+        profile.driverNumber = null;
+        profile.relationshipToPrimaryDriver = null;
+        profile.firstName = sessionAttrs.spousefirstName;
+        profile.middleName = null;
+        profile.lastName = sessionAttrs.spouselastName;
+        profile.suffix = null;
+        profile.dateOfBirth = DateUtil.getFormattedDate(sessionAttrs.spouseDob, "MMDDYYYY");;
+        profile.id = "dvEditSpouse";
+        profiles.push(profile);   
+    }
     return profiles;
 }
 
@@ -1136,6 +1148,21 @@ function mapResident(rentersInfoData, sessionAttrs) {
             var diff = cur - birthdate;
             var age = Math.floor(diff / 31557600000);
             rentersInfoData.primaryRenter.age = age;
+        }
+
+    }
+    if (sessionAttrs.spouseAdded) {
+        rentersInfoData.spouse.firstName = sessionAttrs.spousefirstName;
+        rentersInfoData.spouse.lastName = sessionAttrs.spouselastName;
+        rentersInfoData.spouse.gender = sessionAttrs.spouseGender;
+        rentersInfoData.spouse.employmentStatus = sessionAttrs.spouseEmpStatus;
+        rentersInfoData.spouse.dateOfBirth = DateUtil.getFormattedDate(sessionAttrs.spouseDob, "MMDDYYYY");
+        if (sessionAttrs.spouseDob) {
+            var birthdate = new Date(sessionAttrs.spouseDob);
+            var cur = new Date();
+            var diff = cur - birthdate;
+            var age = Math.floor(diff / 31557600000);
+            rentersInfoData.spouse.age = age;
         }
 
     }
