@@ -300,7 +300,7 @@ AOS.prototype.handlerRentersPhoneNumberAuthorize = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    if(sessionAttrs.isAuthorize == true)
+    if(sessionAttrs.isAuthorize === "true")
     {
     speechOutput.text = "Now, i need your email address" ;
 }
