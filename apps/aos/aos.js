@@ -405,7 +405,7 @@ AOS.prototype.handlerRentersLivedMoreThanTwoYrsYes = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    console.log(sessionAttrs.transactionToken);     
+    //console.log(sessionAttrs.transactionToken);     
     if (sessionAttrs.transactionToken) {
         getRentersInfoResponse(sessionAttrs)
             .then(function (rentersInfoSpeechOutput) {
@@ -1037,6 +1037,7 @@ function getCustomerSaveInfo(sessionAttrs, sessionInfo) {
     var customerData = {};
     customerData.firstName = sessionAttrs.firstName;
     customerData.lastName = sessionAttrs.lastName;
+    customerData.suffix = '';
     customerData.dateOfBirth = DateUtil.getFormattedDate(sessionAttrs.dob, "MMDDYYYY");
     customerData.mailingAddress = sessionAttrs.addrLine1;
     customerData.city = sessionAttrs.city;
@@ -1044,13 +1045,18 @@ function getCustomerSaveInfo(sessionAttrs, sessionInfo) {
     customerData.zipCode = sessionAttrs.zip;
     customerData.aWSFlag = "N";
     customerData.affinity = {};
-    customerData.insuredAddress = new Address();
+    customerData.insuredAddress = {};
+    customerData.insuredAddress.addressLine1 = '';
+    customerData.insuredAddress.city = '';
+    customerData.insuredAddress.state = '';
+    customerData.insuredAddress.zipCode = '';
     if(!sessionAttrs.IsInsuredAddrSame){
         if(customerData.insuredAddress){
             customerData.insuredAddress.addressLine1 = sessionAttrs.newaddrLine1;
-            customerData.insuredAddress.city =  sessionAttrs.newcity;
-            customerData.insuredAddress.state =   sessionAttrs.newstate;
-            customerData.insuredAddress.zipCode =   sessionAttrs.newzip;
+            customerData.insuredAddress.aptOrUnit = '';
+            customerData.insuredAddress.city = sessionAttrs.newcity;
+            customerData.insuredAddress.state =  sessionAttrs.newstate;
+            customerData.insuredAddress.zipCode =  sessionAttrs.newzip;
         }
     }
     customerData.isInsuredAddressSameAsCurrent = sessionAttrs.IsInsuredAddrSame;
@@ -1351,6 +1357,7 @@ function getStateFromZip(sessionId, zip) {
 
 function rentersSaveCustomer(customerSaveInfo, sessionId) {
     var deferred = q.defer();
+    console.log(customerSaveInfo);
     request(
         {
             method: "POST",
