@@ -185,6 +185,7 @@ AOS.prototype.handleRentersInsuranceName = function (sessionAttrs) {
         rentersFindSpeechResp.speechOutput = speechOutput;
         rentersFindSpeechResp.repromptOutput = speechOutput;
     }
+    rentersFindSpeechResp.sessionAttrs = sessionAttrs;
     deferred.resolve(rentersFindSpeechResp);
 
 
@@ -201,6 +202,7 @@ AOS.prototype.handleRentersInsuranceDOB = function (sessionAttrs) {
     speechOutput.text = "Now what's your street address?, or say current location to take current address ";
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
+    rentersFindSpeechResp.sessionAttrs = sessionAttrs;
     deferred.resolve(rentersFindSpeechResp);
 
     return deferred.promise;
@@ -222,6 +224,7 @@ AOS.prototype.handleRentersInsuranceAddr = function (sessionAttrs) {
         rentersFindSpeechResp.repromptOutput = speechOutput;
         rentersFindSpeechResp.contextOut.push({ "name": "PermissionSeekingIntent", "parameters": { "IntentName": "AOS-RENTERS-CURADDR" } });
     }
+    rentersFindSpeechResp.sessionAttrs = sessionAttrs;
     deferred.resolve(rentersFindSpeechResp);
 
     return deferred.promise;
@@ -245,7 +248,7 @@ AOS.prototype.handleRentersInsuranceCityZip = function (sessionAttrs) {
         rentersFindSpeechResp.speechOutput = speechOutput;
         rentersFindSpeechResp.repromptOutput = speechOutput;
     }
-
+     rentersFindSpeechResp.sessionAttrs = sessionAttrs;
     deferred.resolve(rentersFindSpeechResp);
     return deferred.promise;
 };
