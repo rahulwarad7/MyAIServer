@@ -834,6 +834,7 @@ function handlerAOSRentersPrevCityZip(body, deferred) {
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
             rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
             deferred.resolve(rentersWelcomeSpeechResp);
         });
 
@@ -1071,7 +1072,11 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "spouseGender" : undefined,
         "newcity" : undefined,
         "newzip" : undefined,
-        "newaddrLine1" : undefined
+        "newaddrLine1" : undefined,
+        "prevzipcode" : undefined,
+        "prevstate" : undefined,
+        "prevcity" : undefined,
+        "prevaddrLine1" : undefined,
     };
 
     if (contextInfo) {
@@ -1209,6 +1214,24 @@ function getAOSRentersSessionAttributes(contextInfo) {
         var spouseGender = contextInfo.parameters["spouseGender.original"];
         if (spouseGender && spouseGender.trim().length > 0) {
             sessionAttrs.spouseGender = contextInfo.parameters["spouseGender"];           
+        }
+        var prevaddrLine1 = contextInfo.parameters["prevaddress.original"];
+        if (prevaddrLine1 && prevaddrLine1.trim().length > 0) {
+            sessionAttrs.prevaddrLine1 = contextInfo.parameters["prevaddress"];
+        }
+        var prevcity = contextInfo.parameters["prevcity.original"];
+        if (prevcity && prevcity.trim().length > 0) {
+            sessionAttrs.prevcity = contextInfo.parameters["prevcity"];
+        }
+        var prevzipcode = contextInfo.parameters["prevzipcode.original"];
+        if (prevzipcode && prevzipcode.trim().length > 0) {
+            sessionAttrs.prevzip = contextInfo.parameters["prevzipcode"];
+            if (sessionAttrs.prevzip.length === 4) {
+                sessionAttrs.prevzip = "0" + sessionAttrs.prevzip;
+            }
+        }
+         if (contextInfo.parameters.prevstate != null) {
+            sessionAttrs.prevstate = contextInfo.parameters.prevstate;
         }    
         if(contextInfo.parameters["IsInsuredAddrSame"] === false || contextInfo.parameters["IsInsuredAddrSame"] === "false" ){
             sessionAttrs.IsInsuredAddrSame = false;
@@ -1221,6 +1244,12 @@ function getAOSRentersSessionAttributes(contextInfo) {
         }
         else{
             sessionAttrs.spouseAdded = false;
+        }
+        if(contextInfo.parameters["livedmorethantwo"] === false || contextInfo.parameters["livedmorethantwo"] === "false" ){
+            sessionAttrs.livedmorethantwo = false;
+        }
+        else{
+            sessionAttrs.livedmorethantwo = true;
         }
         
 
