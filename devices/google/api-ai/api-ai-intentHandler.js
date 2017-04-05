@@ -1063,6 +1063,7 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "livedmorethantwo" : undefined,
         "transactionToken" : {},
         "agentDetails" :{},
+        "isSpouseAdded" : undefined,
         "spousefirstName": undefined,
         "spouselastName": undefined,
         "spouseDob": undefined,
@@ -1182,6 +1183,10 @@ function getAOSRentersSessionAttributes(contextInfo) {
          if (contextInfo.parameters.isValidRenterCustomer != null) {
             sessionAttrs.isValidRenterCustomer = contextInfo.parameters.isValidRenterCustomer;
         }
+        var isSpouseAdded = contextInfo.parameters["isSpouseAdded.original"];
+        if (isSpouseAdded && isSpouseAdded.trim().length > 0) {
+            sessionAttrs.isSpouseAdded = contextInfo.parameters["isSpouseAdded"];           
+        }
          var spousefirstName = contextInfo.parameters["spousefirstName.original"];
         if (spousefirstName && spousefirstName.length > 0) {
             sessionAttrs.spousefirstName = contextInfo.parameters["spousefirstName"];
@@ -1211,6 +1216,14 @@ function getAOSRentersSessionAttributes(contextInfo) {
         else{
             sessionAttrs.IsInsuredAddrSame = true;
         }
+        if(contextInfo.parameters["isSpouseAdded"] === true || contextInfo.parameters["isSpouseAdded"] === "true" ){
+            sessionAttrs.spouseAdded = true;
+        }
+        else{
+            sessionAttrs.spouseAdded = false;
+        }
+        
+
     }
 
     return sessionAttrs;
