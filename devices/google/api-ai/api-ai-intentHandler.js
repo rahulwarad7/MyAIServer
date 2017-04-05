@@ -1068,6 +1068,7 @@ function getAOSRentersSessionAttributes(contextInfo) {
     var sessionAttrs = {
         "firstName": undefined,
         "lastName": undefined,
+        "middleName":undefined,
         "dob": undefined,
         "addrLine1": undefined,
         "city": undefined,
@@ -1115,9 +1116,14 @@ function getAOSRentersSessionAttributes(contextInfo) {
         if (Name && Name.length > 0) {
             Name = contextInfo.parameters["language"];
             var arr = Name.split(" ");
-            if(arr){
+            if(arr.length <=2){
             sessionAttrs.firstName = arr[0];
             sessionAttrs.lastName = arr[1];
+           }
+           else{
+               sessionAttrs.firstName = arr[0];
+               sessionAttrs.middleName = arr[1];
+               sessionAttrs.lastName = arr[2];
            }
         }
         var lastName = contextInfo.parameters["last-name.original"];
