@@ -405,7 +405,6 @@ AOS.prototype.handlerRentersLivedMoreThanTwoYrsYes = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    //console.log(sessionAttrs.transactionToken);     
     if (sessionAttrs.transactionToken) {
         getRentersInfoResponse(sessionAttrs)
             .then(function (rentersInfoSpeechOutput) {
@@ -451,7 +450,7 @@ AOS.prototype.handlerRentersLivedMoreThanTwoYrsNo = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    speechOutput.text = "Now what's your street address?, or say current location to take current address ";
+    speechOutput.text = "Okay, What's the CITY and ZIP code of your previous address?";
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     deferred.resolve(rentersFindSpeechResp);
@@ -464,11 +463,44 @@ AOS.prototype.handlerRentersPrevCityZip = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
+    if(sessionAttrs.prevzip && sessionAttrs.transactionToken){
+        getStateFromZip(sessionAttrs.transactionToken.sessionID, sessionAttrs.prevzip)
+            .then(function (state) {
+            sessionAttrs.prevstate = state;
+            speechOutput.text = "Now what's previous street address? ";
+            rentersFindSpeechResp.speechOutput = speechOutput;
+            rentersFindSpeechResp.repromptOutput = speechOutput;
+            rentersFindSpeechResp.sessionAttrs = sessionAttrs;
+            deferred.resolve(rentersFindSpeechResp);
+            });
+    }
+    else{
+        speechOutput.text = "prevous address is not proper. Please provide valid city and zipcode";
+        rentersFindSpeechResp.speechOutput = speechOutput;
+        rentersFindSpeechResp.repromptOutput = speechOutput;
+        deferred.resolve(rentersFindSpeechResp);
+    }
+    return deferred.promise;
+};
 
-    speechOutput.text = "Now what's street address? ";
-    rentersFindSpeechResp.speechOutput = speechOutput;
-    rentersFindSpeechResp.repromptOutput = speechOutput;
-    deferred.resolve(rentersFindSpeechResp);
+AOS.prototype.handlerRentersPrevStreetAddrs = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+    if (sessionAttrs.transactionToken) {
+        getRentersInfoResponse(sessionAttrs)
+            .then(function (rentersInfoSpeechOutput) {
+                rentersFindSpeechResp.speechOutput = rentersInfoSpeechOutput;
+                rentersFindSpeechResp.repromptOutput = null;
+                rentersFindSpeechResp.sessionAttrs = sessionAttrs;
+                deferred.resolve(rentersFindSpeechResp);
+            });
+    } else {
+        speechOutput.text = "Please login to retrieve quote to see your saved quote. Login details are sent to your registered email id.";
+        rentersFindSpeechResp.speechOutput = speechOutput;
+        rentersFindSpeechResp.repromptOutput = speechOutput;
+    }
 
     return deferred.promise;
 };
@@ -945,9 +977,9 @@ function getRentersInfoResponse(sessionAttrs) {
     var deferred = q.defer();
     var rentersInfoSpeechOutput = new Speech();	
     if (sessionAttrs.transactionToken) {        
-        var rentersInfo = mapRentersInfo(sessionAttrs);
-        saveRentersInfo(rentersInfo, sessionAttrs.transactionToken)
-            .then(function (result) {
+        var rentersInfo = mapRentersInfo(sessionAttrs);         
+            saveRentersInfo(rentersInfo, sessionAttrs.transactionToken)
+                .then(function (result) {
                 sessionAttrs.creditHit = result.creditHit;
                 sessionAttrs.isRenterReOrderData = result.isRenterReOrderData;
                 rentersInfoSpeechOutput.text = "Thank you for the basic renters information. Would you like to proceed."
@@ -1070,10 +1102,13 @@ function mapRentersInfo(sessionAttrs) {
         rentersInfoData = mapResident(rentersInfoData, sessionAttrs);
         rentersInfoData.insuredAddress = mapAddress(rentersInfoData.insuredAddress, sessionAttrs);
         rentersInfoData.currentAddress = mapAddress(rentersInfoData.currentAddress, sessionAttrs);
+        if(!sessionAttrs.livedmorethantwo){           
+            rentersInfoData.previousAddress = mapAddress(rentersInfoData.previousAddress, sessionAttrs);
+        }
         rentersInfoData = mapContactInfo(rentersInfoData, sessionAttrs);
         rentersInfoData.businessOutOfResidence = null;
         rentersInfoData.liveAtCurAddressMoreThanTwoYears = sessionAttrs.livedmorethantwo;
-        rentersInfoData.isSpouseAdded = false; //need to add question and functionality
+        rentersInfoData.isSpouseAdded = false;
         rentersInfoData.isAgreeForTelemarketingCalls = true; //add question to user
 
     }
@@ -1122,7 +1157,7 @@ function getAddresses(sessionAttrs) {
     addrs.address.addressLine1 = sessionAttrs.addrLine1;
     addrs.address.aptOrUnit = null;
     addrs.address.city = sessionAttrs.city;
-    addrs.address.state = "IL";
+    addrs.address.state = sessionAttrs.state;
     addrs.address.zipCode = sessionAttrs.zip;
     addrs.address.stateReadOnly = true;
     addrs.address.zipCodeReadOnly = true;
@@ -1170,11 +1205,17 @@ function mapResident(rentersInfoData, sessionAttrs) {
 }
 
 function mapAddress(address, sessionAttrs) {
-    if (address) {
+    if (address.addressType === "Previous") {
+        address.addressLine1 = sessionAttrs.prevaddrLine1;
+        address.city = sessionAttrs.prevcity;
+        address.state = sessionAttrs.prevstate;
+        address.zipCode = sessionAttrs.prevzipcode;
+    }
+    else{
         address.addressLine1 = sessionAttrs.addrLine1;
         address.city = sessionAttrs.city;
-        address.state = "IL";
-        address.zipCode = sessionAttrs.zip;
+        address.state = sessionAttrs.state;
+        address.zipCode = sessionAttrs.zip;    
     }
     return address;
 }
