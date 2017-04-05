@@ -1062,7 +1062,6 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "gender" : undefined,
         "livedmorethantwo" : undefined,
         "transactionToken" : {},
-        "IsInsuredAddrSame" :undefined,
         "spousefirstName": undefined,
         "spouselastName": undefined,
         "spouseDob": undefined,
@@ -1203,7 +1202,7 @@ function getAOSRentersSessionAttributes(contextInfo) {
             sessionAttrs.spouseGender = contextInfo.parameters["spouseGender"];           
         }    
 
-        sessionAttrs.IsInsuredAddrSame = contextInfo.parameters["IsInsuredAddrSame"] === "true" ? true : false;
+        sessionAttrs.IsInsuredAddrSame = contextInfo.parameters["IsInsuredAddrSame"] === false ? false : true;
 
     }
 
