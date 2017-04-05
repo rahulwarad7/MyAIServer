@@ -494,7 +494,7 @@ AOS.prototype.handlerRentersIsPrimaryResNo = function (sessionAttrs) {
     var repromptOutput = new Speech();
 
     if(sessionAttrs && sessionAttrs.agentDetails){
-        speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. Here is agent close to you: " + sessionAttrs.agentDetails.name + " , you can contact him at " + sessionAttrs.agentDetails.phoneNumber + " , and email at " + sessionAttrs.agentDetails.emailAddress ;
+        speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. Here is agent close to you: " + sessionAttrs.agentDetails.name + " , you can call at, " + sessionAttrs.agentDetails.phoneNumber + " , and email at, " + sessionAttrs.agentDetails.emailAddress ;
     }
     else {
         speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. ";
@@ -513,7 +513,7 @@ AOS.prototype.handlerRentersResidenceLocYes = function (sessionAttrs) {
     var repromptOutput = new Speech();
 
     if(sessionAttrs && sessionAttrs.agentDetails){
-        speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. Here is agent close to you: " + sessionAttrs.agentDetails.name + " , you can contact him at " + sessionAttrs.agentDetails.phoneNumber + " , and email at " + sessionAttrs.agentDetails.emailAddress ;
+        speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. Here is agent close to you: " + sessionAttrs.agentDetails.name + " , you can call at, " + sessionAttrs.agentDetails.phoneNumber + " , and email at, " + sessionAttrs.agentDetails.emailAddress ;
     }
     else {
         speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. ";
@@ -546,7 +546,7 @@ AOS.prototype.handlerRentersIsBusinessOperatedYes = function (sessionAttrs) {
     var repromptOutput = new Speech();
 
     if(sessionAttrs && sessionAttrs.agentDetails){
-        speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. Here is agent close to you: " + sessionAttrs.agentDetails.name + " , you can contact him at " + sessionAttrs.agentDetails.phoneNumber + " , and email at " + sessionAttrs.agentDetails.emailAddress ;
+        speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. Here is agent close to you: " + sessionAttrs.agentDetails.name + " , you can call at, " + sessionAttrs.agentDetails.phoneNumber + " , and email at, " + sessionAttrs.agentDetails.emailAddress ;
     }
     else {
         speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. ";
