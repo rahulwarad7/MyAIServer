@@ -256,7 +256,7 @@ function askVehicleModel(sessionAttrs) {
 }
 
 function askLocation(sessionAttrs) {
-    var ARSSpeechResp = new SpeechResponse();
+    //var ARSSpeechResp = new SpeechResponse();
     var locationServSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
@@ -264,7 +264,7 @@ function askLocation(sessionAttrs) {
     repromptOutput.text = "Please provide your vehicle's location, or you can say 'current location'";;
     locationServSpeechResp.speechOutput = speechOutput;
     locationServSpeechResp.repromptOutput = repromptOutput;
-    ARSSpeechResp.sessionAttrs = sessionAttrs;
+    locationServSpeechResp.sessionAttrs = sessionAttrs;
     return locationServSpeechResp;
 }
 
