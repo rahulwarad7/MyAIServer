@@ -1113,10 +1113,10 @@ function getAOSRentersSessionAttributes(contextInfo) {
 //             sessionAttrs.lastName = contextInfo.parameters["given-name.original"][1];
 //         }
         
-        var Name = contextInfo.parameters["language.original"];
-        if (Name && Name.length > 0) {
-            Name = contextInfo.parameters["language"];
-            var arr = Name.split(" ");
+        var givenname = contextInfo.parameters["given-name.original"];
+        if (givenname && givenname.length > 0) {
+            givenname = contextInfo.parameters["given-name"];
+            var arr = givenname.split(" ");
             if(arr.length <=2){
             sessionAttrs.firstName = arr[0];
             sessionAttrs.lastName = arr[1];
