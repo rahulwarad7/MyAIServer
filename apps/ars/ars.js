@@ -55,7 +55,25 @@ ARS.prototype.handleRoadServiceAgreementHandler = function (sessionAttrs) {
     speechOutput.text = "Thank you, for choosing Allstate. We have dispatched 'help' to you.";
     repromptOutput.text = speechOutput.text;
     roadServiceSpeechResp.speechOutput = speechOutput;
-    roadServiceSpeechResp.repromptOutput = repromptOutput;
+    //roadServiceSpeechResp.repromptOutput = repromptOutput;
+
+    deferred.resolve(roadServiceSpeechResp);
+
+
+    return deferred.promise;
+}
+
+
+ARS.prototype.handleRoadServiceErrorHandler = function (sessionAttrs) {
+    var deferred = q.defer();
+    var roadServiceSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    speechOutput.text = "Thank you, for choosing Allstate. please try again!";
+    repromptOutput.text = speechOutput.text;
+    roadServiceSpeechResp.speechOutput = speechOutput;
+   // roadServiceSpeechResp.repromptOutput = repromptOutput;
 
     deferred.resolve(roadServiceSpeechResp);
 
@@ -202,7 +220,7 @@ function askForCostAgreement(serviceCostInfo, sessionAttrs) {
     repromptOutput.text = speechOutput.text;
     locationServSpeechResp.speechOutput = speechOutput;
     locationServSpeechResp.repromptOutput = repromptOutput;
-    //locationServSpeechResp.sessionAttrs = sessionAttrs;
+    locationServSpeechResp.sessionAttrs = sessionAttrs;
     return locationServSpeechResp;
 }
 
