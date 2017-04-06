@@ -202,6 +202,12 @@ function HanldeIntentRequest(body, deferred) {
                 });
             break;
             
+            case "ARS_SERVICE_ERROR":
+              handleARSError(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
             default:
             deferred.reject("Sorry. I am still learning. For now I can't help you with this.");
             break;
@@ -592,6 +598,21 @@ function handleARSAgreement(body, deferred) {
     ars.handleRoadServiceAgreementHandler(sessionAttrs)
         .then(function (handleARSResp) {
             body.session.attributes.predictedIntent = "";
+            ARSResponse = proessAlexaSpeechResp(handleARSResp, body, "Road Side Service");
+            deferred.resolve(ARSResponse);
+        });
+    return deferred.promise;
+}
+
+function handleARSError(body, deferred) { 
+    var ARSResponse;
+    var intent = body.request.intent;
+
+    var sessionAttrs = getARSSessionAttributes(body);
+
+    ars.handleRoadServiceErrorHandler(sessionAttrs)
+        .then(function (handleARSResp) {
+            body.session.attributes.predictedIntent = " ";
             ARSResponse = proessAlexaSpeechResp(handleARSResp, body, "Road Side Service");
             deferred.resolve(ARSResponse);
         });
