@@ -1252,8 +1252,8 @@ function getAOSRentersSessionAttributes(contextInfo) {
             sessionAttrs.spouselastName = arr[1];
            }
            else{
-               sessionAttrs.spousefirstName = arr.[0];
-               sessionAttrs.spouselastName = arr.[2];
+               sessionAttrs.spousefirstName = arr[0];
+               sessionAttrs.spouselastName = arr[2];
                sessionAttrs.spousemiddleName = arr[1];
            }
         }
