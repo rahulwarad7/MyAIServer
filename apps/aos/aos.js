@@ -292,6 +292,7 @@ else{
 }
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
+    rentersFindSpeechResp.sessionAttrs = sessionAttrs;
     deferred.resolve(rentersFindSpeechResp);
 
     return deferred.promise;
@@ -312,6 +313,7 @@ else{
 }
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
+    rentersFindSpeechResp.sessionAttrs = sessionAttrs;
     deferred.resolve(rentersFindSpeechResp);
 
     return deferred.promise;
@@ -327,6 +329,7 @@ AOS.prototype.handlerRentersEmailAddress = function (sessionAttrs) {
     speechOutput.text = "Finally, your date of birth ";
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
+    rentersFindSpeechResp.sessionAttrs = sessionAttrs;
     deferred.resolve(rentersFindSpeechResp);
 
     return deferred.promise;
@@ -411,6 +414,7 @@ AOS.prototype.handlerRentersEmpStatus = function (sessionAttrs) {
                 speechOutput.text = "Now please mention your gender ";
                 rentersFindSpeechResp.speechOutput = speechOutput;
                 rentersFindSpeechResp.repromptOutput = speechOutput;
+                rentersFindSpeechResp.sessionAttrs = sessionAttrs;
                 deferred.resolve(rentersFindSpeechResp);
             });
     }
@@ -426,6 +430,7 @@ AOS.prototype.handlerRentersGender = function (sessionAttrs) {
     speechOutput.text = "Thanks. Would you like to add a spouse to your quote? ";
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
+    rentersFindSpeechResp.sessionAttrs = sessionAttrs;
     deferred.resolve(rentersFindSpeechResp);
 
     return deferred.promise;
