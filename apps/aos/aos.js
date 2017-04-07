@@ -998,7 +998,7 @@ function getRentersSaveCustomerResponse(sessionAttrs) {
             if (saveResp && saveResp.transactionToken) {
                 sessionAttrs.transactionToken = saveResp.transactionToken;
                 saveCustSpeechOutput.sessionAttrs = sessionAttrs;
-                rentersFindSpeechResp.sessionAttrs = sessionAttrs;
+                
                 saveCustSpeechOutput.text = "Great! Next I'll need to know a little about your employment status. Are you employed, self employed, unemployed, student, retired, home maker or military";
             }
             deferred.resolve(saveCustSpeechOutput);
