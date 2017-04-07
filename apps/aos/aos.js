@@ -263,16 +263,19 @@ AOS.prototype.handleRentersInsuranceInsuredAddrSame = function (sessionAttrs) {
         getRentersSaveCustomerResponse(sessionAttrs)
             .then(function (saveCustSpeechOutput) {
                 rentersFindSpeechResp.speechOutput = saveCustSpeechOutput;
-                rentersFindSpeechResp.repromptOutput = null;
+               rentersFindSpeechResp.repromptOutput = null;
+            saveCustSpeechOutput.sessionAttrs = sessionAttrs;
+                deferred.resolve(rentersFindSpeechResp);
                 
             });
     } else {
         speechOutput.text = "Is this the address you'd like to insure?";
         rentersFindSpeechResp.speechOutput = speechOutput;
         rentersFindSpeechResp.repromptOutput = speechOutput;
+         rentersFindSpeechResp.sessionAttrs = sessionAttrs;
+         deferred.resolve(rentersFindSpeechResp);
     }
-rentersFindSpeechResp.sessionAttrs = sessionAttrs;
-                deferred.resolve(rentersFindSpeechResp);
+
     return deferred.promise;
 };
 
