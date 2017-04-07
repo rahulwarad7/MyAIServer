@@ -148,6 +148,28 @@ function HanldeIntentRequest(body, deferred) {
                     deferred.resolve(intentResponseInfo);
                 })
             break;
+            
+            case "AOSRENTERSPHONENUMBER":
+            handlerAOSRentersPhoneNumber(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AOSRENTERSPHONENUMBERAUTHORIZE":
+            handlerAOSRentersPhoneNumberAuthorize(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+
+        case "AOSRENTERSEMAILADDRESS":
+            handlerAOSRentersEmailAddress(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+            
+            
         case "AOSRENTERSDOB":
             handlerAOSRentersInsuranceDOB(body, deferred)
                 .then(function (output) {
@@ -168,14 +190,34 @@ function HanldeIntentRequest(body, deferred) {
                     deferred.resolve(intentResponseInfo);
                 })
             break;
-        case "AOSRENTERINSADDRSAMENO":
+            
+       /* case "AOSRENTERINSADDRSAMENO":
         case "AOSRENTERINSADDRSAMEYES":
             handlerAOSRentersInsuranceInsuredAddrSame(body, deferred)
                 .then(function (output) {
                     intentResponseInfo = output;
                     deferred.resolve(intentResponseInfo);
                 })
-            break;         
+            break;  */
+            case "YESINTENT":
+            handlerYESIntent(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+            case "AOSRENTERSEMPSTATUS":
+            handlerAOSRentersEmpStatus(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AOSRENTERSGENDER":
+            handlerAOSRentersGender(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+            
          case "ARS_SERVICE_START":
         case "ARS_SERVICE_LOCATION":
             handleARSStart(body, deferred)
@@ -214,6 +256,24 @@ function HanldeIntentRequest(body, deferred) {
     }
     return deferred.promise;
 }
+
+function handlerYESIntent(body, deferred) {
+    var intentName = "AOSRENTERINSADDRSAMEYES"; //body.session.attributes.intentsequence[]; previous intent
+    var intentResponseInfo;
+    switch (intentName.toUpperCase()) {
+        case "AOSRENTERINSADDRSAMEYES":
+            handlerAOSRentersInsuranceInsuredAddrSame(body, deferred)
+            .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        default:
+            deferred.reject("Sorry i did not understand.");
+            break;
+    }
+    return deferred.promise;
+}
+
 
 function onSessionStarted(body) {
     logging("onSessionStarted requestId: " + body.request.requestId
@@ -522,6 +582,105 @@ function handlerAOSRentersInsuranceInsuredAddrSame(body, deferred) {
     return deferred.promise;
 }
 
+function handlerAOSRentersPhoneNumber(body, deferred) {
+    var rentersInsuranceResponse;
+    var intent = body.request.intent;
+    var sessionAttrs = getAOSRentersSessionAttributes(body);
+
+    aos.handlerRentersPhoneNumber(sessionAttrs)
+        .then(function (handleRentersInsuranceResp) {
+            body.session.attributes.predictedIntent = " AOSRENTERSPHONENUMBERAUTHORIZE ";
+            rentersInsuranceResponse = proessAlexaSpeechResp(handleRentersInsuranceResp, body, "Renters Insurance");
+            deferred.resolve(rentersInsuranceResponse);
+        });
+    return deferred.promise;
+}
+function handlerAOSRentersPhoneNumberAuthorize (body, deferred) {
+    var rentersInsuranceResponse;
+    var intent = body.request.intent;
+    var sessionAttrs = getAOSRentersSessionAttributes(body);
+
+    aos.handlerRentersPhoneNumberAuthorize(sessionAttrs)
+        .then(function (handleRentersInsuranceResp) {
+            body.session.attributes.predictedIntent = "AOSRENTERSEMAILADDRESS ";
+            rentersInsuranceResponse = proessAlexaSpeechResp(handleRentersInsuranceResp, body, "Renters Insurance");
+            deferred.resolve(rentersInsuranceResponse);
+        });
+    return deferred.promise;
+}
+
+
+
+function handlerAOSRentersEmailAddress(body, deferred) {
+    var rentersInsuranceResponse;
+    var intent = body.request.intent;
+    var sessionAttrs = getAOSRentersSessionAttributes(body);
+
+    aos.handlerRentersEmailAddress(sessionAttrs)
+        .then(function (handleRentersInsuranceResp) {
+            body.session.attributes.predictedIntent = "AOSRENTERSDOB ";
+            rentersInsuranceResponse = proessAlexaSpeechResp(handleRentersInsuranceResp, body, "Renters Insurance");
+            deferred.resolve(rentersInsuranceResponse);
+        });
+    return deferred.promise;
+}
+
+function handlerAOSRentersEmpStatus(body, deferred) {
+    var rentersInsuranceResponse;
+    var intent = body.request.intent;
+    var sessionAttrs = getAOSRentersSessionAttributes(body);
+
+    aos.handlerRentersEmpStatus(sessionAttrs)
+        .then(function (handleRentersInsuranceResp) {
+            body.session.attributes.predictedIntent = "AOSRentersGender ";
+            rentersInsuranceResponse = proessAlexaSpeechResp(handleRentersInsuranceResp, body, "Renters Insurance");
+            deferred.resolve(rentersInsuranceResponse);
+        });
+    return deferred.promise;
+}
+
+function handlerAOSRentersGender(body, deferred) {
+    var rentersInsuranceResponse;
+    var intent = body.request.intent;
+    var sessionAttrs = getAOSRentersSessionAttributes(body);
+
+    aos.handlerRentersGender(sessionAttrs)
+        .then(function (handleRentersInsuranceResp) {
+            body.session.attributes.predictedIntent = "AOSRENTERSLIVEMORETHANTWOYRSYES/ AOSRENTERSLIVEMORETHANTWOYRSNO";
+            rentersInsuranceResponse = proessAlexaSpeechResp(handleRentersInsuranceResp, body, "Renters Insurance");
+            deferred.resolve(rentersInsuranceResponse);
+        });
+    return deferred.promise;
+}
+
+function handlerAOSRentersLivedMoreThanTwoYrsYes(body, deferred) {
+    var rentersInsuranceResponse;
+    var intent = body.request.intent;
+    var sessionAttrs = getAOSRentersSessionAttributes(body);
+
+    aos.handlerRentersGender(sessionAttrs)
+        .then(function (handleRentersInsuranceResp) {
+            body.session.attributes.predictedIntent = "AOSRENTERSRESIDENCEPROCEED";
+            rentersInsuranceResponse = proessAlexaSpeechResp(handleRentersInsuranceResp, body, "Renters Insurance");
+            deferred.resolve(rentersInsuranceResponse);
+        });
+    return deferred.promise;
+}
+
+function handlerAOSRentersResidence(body, deferred) {
+    var rentersInsuranceResponse;
+    var intent = body.request.intent;
+    var sessionAttrs = getAOSRentersSessionAttributes(body);
+
+    aos.handlerRentersResidence(sessionAttrs)
+        .then(function (handleRentersInsuranceResp) {
+            //body.session.attributes.predictedIntent = "AOSRENTERSRESIDENCEPROCEED";
+            rentersInsuranceResponse = proessAlexaSpeechResp(handleRentersInsuranceResp, body, "Renters Insurance");
+            deferred.resolve(rentersInsuranceResponse);
+        });
+    return deferred.promise;
+}
+
 function getAOSRentersSessionAttributes(body) {
     var sessionAttrs = {
         "firstName": undefined,
@@ -530,7 +689,21 @@ function getAOSRentersSessionAttributes(body) {
         "addrLine1": undefined,
         "city": undefined,
         "zip": undefined,
-        "IsInsuredAddrSame": undefined
+        "IsInsuredAddrSame": undefined,
+        "phoneNumber": undefined,
+        "emailAddress": undefined,
+        "gender": undefined,
+        "employmentStatus": undefined,
+        "businessoutofresidence": undefined,
+        "unitsInBuilding": undefined,
+        "locatedInDormOrMilitaryBarracks": undefined,
+        "residenceBuildingType": undefined,
+        "primaryResidence": undefined,
+        "isCurrentAddressSameAsInsuredAddress": undefined,
+        "livedmorethantwo": undefined,
+        "isAuthorize":undefined,
+        "transactionToken": {},
+        
     };
     var slots = body.request.intent.slots;
     if (slots) {
@@ -541,9 +714,80 @@ function getAOSRentersSessionAttributes(body) {
         sessionAttrs.city = slots.city ? slots.city.value : body.session.attributes.city;
         sessionAttrs.zip = slots.zip ? slots.zip.value : body.session.attributes.zip;
         sessionAttrs.IsInsuredAddrSame = true;
-    }
+        sessionAttrs.phoneNumber = slots.phoneNo ? slots.phoneNo.value : body.session.attributes.phoneNumber;
+        sessionAttrs.emailAddress = slots.emailAddress ? slots.emailAddress.value : body.session.attributes.emailAddress;
+        sessionAttrs.employmentStatus = slots.empstatus ? getEmployeeStatusCode(slots.empstatus.value) : body.session.attributes.employmentStatus;
+        sessionAttrs.gender = slots.gender ? getGender(slots.gender.value) : body.session.attributes.gender;
+        sessionAttrs.transactionToken = body.session.attributes.transactionToken;
+        sessionAttrs.residenceBuildingType = slots.ResidenceType ? getResidenceType(slots.ResidenceType) : body.session.attributes.ResidenceType;
+        sessionAttrs.isAuthorize=slots.AuthorizeYes? "true" : body.session.attributes.isAuthorize;
+}
     return sessionAttrs;
 }
+
+
+
+function getEmployeeStatusCode(empStatus) {
+    var empStatusValue = empStatus.toUpperCase();
+    if (empStatusValue == "EMPLOYED" || empStatusValue == "WORKING") {
+        return "01";
+    }
+    else if (empStatusValue == "SELF EMPLOYED" || empStatusValue == "BUISNESS") {
+        return "02";
+    }
+    else if (empStatusValue == "STUDENT" || empStatusValue == "STUDYING") {
+        return "03";
+    }
+    else if (empStatusValue == "AGED" || empStatusValue == "RETIRED") {
+        return "04";
+    }
+    else if (empStatusValue == "UNEMPLOYED" || empStatusValue == "NOT WORKING") {
+        return "05";
+    }
+    else if (empStatusValue == "HOMEMAKER") {
+        return "06";
+    }
+    else if (empStatusValue == "MILITARY" || empStatusValue == "MILITARY FORCES") {
+        return "07";
+    }
+    else {
+        return "01";
+    }
+}
+
+function getGender(gender) {
+    var genderValue = gender.toUpperCase();
+    if (genderValue == "MALE" || genderValue == "BOY" || genderValue == "MAN") {
+        return "M";
+    }
+    else if (genderValue == "FEMALE" || genderValue == "GIRL" || genderValue == "WOMAN") {
+        return "F";
+    }
+    else {
+        return " ";
+    }
+
+}
+function getResidenceType(ResidenceType) {
+    var ResidenceTypeValue = ResidenceType.toUpperCase();
+    if (ResidenceTypeValue == "APARTMENT" || ResidenceTypeValue == "APARTMENTS") {
+        return "APT";
+    }
+    else if (ResidenceTypeValue == "TOWNHOUSE") {
+        return "TH1";
+    }
+
+    else if (ResidenceTypeValue == "HOUSE" || ResidenceTypeValue == "HOME" || ResidenceTypeValue == "OWN HOUSE" || ResidenceTypeValue == "OWN HOUSE") {
+        return "HO1";
+    }
+    else if (ResidenceTypeValue == "CONDO") {
+        return "APT";
+    }
+    else {
+        return "MO";
+    }
+}
+
 
 //#endregion
 // private intents functions end
