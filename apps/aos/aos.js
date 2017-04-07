@@ -647,7 +647,7 @@ AOS.prototype.handlerRentersResidenceType = function (sessionAttrs) {
         deferred.resolve(rentersFindSpeechResp);
     }
     else {
-        speechOutput.text = "Units need not be specified. Say proceed ";
+        speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence? ";
         rentersFindSpeechResp.speechOutput = speechOutput;
         rentersFindSpeechResp.repromptOutput = speechOutput;
         deferred.resolve(rentersFindSpeechResp);
