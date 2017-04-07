@@ -264,15 +264,15 @@ AOS.prototype.handleRentersInsuranceInsuredAddrSame = function (sessionAttrs) {
             .then(function (saveCustSpeechOutput) {
                 rentersFindSpeechResp.speechOutput = saveCustSpeechOutput;
                 rentersFindSpeechResp.repromptOutput = null;
-                rentersFindSpeechResp.sessionAttrs = sessionAttrs;
-                deferred.resolve(rentersFindSpeechResp);
+                
             });
     } else {
         speechOutput.text = "Is this the address you'd like to insure?";
         rentersFindSpeechResp.speechOutput = speechOutput;
         rentersFindSpeechResp.repromptOutput = speechOutput;
     }
-
+rentersFindSpeechResp.sessionAttrs = sessionAttrs;
+                deferred.resolve(rentersFindSpeechResp);
     return deferred.promise;
 };
 
