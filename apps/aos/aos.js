@@ -263,7 +263,7 @@ AOS.prototype.handleRentersInsuranceInsuredAddrSame = function (sessionAttrs) {
         getRentersSaveCustomerResponse(sessionAttrs)
             .then(function (saveCustSpeechOutput) {
                 rentersFindSpeechResp.speechOutput = saveCustSpeechOutput;
-               rentersFindSpeechResp.repromptOutput = null;
+               rentersFindSpeechResp.repromptOutput = speechOutput;
             saveCustSpeechOutput.sessionAttrs = sessionAttrs;
                 deferred.resolve(rentersFindSpeechResp);
                 
