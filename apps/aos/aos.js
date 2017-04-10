@@ -264,7 +264,7 @@ AOS.prototype.handleRentersInsuranceInsuredAddrSame = function (sessionAttrs) {
             .then(function (saveCustSpeechOutput) {
                 rentersFindSpeechResp.speechOutput = saveCustSpeechOutput;
                rentersFindSpeechResp.repromptOutput = speechOutput;
-            saveCustSpeechOutput.sessionAttrs = sessionAttrs;
+            rentersFindSpeechResp.sessionAttrs = sessionAttrs;
                 deferred.resolve(rentersFindSpeechResp);
                 
             });
