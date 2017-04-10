@@ -29,6 +29,12 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
+         case "HELP":
+            handleHelpIntent(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
         case "AGENT-FIND":
             handleAgentFindIntent(body, deferred)
                 .then(function (responseInfo) {
@@ -1323,10 +1329,22 @@ function getAOSRentersSessionAttributes(contextInfo) {
 //#region Agent
 
 function handleWelcomeIntent(body, deferred) {
-    var agentFindSpeechResp = {};
-    agentFindSpeechResp.speech = "Welcome to Allstate. I can help find an agent, get you an insurance. I can even help you with Road Side Assistance.";
-    agentFindSpeechResp.displayText = agentFindSpeechResp.speech;
-    deferred.resolve(agentFindSpeechResp);
+    var welcomeSpeechResp = {};
+    welcomeSpeechResp.speech = "Welcome to the Allstatebot. I can help you with your insurance-related questions.  "
+
+    welcomeSpeechResp.speech = welcomeSpeechResp.speech + "    Just tap Get Started so I can view your public info and get you the answers you need quickly.";
+    welcomeSpeechResp.displayText = welcomeSpeechResp.speech;
+    deferred.resolve(welcomeSpeechResp);
+    return deferred.promise;
+}
+
+function handleHelpIntent(body, deferred) {
+    var helpSpeechResp = {};
+    helpSpeechResp.speech = "I can help! Simply select one of the menu options below or type a question or phrase.   "
+
+    helpSpeechResp.speech = helpSpeechResp.speech + "    I can also connect you with a community manager. Just type Get Live Help";
+    helpSpeechResp.displayText = helpSpeechResp.speech;
+    deferred.resolve(helpSpeechResp);
     return deferred.promise;
 }
 
