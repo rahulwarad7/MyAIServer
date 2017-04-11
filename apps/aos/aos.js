@@ -283,9 +283,7 @@ AOS.prototype.handlerCreditHistoryAuthorize = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    speechOutput.text = "Information from outside sources regarding credit history is used to provide you with a renters quote. A third party may be used to calculate your insurance score. This information, along with subsequently collected information, will be shared with outside parties that perform services on Allstate's behalf. ";
-    speechOutput.text = speechOutput.text + "   Privacy Policy:http://www.allstate.com/about/privacy-statement-aic.aspx ";
-    speechOutput.text = speechOutput.text + "   Type OK to authorize.";
+    speechOutput.text = "Great! Next I'll need to know a little about your employment status. Are you employed, self employed, unemployed, student, retired, home maker or military";
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     deferred.resolve(rentersFindSpeechResp);
@@ -756,8 +754,9 @@ function getRentersSaveCustomerResponse(sessionAttrs) {
             if (saveResp && saveResp.transactionToken) {
                 sessionAttrs.transactionToken = saveResp.transactionToken;
                 saveCustSpeechOutput.sessionAttrs = sessionAttrs;
-                
-                saveCustSpeechOutput.text = "Great! Next I'll need to know a little about your employment status. Are you employed, self employed, unemployed, student, retired, home maker or military";
+                saveCustSpeechOutput.text = "Information from outside sources regarding credit history is used to provide you with a renters quote. A third party may be used to calculate your insurance score. This information, along with subsequently collected information, will be shared with outside parties that perform services on Allstate's behalf. ";
+                saveCustSpeechOutput.text = saveCustSpeechOutput.text + "   Privacy Policy:http://www.allstate.com/about/privacy-statement-aic.aspx ";
+                saveCustSpeechOutput.text = saveCustSpeechOutput.text + "   Type OK to authorize.";                
             }
             deferred.resolve(saveCustSpeechOutput);
         }).catch(function (error) {
