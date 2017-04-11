@@ -67,7 +67,7 @@ AOS.prototype.handleRentersInsuranceName = function (sessionAttrs) {
     var repromptOutput = new Speech();
 
     if (sessionAttrs.lastName) {
-        speechOutput.text = "And 10-digit phone number.";
+        speechOutput.text = "Now your birthday.";
         rentersFindSpeechResp.speechOutput = speechOutput;
         rentersFindSpeechResp.repromptOutput = speechOutput;
     } else {
@@ -89,7 +89,7 @@ AOS.prototype.handleRentersInsuranceDOB = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    speechOutput.text = "Now what's your street address?, or say current location to take current address ";
+    speechOutput.text = " And 10-digit phone number";
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     rentersFindSpeechResp.sessionAttrs = sessionAttrs;
@@ -98,7 +98,7 @@ AOS.prototype.handleRentersInsuranceDOB = function (sessionAttrs) {
     return deferred.promise;
 };
 
-AOS.prototype.handleRentersInsuranceAddr = function (sessionAttrs) {
+AOS.prototype.handlerRentersEmailAddress = function (sessionAttrs) {
     var deferred = q.defer();
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
@@ -126,7 +126,7 @@ AOS.prototype.handleRentersInsuranceCityZip = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
     if (sessionAttrs.zip && sessionAttrs.city) {
-        speechOutput.text = sessionAttrs.firstName + ", is the address you would like to insure same as current address?";
+        speechOutput.text = " Now what's your current street address?";
         rentersFindSpeechResp.speechOutput = speechOutput;
         rentersFindSpeechResp.repromptOutput = speechOutput;
     } else if (sessionAttrs.zip && !sessionAttrs.city) {
@@ -196,7 +196,7 @@ AOS.prototype.handlerRentersPhoneNumberAuthorize = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
     if(sessionAttrs.isAuthorize === "true") {
-         speechOutput.text = "Now, i need your email address" ;
+         speechOutput.text = "Finally, email address." ;
       } 
     else {
          speechOutput.text = "you need to authorize to move further so say \"authorize\"";
@@ -208,13 +208,13 @@ AOS.prototype.handlerRentersPhoneNumberAuthorize = function (sessionAttrs) {
     return deferred.promise;
 };
 
-AOS.prototype.handlerRentersEmailAddress = function (sessionAttrs) {
+AOS.prototype.handleRentersInsuranceAddr = function (sessionAttrs) {
     var deferred = q.defer();
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    speechOutput.text = "Finally, your date of birth ";
+    speechOutput.text = "Is this the address you'd like to insure? ";
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     rentersFindSpeechResp.sessionAttrs = sessionAttrs;
