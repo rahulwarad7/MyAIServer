@@ -1,8 +1,6 @@
 
 
-var TidePooler = require('./../../../apps/tide-pooler/tide-pooler.js');
 var aos = require('./../../../apps/aos/aos.js');
-var ars = require('./../../../apps/ars/ars.js');
 var q = require('q');
 
 var ApiAiIntentHandler = function () { };
@@ -29,96 +27,30 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
-         case "HELP":
+        case "HELP":
             handleHelpIntent(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
                 });
             break;
-        case "AGENT-FIND":
-            handleAgentFindIntent(body, deferred)
+         case "MENU":
+            handleMenuIntent(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;  
+        case "AOS-RENTERS-QUOTESTART":
+            handleAosRentersQuoteStart(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
                 });
             break;
-        case "AGENT-FIND-BYZIP":
-            handleAgentFindByZip(body, deferred)
+        case "AOS-RENTERS-QUOTESTART-NO":
+            handleAosRentersQuoteStartNo(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
                 });
-            break;
-        case "AGENT-FIND-BYCURRENTLOC":
-            break;
-        case "AGENT-FIND-EMAIL-YES":
-            handleAgentFindEmailYes(body, deferred)
-                .then(function (responseInfo) {
-                    deferred.resolve(responseInfo);
-                });
-            break;
-        case "AGENT-FIND-EMAIL-NO":
-            handleAgentFindEmailNo(body, deferred)
-                .then(function (responseInfo) {
-                    deferred.resolve(responseInfo);
-                });
-            break;
-        case "AGENT-FIND-EMAIL-SEND":
-            handleAgentFindEmailSend(body, deferred)
-                .then(function (responseInfo) {
-                    deferred.resolve(responseInfo);
-                });
-            break;
-        case "WEATHERFORECAST":
-            var message = "Today in Boston: Fair, the temperature is 37 degree fahrenheit.";
-            responseBody.speech = message;
-            responseBody.displayText = message;
-            deferred.resolve(responseBody);
-            break;
-        case "TDSUPPORTEDCITIES":
-            var poolerSpeechResponse = TidePooler.getSupportedCitiesResponse();
-            responseBody.speech = poolerSpeechResponse.speechOutput.text;
-            responseBody.displayText = poolerSpeechResponse.speechOutput.text;
-            deferred.resolve(responseBody);
-            break;
-        case "TDDIALOGTIDEINTENT":
-            dialogTideIntent(body, deferred)
-                .then(function (responseInfo) {
-                    deferred.resolve(responseInfo);
-                });
-            break;
-        case "TDDIALOG-CITY":
-            handleTDCityIntent(body, deferred)
-                .then(function (responseInfo) {
-                    deferred.resolve(responseInfo);
-                });
-            break;
-        case "TDDIALOG-DATE":
-            handleTDDateIntent(body, deferred)
-                .then(function (responseInfo) {
-                    deferred.resolve(responseInfo);
-                });
-            break;
-        case "ARS-SERVICE-START":
-        case "ARS-SERVICE-LOCATION":
-            handleARSStartIntent(body, deferred)
-                .then(function (responseInfo) {
-                    deferred.resolve(responseInfo);
-                });
-            break;
-        case "ARS-SERVICE-VEHICLE-YEAR":
-        case "ARS-SERVICE-VEHICLE-MAKE":
-        case "ARS-SERVICE-VEHICLE-MODEL":
-        case "ARS-SERVICE-VEHICLE-YMM":
-            handleARSVehicleYMMIntent(body, deferred)
-                .then(function (responseInfo) {
-                    deferred.resolve(responseInfo);
-                });
-            break;
-        case "ARS-SERVICE-PRICE-AGREE":
-            handleARSAgreementIntent(body, deferred)
-                .then(function (responseInfo) {
-                    deferred.resolve(responseInfo);
-                });
-            break;
+            break;      
         case "AOS-RENTERS-INSURANCE":
             handlerAOSRentersInsuranceStart(body, deferred)
                 .then(function (responseInfo) {
@@ -309,57 +241,8 @@ function intentHandlers(body) {
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
                 });
-            break;
-        case "AOS-RETRIEVE-START":
-            handlerAOSRetrieveInitiate(body, deferred)
-                .then(function (responseInfo) {
-                    deferred.resolve(responseInfo);
-                });
-            break;
-        case "AOS-RETRIEVE-LASTNAME":
-            handlerAOSRetrieveLastName(body, deferred)
-                .then(function (responseInfo) {
-                    deferred.resolve(responseInfo);
-                });
-            break;
-        case "AOS-RETRIEVE-DOB":
-            handlerAOSRetrieveDOB(body, deferred)
-                .then(function (responseInfo) {
-                    deferred.resolve(responseInfo);
-                });
-            break;
-        case "AOS-RETRIEVE-EMAIL":
-            handlerAOSRetrieveEmail(body, deferred)
-                .then(function (responseInfo) {
-                    deferred.resolve(responseInfo);
-                });
-            break;
-        case "AOS-RETRIEVE-ZIP":
-            handlerAOSRetrieveZipCode(body, deferred)
-                .then(function (responseInfo) {
-                    deferred.resolve(responseInfo);
-                });
-            break;
-        case "AOS-RETRIEVE-EMAIL-YES":
-            handleRetrieveQuoteEmailYes(body, deferred)
-                .then(function (responseInfo) {
-                    deferred.resolve(responseInfo);
-                });
-            break;
-        case "AOS-RETRIEVE-EMAIL-NO":
-            handleRetrieveQuoteEmailNo(body, deferred)
-                .then(function (responseInfo) {
-                    deferred.resolve(responseInfo);
-                });
-            break;
-        case "AOS-RETRIEVE-EMAIL-SEND":
-            handleRetrieveQuoteEmailSend(body, deferred)
-                .then(function (responseInfo) {
-                    deferred.resolve(responseInfo);
-                });
-            break;
-            
-            case "AOS-RENTERS-ISSPOUSEADDED-YES":
+            break;           
+        case "AOS-RENTERS-ISSPOUSEADDED-YES":
                handlerAOSRentersIsSpouseYes(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
@@ -413,7 +296,7 @@ function intentHandlers(body) {
             
         case "HELPINTENT":
         default:
-            var message = "You can say hello to me!";
+            var message = "Type help to get help and menu for options!";
             responseBody.speech = message;
             responseBody.displayText = message;
             deferred.resolve(responseBody);
@@ -484,101 +367,6 @@ function getDeviceZipcode(body) {
         return body.originalRequest.data.device.location.zip_code;
     }
 }
-//#endregion
-
-//#region ARS
-
-function handleARSAgreementIntent(body, deferred) {
-    var arsSpeechResp = {};
-    var result = body.result;
-    var agFindCntx = result.contexts.find(function (curCntx) { return curCntx.name === "ars"; });
-    var sessionAttrs = getARSSessionAttributes(agFindCntx);
-
-
-    ars.handleRoadServiceAgreementHandler(sessionAttrs)
-        .then(function (roasServiceResponse) {
-            arsSpeechResp.speech = roasServiceResponse.speechOutput.text;
-            arsSpeechResp.displayText = roasServiceResponse.speechOutput.text;
-            deferred.resolve(arsSpeechResp);
-        });
-
-    return deferred.promise;
-}
-
-function handleARSStartIntent(body, deferred) {
-    var arsSpeechResp = {};
-    var result = body.result;
-    var agFindCntx = result.contexts.find(function (curCntx) { return curCntx.name === "ars"; });
-    var sessionAttrs = getARSSessionAttributes(agFindCntx);
-
-
-    ars.handleRoadServiceHandler(sessionAttrs)
-        .then(function (roasServiceResponse) {
-            arsSpeechResp.speech = roasServiceResponse.speechOutput.text;
-            arsSpeechResp.displayText = roasServiceResponse.speechOutput.text;
-            deferred.resolve(arsSpeechResp);
-        });
-
-    return deferred.promise;
-}
-
-function handleARSVehicleYMMIntent(body, deferred) {
-    var arsSpeechResp = {};
-    var result = body.result;
-    var agFindCntx = result.contexts.find(function (curCntx) { return curCntx.name === "ars"; });
-    var sessionAttrs = getARSSessionAttributes(agFindCntx);
-
-
-    ars.handleRoadServiceYMMHandler(sessionAttrs)
-        .then(function (roasServiceResponse) {
-            arsSpeechResp.speech = roasServiceResponse.speechOutput.text;
-            arsSpeechResp.displayText = roasServiceResponse.speechOutput.text;
-            deferred.resolve(arsSpeechResp);
-        });
-
-    return deferred.promise;
-}
-
-function getARSSessionAttributes(contextInfo) {
-    var sessionAttrs = {
-        "serviceType": undefined, "cost": undefined,
-        "keyLocation": undefined, "vehicle": {}, "vehicleLocation": undefined
-    };
-
-    if (contextInfo) {
-        var serviceType = contextInfo.parameters["ars-service-type.original"];
-        if (serviceType && serviceType.trim().length > 0) {
-            sessionAttrs.serviceType = contextInfo.parameters["ars-service-type"];
-        }
-        var keyLocation = contextInfo.parameters["ars-key-loc.original"];
-        if (keyLocation && keyLocation.trim().length > 0) {
-            sessionAttrs.keyLocation = contextInfo.parameters["ars-key-loc"];
-        }
-        var vehicleLocation = contextInfo.parameters["location.original"];
-        if (vehicleLocation && vehicleLocation.trim().length > 0) {
-            sessionAttrs.vehicleLocation = contextInfo.parameters["location"];
-            if (sessionAttrs.vehicleLocation.toUpperCase() === 'CURRENT') {
-                sessionAttrs.vehicleLocation = "1500 Capitol Drive, Northbrook, IL 60060";
-            }
-        }
-        var vehicleYear = contextInfo.parameters["vehicle-year.original"];
-        if (vehicleYear && vehicleYear.trim().length > 0) {
-            sessionAttrs.vehicleYear = contextInfo.parameters["vehicle-year"];
-        }
-        var vehicleMake = contextInfo.parameters["vehicle-make.original"];
-        if (vehicleMake && vehicleMake.trim().length > 0) {
-            sessionAttrs.vehicleMake = contextInfo.parameters["vehicle-make"];
-        }
-        var vehicleModel = contextInfo.parameters["vehicle-model.original"];
-        if (vehicleModel && vehicleModel.trim().length > 0) {
-            sessionAttrs.vehicleModel = contextInfo.parameters["vehicle-model"];
-        }
-    }
-
-    return sessionAttrs;
-}
-
-
 //#endregion
 
 //#region Renters insurance
@@ -1070,6 +858,102 @@ function handlerAOSRentersInsuranceAddrCurLoc(body, deferred) {
     return deferred.promise;
 }
 
+function handlerAOSRentersIsSpouseYes(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handlerAOSRentersIsSpouseYes(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            //rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+function handlerAOSRentersSpouseInsuranceName(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handleRentersSpouseInsuranceName(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+function handlerAOSRentersSpouseInsuranceDOB(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handleRentersSpouseInsuranceDOB(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+function handlerAOSRentersSpouseEmpStatus(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+    aos.handlerRentersSpouseEmpStatus(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+function handlerAOSRentersSpouseGender(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+    aos.handlerRentersSpouseGender(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+function handlerAOSRentersIsSpouseNo(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handlerAOSRentersIsSpouseNo(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            //rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
 function getAOSRentersSessionAttributes(contextInfo) {
     var sessionAttrs = {
         "firstName": undefined,
@@ -1111,13 +995,7 @@ function getAOSRentersSessionAttributes(contextInfo) {
     };
 
     if (contextInfo) {
-//         var firstName = contextInfo.parameters["given-name.original"];
-//         if (firstName && firstName.length > 0) {
-//             sessionAttrs.firstName = contextInfo.parameters["given-name"];
-//         }
-//         if(firstName && firstName.length>1){
-//             sessionAttrs.lastName = contextInfo.parameters["given-name.original"][1];
-//         }
+
         
         var givenname = contextInfo.parameters["given-name.original"];
         if (givenname && givenname.length > 0) {
@@ -1242,13 +1120,7 @@ function getAOSRentersSessionAttributes(contextInfo) {
         if (isSpouseAdded && isSpouseAdded.trim().length > 0) {
             sessionAttrs.isSpouseAdded = contextInfo.parameters["isSpouseAdded"];           
         }
-//          var spousefirstName = contextInfo.parameters["spousefirstName.original"];
-//         if (spousefirstName && spousefirstName.length > 0) {
-//             sessionAttrs.spousefirstName = contextInfo.parameters["spousefirstName"];
-//         }
-//         if(spousefirstName && spousefirstName.length>1){
-//             sessionAttrs.spouselastName = contextInfo.parameters["spousefirstName.original"][1];
-//         }
+
         var spouseName = contextInfo.parameters["spouse-name.original"];
         if (spouseName && spouseName.length > 0) {
             spouseName = contextInfo.parameters["spouse-name"];
@@ -1326,13 +1198,13 @@ function getAOSRentersSessionAttributes(contextInfo) {
 //#endregion
 
 
-//#region Agent
+//#region General Intents
 
 function handleWelcomeIntent(body, deferred) {
     var welcomeSpeechResp = {};
-    welcomeSpeechResp.speech = "Welcome to the Allstatebot. I can help you with your insurance-related questions.  "
+    welcomeSpeechResp.speech = "Welcome to the Allstatebot. I can help you with your insurance-related questions.  ";
 
-    welcomeSpeechResp.speech = welcomeSpeechResp.speech + "    Just tap Get Started so I can view your public info and get you the answers you need quickly.";
+    welcomeSpeechResp.speech = welcomeSpeechResp.speech + "    You can choose from options: Get Renters Quote, Help.";
     welcomeSpeechResp.displayText = welcomeSpeechResp.speech;
     deferred.resolve(welcomeSpeechResp);
     return deferred.promise;
@@ -1340,7 +1212,7 @@ function handleWelcomeIntent(body, deferred) {
 
 function handleHelpIntent(body, deferred) {
     var helpSpeechResp = {};
-    helpSpeechResp.speech = "I can help! Simply select one of the menu options below or type a question or phrase.   "
+    helpSpeechResp.speech = "I can help! Simply select one of the menu options below or type a question or phrase.   ";
 
     helpSpeechResp.speech = helpSpeechResp.speech + "    I can also connect you with a community manager. Just type Get Live Help";
     helpSpeechResp.displayText = helpSpeechResp.speech;
@@ -1348,471 +1220,31 @@ function handleHelpIntent(body, deferred) {
     return deferred.promise;
 }
 
-function handleAgentFindEmailYes(body, deferred) {
-    var agentFindSpeechResp = {};
-    var result = body.result;
-    var agFindCntx = result.contexts.find(function (curCntx) { return curCntx.name === "agentfindbyzip"; });
-    var sessionAttrs = getAgentSessionAttributes(agFindCntx);
-
-
-    aos.handleAgentFindEmailYesIntent(sessionAttrs)
-        .then(function (agentFindSpeechResponse) {
-            agentFindSpeechResp.speech = agentFindSpeechResponse.speechOutput.text;
-            agentFindSpeechResp.displayText = agentFindSpeechResponse.speechOutput.text;
-            deferred.resolve(agentFindSpeechResp);
-        });
-
-    return deferred.promise;
-}
-
-function handleAgentFindEmailNo(body, deferred) {
-    var agentFindSpeechResp = {};
-    var result = body.result;
-    var agFindCntx = result.contexts.find(function (curCntx) { return curCntx.name === "agentfindbyzip"; });
-    var sessionAttrs = getAgentSessionAttributes(agFindCntx);
-
-
-    aos.handleAgentFindEmailNoIntent(sessionAttrs)
-        .then(function (agentFindSpeechResponse) {
-            agentFindSpeechResp.speech = agentFindSpeechResponse.speechOutput.text;
-            agentFindSpeechResp.displayText = agentFindSpeechResponse.speechOutput.text;
-            deferred.resolve(agentFindSpeechResp);
-        });
-
-    return deferred.promise;
-
-}
-
-function handleAgentFindEmailSend(body, deferred) {
-    var agentFindSpeechResp = {};
-    var result = body.result;
-    var agFindCntx = result.contexts.find(function (curCntx) { return curCntx.name === "agentfindbyzip"; });
-    var sessionAttrs = getAgentSessionAttributes(agFindCntx);
-
-    console.log("handleAgentFindEmailSend - start");
-
-    aos.handleAgentFindEmailSendIntent(sessionAttrs)
-        .then(function (agentFindSpeechResponse) {
-            agentFindSpeechResp.speech = agentFindSpeechResponse.speechOutput.text;
-            agentFindSpeechResp.displayText = agentFindSpeechResponse.speechOutput.text;
-            console.log("handleAgentFindEmailSend - end");
-            deferred.resolve(agentFindSpeechResp);
-        });
-
-    return deferred.promise;
-}
-
-function handleAgentFindByZip(body, deferred) {
-    var agentFindSpeechResp = {};
-    var result = body.result;
-    var agFindCntx = result.contexts.find(function (curCntx) { return curCntx.name === "agent"; });
-    var sessionAttrs = getAgentSessionAttributes(agFindCntx);
-
-    if (sessionAttrs.zip) {
-        aos.handleAgentFindByZipIntent(sessionAttrs)
-            .then(function (agentFindSpeechResponse) {
-                agentFindSpeechResp.speech = agentFindSpeechResponse.speechOutput.text;
-                agentFindSpeechResp.displayText = agentFindSpeechResponse.speechOutput.text;
-                agentFindSpeechResp.contextOut = [{ "name": "AgentFindByZip", "parameters": sessionAttrs }];
-                deferred.resolve(agentFindSpeechResp);
-            });
-    }
-    return deferred.promise;
-}
-
-function handleAgentFindIntent(body, deferred) {
-    var agentFindSpeechResp = {};
-    var result = body.result;
-    var agFindCntx = result.contexts.find(function (curCntx) { return curCntx.name === "agent"; });
-    var sessionAttrs = getAgentSessionAttributes(agFindCntx);
-
-    aos.handleAgentFindRequest(sessionAttrs)
-        .then(function (agentFindSpeechResponse) {
-            agentFindSpeechResp.speech = agentFindSpeechResponse.speechOutput.text;
-            agentFindSpeechResp.displayText = agentFindSpeechResponse.speechOutput.text;
-            deferred.resolve(agentFindSpeechResp);
-        });
-
-    return deferred.promise;
-}
-
-function getAgentSessionAttributes(contextInfo) {
-    var sessionAttrs = { "zip": undefined, "email": undefined, "agent": {} };
-    if (contextInfo) {
-        var zip = contextInfo.parameters["zip.original"];
-        if (zip && zip.trim().length > 0) {
-            sessionAttrs.zip = contextInfo.parameters["zip"];
-        }
-        var email = contextInfo.parameters["email.original"];
-        if (email && email.trim().length > 0) {
-            sessionAttrs.email = email;
-        }
-        if (contextInfo.parameters.agent) {
-            sessionAttrs.agent = contextInfo.parameters.agent;
-        }
-    }
-
-    return sessionAttrs;
-}
-
-//#endregion
-
-//#region RetrieveQuote
-function handlerAOSRetrieveInitiate(body, deferred) {
-    var retrieveWelcomeSpeechResp = {};
-    var result = body.result;
-    var retrieveCntx = result.contexts.find(function (curCntx) { return curCntx.name === "aos-retv"; });
-    var sessionAttrs = getRetrieveQuoteSessionAttributes(retrieveCntx);
-
-    aos.handleRetrieveQuoteStart(sessionAttrs)
-        .then(function (retrieveSpeechResponse) {
-            retrieveWelcomeSpeechResp.speech = retrieveSpeechResponse.speechOutput.text;
-            retrieveWelcomeSpeechResp.displayText = retrieveSpeechResponse.speechOutput.text;
-            deferred.resolve(retrieveWelcomeSpeechResp);
-        });
-
-    return deferred.promise;
-}
-
-function handlerAOSRetrieveLastName(body, deferred) {
-    var retrieveSpeechResp = {};
-    var result = body.result;
-    var retrieveCntx = result.contexts.find(function (curCntx) { return curCntx.name === "aos-retv"; });
-    var sessionAttrs = getRetrieveQuoteSessionAttributes(retrieveCntx);
-
-    aos.handleRetrieveQuoteLastName(sessionAttrs)
-        .then(function (retrieveSpeechResponse) {
-            retrieveSpeechResp.speech = retrieveSpeechResponse.speechOutput.text;
-            retrieveSpeechResp.displayText = retrieveSpeechResponse.speechOutput.text;
-            deferred.resolve(retrieveSpeechResp);
-        });
-
-    return deferred.promise;
-}
-
-function handlerAOSRetrieveDOB(body, deferred) {
-    var retrieveSpeechResp = {};
-    var result = body.result;
-    var retrieveCntx = result.contexts.find(function (curCntx) { return curCntx.name === "aos-retv"; });
-    var sessionAttrs = getRetrieveQuoteSessionAttributes(retrieveCntx);
-
-    aos.handleRetrieveQuoteDOB(sessionAttrs)
-        .then(function (retrievespeechResponse) {
-            retrieveSpeechResp.speech = retrievespeechResponse.speechOutput.text;
-            retrieveSpeechResp.displayText = retrievespeechResponse.speechOutput.text;
-            deferred.resolve(retrieveSpeechResp);
-        });
-
-    return deferred.promise;
-}
-
-function handlerAOSRetrieveEmail(body, deferred) {
-    var retrieveSpeechResp = {};
-    var result = body.result;
-    var retrieveCntx = result.contexts.find(function (curCntx) { return curCntx.name === "aos-retv"; });
-    var sessionAttrs = getRetrieveQuoteSessionAttributes(retrieveCntx);
-
-    aos.handleRetrieveQuoteEmail(sessionAttrs)
-        .then(function (retrievespeechResponse) {
-            retrieveSpeechResp.speech = retrievespeechResponse.speechOutput.text;
-            retrieveSpeechResp.displayText = retrievespeechResponse.speechOutput.text;
-            deferred.resolve(retrieveSpeechResp);
-        });
-
-    return deferred.promise;
-}
-
-function handlerAOSRetrieveZipCode(body, deferred) {
-    var retrieveSpeechResp = {};
-    var result = body.result;
-    var retrieveCntx = result.contexts.find(function (curCntx) { return curCntx.name === "aos-retv"; });
-    var sessionAttrs = getRetrieveQuoteSessionAttributes(retrieveCntx);
-
-    aos.handleRetrieveQuoteZipCode(sessionAttrs)
-        .then(function (retrievespeechResponse) {
-            retrieveSpeechResp.speech = retrievespeechResponse.speechOutput.text;
-            retrieveSpeechResp.displayText = retrievespeechResponse.speechOutput.text;
-            deferred.resolve(retrieveSpeechResp);
-        });
-
-    return deferred.promise;
-}
-
-function handleRetrieveQuoteEmailYes(body, deferred) {
-    var retrieveSpeechResp = {};
-    var result = body.result;
-    var retrieveCntx = result.contexts.find(function (curCntx) { return curCntx.name === "aos-retv"; });
-    var sessionAttrs = getRetrieveQuoteSessionAttributes(retrieveCntx);
-
-
-    aos.handleRetrieveQuoteEmailYesIntent(sessionAttrs)
-        .then(function (retrieveQuoteSpeechResponse) {
-            retrieveSpeechResp.speech = retrieveQuoteSpeechResponse.speechOutput.text;
-            retrieveSpeechResp.displayText = retrieveQuoteSpeechResponse.speechOutput.text;
-            deferred.resolve(retrieveSpeechResp);
-        });
-
-    return deferred.promise;
-}
-
-function handleRetrieveQuoteEmailNo(body, deferred) {
-    var retrieveSpeechResp = {};
-    var result = body.result;
-    var retrieveCntx = result.contexts.find(function (curCntx) { return curCntx.name === "aos-retv"; });
-    var sessionAttrs = getRetrieveQuoteSessionAttributes(retrieveCntx);
-
-
-    aos.handleAgentFindEmailNoIntent(sessionAttrs)
-        .then(function (retrieveQuoteSpeechResponse) {
-            retrieveSpeechResp.speech = retrieveQuoteSpeechResponse.speechOutput.text;
-            retrieveSpeechResp.displayText = retrieveQuoteSpeechResponsess.speechOutput.text;
-            deferred.resolve(retrieveSpeechResp);
-        });
-
-    return deferred.promise;
-
-}
-
-function handleRetrieveQuoteEmailSend(body, deferred) {
-    var retrieveSpeechResp = {};
-    var result = body.result;
-    var retrieveCntx = result.contexts.find(function (curCntx) { return curCntx.name === "aos-retv"; });
-    var sessionAttrs = getRetrieveQuoteSessionAttributes(retrieveCntx);
-
-    console.log("handleRetrieveQuoteEmailSend - start");
-
-    aos.handleRetrieveQuoteEmailSendIntent(sessionAttrs)
-        .then(function (retrieveQuoteSpeechResponse) {
-            retrieveSpeechResp.speech = retrieveQuoteSpeechResponse.speechOutput.text;
-            retrieveSpeechResp.displayText = retrieveQuoteSpeechResponse.speechOutput.text;
-            console.log("handleRetrieveQuoteEmailSend - end");
-            deferred.resolve(retrieveSpeechResp);
-        });
-
-    return deferred.promise;
-}
-
-function getRetrieveQuoteSessionAttributes(contextInfo) {
-    var sessionQuoteAttrs = { "zipcode": undefined, "email": undefined, "lastname": undefined, "dob": undefined, "quotedetails": {} };
-    if (contextInfo) {
-        var zip = contextInfo.parameters["zipcode.original"];
-        if (zip && zip.trim().length > 0) {
-            sessionQuoteAttrs.zipcode = contextInfo.parameters["zipcode"];
-        }
-        var email = contextInfo.parameters["email.original"];
-        if (email && email.trim().length > 0) {
-            sessionQuoteAttrs.email = contextInfo.parameters["email"];
-        }
-        var lastname = contextInfo.parameters["lastname.original"];
-        if (lastname && lastname.trim().length > 0) {
-            sessionQuoteAttrs.lastname = contextInfo.parameters["lastname"];
-        }
-        var dob = contextInfo.parameters["dob.original"];
-        if (dob && dob.trim().length > 0) {
-            sessionQuoteAttrs.dob = contextInfo.parameters["dob"];
-        }
-        if (contextInfo.parameters.quotedetails) {
-            sessionQuoteAttrs.quotedetails = contextInfo.parameters.quotedetails;
-        }
-    }
-
-    return sessionQuoteAttrs;
-}
-
-
-//#endregion 
-
-//#region Tidepooler
-function handleTDCityIntent(body, deferred) {
-    var dialogTideSpeechResponse = {};
-    var result = body.result;
-    var tdPoolerCntx = result.contexts.find(function (curCntx) { return curCntx.name === "tide-pooler"; });
-    var sessionAttrs = getTDSessionAttributes(tdPoolerCntx);
-
-    if (sessionAttrs.city) {
-        TidePooler.handleCityDialogRequest(sessionAttrs.city, sessionAttrs)
-            .then(function (poolerCitySpeechResponse) {
-                dialogTideSpeechResponse.speech = poolerCitySpeechResponse.speechOutput.text;
-                dialogTideSpeechResponse.displayText = poolerCitySpeechResponse.speechOutput.text;
-                deferred.resolve(dialogTideSpeechResponse);
-            });
-    }
-
-    return deferred.promise;
-}
-
-function handleTDDateIntent(body, deferred) {
-    var dialogTideSpeechResponse = {};
-    var result = body.result;
-    var tdPoolerCntx = result.contexts.find(function (curCntx) { return curCntx.name === "tide-pooler"; });
-    var sessionAttrs = getTDSessionAttributes(tdPoolerCntx);
-
-    if (sessionAttrs.date) {
-        TidePooler.handleDateDialogRequest(sessionAttrs.date, sessionAttrs)
-            .then(function (poolerDateSpeechResponse) {
-                dialogTideSpeechResponse.speech = poolerDateSpeechResponse.speechOutput.text;
-                dialogTideSpeechResponse.displayText = poolerDateSpeechResponse.speechOutput.text;
-                deferred.resolve(dialogTideSpeechResponse);
-            });
-    }
-
-
-    return deferred.promise;
-}
-
-function getTDSessionAttributes(contextInfo) {
-    var sessionAttrs = { "city": undefined, "date": undefined };
-
-    if (contextInfo) {
-        var cityOrg = contextInfo.parameters['geo-city.original'];
-        var dateOrg = contextInfo.parameters['date.original'];
-        if (cityOrg && cityOrg.length > 0) {
-            sessionAttrs.city = contextInfo.parameters['geo-city'];
-        }
-        if (dateOrg && dateOrg.length > 0) {
-            sessionAttrs.date = contextInfo.parameters.date;
-        }
-    }
-
-    return sessionAttrs;
-}
-
-function dialogTideIntent(body, deferred) {
-    var dialogTideSpeechResponse;
-    var result = body.result;
-    var city = result.parameters['geo-city'];
-    var date = result.parameters.date;
-    if (city) {
-        TidePooler.handleCityDialogRequest(city, {})
-            .then(function (poolerCitySpeechResponse) {
-                dialogTideSpeechResponse = processPoolerSpeechResp(poolerCitySpeechResponse, body);
-                deferred.resolve(dialogTideSpeechResponse);
-            });
-    } else if (date) {
-        TidePooler.handleDateDialogRequest(date, {})
-            .then(function (poolerDateSpeechResponse) {
-                dialogTideSpeechResponse = processPoolerSpeechResp(poolerDateSpeechResponse, body);
-                deferred.resolve(dialogTideSpeechResponse);
-            });
-
-    } else {
-        TidePooler.handleNoSlotDialogRequest(body)
-            .then(function (noSlotSpeechResponse) {
-                deferred.resolve(noSlotSpeechResponse);
-            });
-    }
-    return deferred.promise;
-}
-
-function processPoolerSpeechResp(poolerDateSpeechResponse, body) {
-    var responseInfo;
-
-
-    return responseInfo;
-}
-//#endregion
-
-//#region SPOUSE
-
-function handlerAOSRentersIsSpouseYes(body, deferred) {
-    var rentersWelcomeSpeechResp = {};
-    var result = body.result;
-    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
-    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
-
-    aos.handlerAOSRentersIsSpouseYes(sessionAttrs)
-        .then(function (renterspeechResponse) {
-            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
-            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
-            //rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
-            deferred.resolve(rentersWelcomeSpeechResp);
-        });
-
+function handleMenuIntent(body, deferred) {
+    var helpSpeechResp = {};
+    helpSpeechResp.speech = "Okay! Simply select one of the menu options like get me renters quote or type a question or phrase. If you need any assistance at any time, just type help.   ";
+    helpSpeechResp.displayText = helpSpeechResp.speech;
+    deferred.resolve(helpSpeechResp);
     return deferred.promise;
 }
 
 
-function handlerAOSRentersSpouseInsuranceName(body, deferred) {
-    var rentersWelcomeSpeechResp = {};
-    var result = body.result;
-    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
-    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
-
-    aos.handleRentersSpouseInsuranceName(sessionAttrs)
-        .then(function (renterspeechResponse) {
-            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
-            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
-            deferred.resolve(rentersWelcomeSpeechResp);
-        });
-
-    return deferred.promise;
-}
-function handlerAOSRentersSpouseInsuranceDOB(body, deferred) {
-    var rentersWelcomeSpeechResp = {};
-    var result = body.result;
-    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
-    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
-
-    aos.handleRentersSpouseInsuranceDOB(sessionAttrs)
-        .then(function (renterspeechResponse) {
-            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
-            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
-            deferred.resolve(rentersWelcomeSpeechResp);
-        });
-
+function handleAosRentersQuoteStart(body, deferred) {
+    var helpSpeechResp = {};
+    helpSpeechResp.speech = "At this time, I can only provide a quote for renters insurance. Would you like to get a renters quote?   ";
+    helpSpeechResp.displayText = helpSpeechResp.speech;
+    deferred.resolve(helpSpeechResp);
     return deferred.promise;
 }
 
-function handlerAOSRentersSpouseEmpStatus(body, deferred) {
-    var rentersWelcomeSpeechResp = {};
-    var result = body.result;
-    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
-    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
-    aos.handlerRentersSpouseEmpStatus(sessionAttrs)
-        .then(function (renterspeechResponse) {
-            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
-            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
-            deferred.resolve(rentersWelcomeSpeechResp);
-        });
 
+function handleAosRentersQuoteStartNo(body, deferred) {
+    var helpSpeechResp = {};
+    helpSpeechResp.speech = "Type help to get a help   ";
+    helpSpeechResp.displayText = helpSpeechResp.speech;
+    deferred.resolve(helpSpeechResp);
     return deferred.promise;
 }
-
-function handlerAOSRentersSpouseGender(body, deferred) {
-    var rentersWelcomeSpeechResp = {};
-    var result = body.result;
-    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
-    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
-    aos.handlerRentersSpouseGender(sessionAttrs)
-        .then(function (renterspeechResponse) {
-            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
-            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
-            deferred.resolve(rentersWelcomeSpeechResp);
-        });
-
-    return deferred.promise;
-}
-
-function handlerAOSRentersIsSpouseNo(body, deferred) {
-    var rentersWelcomeSpeechResp = {};
-    var result = body.result;
-    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
-    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
-
-    aos.handlerAOSRentersIsSpouseNo(sessionAttrs)
-        .then(function (renterspeechResponse) {
-            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
-            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
-            //rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
-            deferred.resolve(rentersWelcomeSpeechResp);
-        });
-
-    return deferred.promise;
-}
-
-//#endregion
-
-
 
 module.exports = new ApiAiIntentHandler();
 
