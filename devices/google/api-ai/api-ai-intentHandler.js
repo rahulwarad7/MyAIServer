@@ -133,7 +133,13 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
-         case "AOS-RENTERS-EMPSTATUS":
+        case "AOS-RENTERS-CREDITHISTORY-AUTHORIZE":
+        handlerAOSRentersCrediHistoryAuthorize(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AOS-RENTERS-EMPSTATUS":
             handlerAOSRentersEmpStatus(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
@@ -557,6 +563,22 @@ function handlerAOSRentersDiffAddress(body, deferred) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
             rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
             rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+function handlerAOSRentersCrediHistoryAuthorize(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handlerCreditHistoryAuthorize(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
             deferred.resolve(rentersWelcomeSpeechResp);
         });
 
@@ -992,6 +1014,7 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "prevstate" : undefined,
         "prevcity" : undefined,
         "prevaddrLine1" : undefined,
+        "isCreditAuthorized" : undefined
     };
 
     if (contextInfo) {
@@ -1155,6 +1178,10 @@ function getAOSRentersSessionAttributes(contextInfo) {
         var prevaddrLine1 = contextInfo.parameters["prevaddress.original"];
         if (prevaddrLine1 && prevaddrLine1.trim().length > 0) {
             sessionAttrs.prevaddrLine1 = contextInfo.parameters["prevaddress"];
+        }
+        var isCreditAuthorized = contextInfo.parameters["isCreditAuthorized.original"];
+        if (isCreditAuthorized && isCreditAuthorized.trim().length > 0) {
+            sessionAttrs.isCreditAuthorized = contextInfo.parameters["isCreditAuthorized"];
         }
         var prevcity = contextInfo.parameters["prevcity.original"];
         if (prevcity && prevcity.trim().length > 0) {
