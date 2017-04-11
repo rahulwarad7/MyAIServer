@@ -6,7 +6,6 @@ var agents = require('./../../shared/data-models/agent.js');
 var Session = require('./../../shared/data-models/session.js');
 var Agent = require('./../../shared/data-models/agent.js');
 var Address = require('./../../shared/data-models/address.js');
-var RetrieveQuote = require('./../../shared/data-models/retrieveQuote.js');
 var Resident = require('./../../shared/data-models/resident.js');
 var ContactInfo = require('./../../shared/data-models/contactInfo.js');
 
