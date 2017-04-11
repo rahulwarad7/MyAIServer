@@ -2,12 +2,12 @@
 var q = require('q');
 
 var AlexaSkillUtil = require('./alexaSkillUtil.js');
-var TidePooler = require('./../../apps/tide-pooler/tide-pooler.js');
+//var TidePooler = require('./../../apps/tide-pooler/tide-pooler.js');
 var Response = require('./../../shared/data-models/response.js');
 var Speech = require('./../../shared/data-models/speech.js');
 var aos = require('./../../apps/aos/aos.js');
 
-var ars = require('./../../apps/ars/ars.js');
+var ars; // = require('./../../apps/ars/ars.js');
 
 
 var Allstate = function () { };
