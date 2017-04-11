@@ -1314,6 +1314,28 @@ function ProcessQuoteResponse(retrieveQuoteServResp) {
     return quotes;
 }
 
+function ProcessAgentResponse(agentServResp) {
+    var agents = [];
+    if (agentServResp && agentServResp.agentAvailable && agentServResp.agents.length > 0) {
+        for (var index = 0; index < agentServResp.agents.length; index++) {
+            var currServAgent = agentServResp.agents[index];
+            var agentInfo = new Agent();
+            agentInfo.id = currServAgent.id;
+            agentInfo.name = currServAgent.name;
+            agentInfo.addressLine1 = currServAgent.addressLine1;
+            agentInfo.city = currServAgent.city;
+            agentInfo.state = currServAgent.state;
+            agentInfo.zipCode = currServAgent.zipCode;
+            agentInfo.phoneNumber = currServAgent.phoneNumber;
+            agentInfo.imageUrl = currServAgent.imageURL;
+            agentInfo.emailAddress = currServAgent.emailAddress;
+            agents.push(agentInfo);
+        }
+    }
+
+    return agents;
+}
+
 //#endregion
 
 
