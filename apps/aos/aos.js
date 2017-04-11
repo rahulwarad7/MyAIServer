@@ -20,8 +20,7 @@ var AOSTranData = [];
 //#region CONSTANTS
 var URL_COMMON = "https://purchase-stest.allstate.com/onlinesalesapp-common/";
 var URL_RENTERS_SESSIONID = URL_COMMON + "api/transaction/RENTERS/sessionid";
-var URL_AUTO_SESSIONID = URL_COMMON + "api/transaction/AUTO/sessionid";
-var URL_GETAGENTS = URL_COMMON + "api/common/agents";
+//var URL_AUTO_SESSIONID = URL_COMMON + "api/transaction/AUTO/sessionid";
 var URL_GETSTATE = URL_COMMON + "api/location/{0}/state";
 var URL_RENTERS_BASE = "https://purchase-stest.allstate.com/onlinesalesapp-renters/api";
 var URL_RENTERS_SAVECUSTOMER = URL_RENTERS_BASE + "/renters/customer";
@@ -29,14 +28,8 @@ var URL_RENTERS_RENTERSINFO = URL_RENTERS_BASE + "/renters/renter-information";
 var URL_RENTERS_CONFIRMPROFILE = URL_RENTERS_BASE + "/renters/renter-information/confirm-profile";
 var URL_RENTERS_RESIDENCEINFO = URL_RENTERS_BASE + "/renters/residence-information";
 var URL_RENTERS_ORDERQUOTE = URL_RENTERS_BASE + "/renters/quote";
-var URL_RETRIEVEQUOTE = URL_COMMON + "api/quote-repository";
 
-var FROM_EMAIL_ID = "npavangouda@gmail.com";
-var AGENTFINDRESP = [
-    "Sure. what's your zip code?",
-    "I can help you with that. What's your zip?",
-    "Please provide the zip?",
-];
+var FROM_EMAIL_ID = "pgoud@gmail.com";
 var EMAILRESP = [
     "Sure. what's your email id?",
     "Please provide the email id",
@@ -54,108 +47,6 @@ var EMAILSENTRESPAGENT = [
 
 //#region PUBLIC METHODS
 
-//#region PUBLIC AGENT
-AOS.prototype.handleAgentFindRequest = function (sessionAttrs) {
-    var deferred = q.defer();
-    var agentFindSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-
-    if (sessionAttrs.zip) {
-        getFinalAgentFindResponse(sessionAttrs)
-            .then(function (agentSpeechOutput) {
-                agentFindSpeechResp.speechOutput = agentSpeechOutput;
-                agentFindSpeechResp.repromptOutput = null;
-                agentFindSpeechResp.sessionAttrs = sessionAttrs;
-                deferred.resolve(agentFindSpeechResp);
-            });
-    } else {
-        speechOutput.text = Utilities.GetRandomValue(AGENTFINDRESP);
-        repromptOutput.text = Utilities.GetRandomValue(AGENTFINDRESP);
-        agentFindSpeechResp.speechOutput = speechOutput;
-        agentFindSpeechResp.repromptOutput = repromptOutput;
-        deferred.resolve(agentFindSpeechResp);
-    }
-
-    return deferred.promise;
-};
-
-AOS.prototype.handleAgentFindByZipIntent = function (sessionAttrs) {
-    var deferred = q.defer();
-    var agentFindSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-
-
-    getFinalAgentFindResponse(sessionAttrs)
-        .then(function (agentSpeechOutput) {
-            agentFindSpeechResp.speechOutput = agentSpeechOutput;
-            agentFindSpeechResp.repromptOutput = agentSpeechOutput;
-            agentFindSpeechResp.sessionAttrs = sessionAttrs;
-            deferred.resolve(agentFindSpeechResp);
-        });
-
-    return deferred.promise;
-}
-
-AOS.prototype.handleAgentFindEmailYesIntent = function (sessionAttrs) {
-    var deferred = q.defer();
-    var agentFindSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-
-    if (sessionAttrs.email) {
-        getFinalAgentFindSendEmailResponse(sessionAttrs)
-            .then(function (agentSpeechOutput) {
-                agentFindSpeechResp.speechOutput = agentSpeechOutput;
-                agentFindSpeechResp.repromptOutput = null;
-                deferred.resolve(agentFindSpeechResp);
-            });
-    } else {
-        speechOutput.text = Utilities.GetRandomValue(EMAILRESP);
-        repromptOutput.text = Utilities.GetRandomValue(EMAILRESP);
-        agentFindSpeechResp.speechOutput = speechOutput;
-        agentFindSpeechResp.repromptOutput = repromptOutput;
-        deferred.resolve(agentFindSpeechResp);
-    }
-
-
-    return deferred.promise;
-};
-
-AOS.prototype.handleAgentFindEmailNoIntent = function (sessionAttrs) {
-    var deferred = q.defer();
-    var agentFindSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-
-    speechOutput.text = "Thank you for chosing Allstate. You are in Good Hands.";
-    agentFindSpeechResp.speechOutput = speechOutput;
-    agentFindSpeechResp.repromptOutput = null;
-    deferred.resolve(agentFindSpeechResp);
-
-    return deferred.promise;
-};
-
-AOS.prototype.handleAgentFindEmailSendIntent = function (sessionAttrs) {
-    var deferred = q.defer();
-    var agentFindSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-
-    getFinalAgentFindSendEmailResponse(sessionAttrs)
-        .then(function (agentSpeechOutput) {
-            agentFindSpeechResp.speechOutput = agentSpeechOutput;
-            agentFindSpeechResp.repromptOutput = null;
-            deferred.resolve(agentFindSpeechResp);
-        });
-
-
-    return deferred.promise;
-
-};
-//#endregion
-
-//#region PUBLIC RENTERS
 AOS.prototype.handleRentersInsuranceStart = function (sessionAttrs) {
     var deferred = q.defer();
     var rentersFindSpeechResp = new SpeechResponse();
@@ -284,15 +175,14 @@ AOS.prototype.handlerRentersPhoneNumber = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    if(sessionAttrs.phoneNumber.length == 10)
-    {
-    speechOutput.text = "I agree that Allstate can call me at the provided phone number regarding my insurance quote request."+ 
-    "I understand the call may be automatically dialed, that my consent is not a condition of any purchase, and that I can revoke my "+
-    "consent at any time. say OK to authorize" ;
-}
-else{
-    speechOutput.text = "Please provide the valid phone number";
-}
+    if(sessionAttrs.phoneNumber.length == 10) {
+           speechOutput.text = "I agree that Allstate can call me at the provided phone number regarding my insurance quote request."+ 
+           "I understand the call may be automatically dialed, that my consent is not a condition of any purchase, and that I can revoke my "+
+           "consent at any time. say OK to authorize" ;
+      }
+   else {
+         speechOutput.text = "Please provide the valid phone number";
+     }
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     rentersFindSpeechResp.sessionAttrs = sessionAttrs;
@@ -300,28 +190,24 @@ else{
 
     return deferred.promise;
 };
-
 
 AOS.prototype.handlerRentersPhoneNumberAuthorize = function (sessionAttrs) {
     var deferred = q.defer();
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    if(sessionAttrs.isAuthorize === "true")
-    {
-    speechOutput.text = "Now, i need your email address" ;
-}
-else{
-    speechOutput.text = "you need to authorize to move further so say \"authorize\"";
-}
+    if(sessionAttrs.isAuthorize === "true") {
+         speechOutput.text = "Now, i need your email address" ;
+      } 
+    else {
+         speechOutput.text = "you need to authorize to move further so say \"authorize\"";
+      }
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     rentersFindSpeechResp.sessionAttrs = sessionAttrs;
     deferred.resolve(rentersFindSpeechResp);
-
     return deferred.promise;
 };
-
 
 AOS.prototype.handlerRentersEmailAddress = function (sessionAttrs) {
     var deferred = q.defer();
@@ -544,6 +430,96 @@ AOS.prototype.handlerRentersPrevStreetAddrs = function (sessionAttrs) {
     return deferred.promise;
 };
 
+AOS.prototype.handlerAOSRentersIsSpouseYes = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+    speechOutput.text = "Sure thing! I'll just need some basic info first. Please give your spouse's full name.";
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
+    return deferred.promise;
+};
+
+AOS.prototype.handleRentersSpouseInsuranceName = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    if (sessionAttrs.lastName) {
+        speechOutput.text = "Please, Provide your spouse's date of birth";
+        rentersFindSpeechResp.speechOutput = speechOutput;
+        rentersFindSpeechResp.repromptOutput = speechOutput;
+    } else {
+        speechOutput.text = sessionAttrs.firstName + ", please provide your spouse's last name.";
+        rentersFindSpeechResp.speechOutput = speechOutput;
+        rentersFindSpeechResp.repromptOutput = speechOutput;
+    }
+    deferred.resolve(rentersFindSpeechResp);
+
+
+
+    return deferred.promise;
+};
+
+AOS.prototype.handleRentersSpouseInsuranceDOB = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    speechOutput.text = "Great! I would need to know a little about your spouse's employment status. Like employed, self employed, unemployed, student, retired, home maker or military";
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
+
+    return deferred.promise;
+};
+
+AOS.prototype.handlerRentersSpouseEmpStatus = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    speechOutput.text = "Now please mention your spouse's gender ";
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
+
+    return deferred.promise;
+};
+
+AOS.prototype.handlerRentersSpouseGender = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    speechOutput.text = "Thanks! Have you lived in your residence for more than two years? ";
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
+
+    return deferred.promise;
+};
+
+AOS.prototype.handlerAOSRentersIsSpouseNo = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    speechOutput.text = "OK! Have you lived in your residence for more than two years? ";
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
+
+    return deferred.promise;
+};
+
 AOS.prototype.handlerRentersIsPrimaryResYes = function (sessionAttrs) {
     var deferred = q.defer();
     var rentersFindSpeechResp = new SpeechResponse();
@@ -746,236 +722,6 @@ AOS.prototype.handlerRenterValidCustomer = function (sessionAttrs) {
 
 //#endregion
 
-//#region PUBLIC RETRIEVEQUOTE
-AOS.prototype.handleRetrieveQuoteStart = function (sessionAttrs) {
-    var deferred = q.defer();
-    var retrieveFindSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-
-    speechOutput.text = "Sure.!! I'll just need some basic contact info first. What is your last name.";
-    retrieveFindSpeechResp.speechOutput = speechOutput;
-    retrieveFindSpeechResp.repromptOutput = speechOutput;
-    deferred.resolve(retrieveFindSpeechResp);
-
-    return deferred.promise;
-}
-
-AOS.prototype.handleRetrieveQuoteLastName = function (sessionAttrs) {
-    var deferred = q.defer();
-    var retrieveSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-
-    speechOutput.text = "Now, I need your date of birth.";
-    retrieveSpeechResp.speechOutput = speechOutput;
-    retrieveSpeechResp.repromptOutput = speechOutput;
-    deferred.resolve(retrieveSpeechResp);
-
-    return deferred.promise;
-}
-
-AOS.prototype.handleRetrieveQuoteDOB = function (sessionAttrs) {
-    var deferred = q.defer();
-    var retrieveFindSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-
-    speechOutput.text = "great, your email address please";
-    retrieveFindSpeechResp.speechOutput = speechOutput;
-    retrieveFindSpeechResp.repromptOutput = speechOutput;
-    deferred.resolve(retrieveFindSpeechResp);
-
-    return deferred.promise;
-};
-
-AOS.prototype.handleRetrieveQuoteEmail = function (sessionAttrs) {
-    var deferred = q.defer();
-    var retrieveFindSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-
-    speechOutput.text = "Finally,please provide your zip code, or say current location";
-    retrieveFindSpeechResp.speechOutput = speechOutput;
-    retrieveFindSpeechResp.repromptOutput = speechOutput;
-    deferred.resolve(retrieveFindSpeechResp);
-
-    return deferred.promise;
-};
-
-AOS.prototype.handleRetrieveQuoteZipCode = function (sessionAttrs) {
-    var deferred = q.defer();
-    var savedQuoteSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-    if (sessionAttrs.zipcode && sessionAttrs.email && sessionAttrs.dob && sessionAttrs.lastname) {
-        getSavedQuoteResponse(sessionAttrs)
-            .then(function (savedQuoteSpeechOutput) {
-                savedQuoteSpeechResp.speechOutput = savedQuoteSpeechOutput;
-                savedQuoteSpeechResp.repromptOutput = null;
-                savedQuoteSpeechResp.sessionAttrs = sessionAttrs;
-                deferred.resolve(savedQuoteSpeechResp);
-            });
-
-    }
-    else {
-        savedQuoteSpeechResp.speechOutput = "Something went wrong while retrieving please try later.";
-        savedQuoteSpeechResp.repromptOutput = null;
-        savedQuoteSpeechResp.sessionAttrs = sessionAttrs;
-        deferred.resolve(savedQuoteSpeechResp);
-    }
-    return deferred.promise;
-};
-
-AOS.prototype.handleRetrieveQuoteEmailYesIntent = function (sessionAttrs) {
-    var deferred = q.defer();
-    var retrieveQuoteSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-
-    if (sessionAttrs.email) {
-        getFinalRetrieveQuoteSendEmailResponse(sessionAttrs)
-            .then(function (retrieveQuoteSpeechOutput) {
-                retrieveQuoteSpeechResp.speechOutput = retrieveQuoteSpeechOutput;
-                retrieveQuoteSpeechResp.repromptOutput = null;
-                deferred.resolve(retrieveQuoteSpeechResp);
-            });
-    } else {
-        speechOutput.text = Utilities.GetRandomValue(EMAILRESP);
-        repromptOutput.text = Utilities.GetRandomValue(EMAILRESP);
-        retrieveQuoteSpeechResp.speechOutput = speechOutput;
-        retrieveQuoteSpeechResp.repromptOutput = repromptOutput;
-        deferred.resolve(retrieveQuoteSpeechResp);
-    }
-
-
-    return deferred.promise;
-};
-
-AOS.prototype.handleRetrieveQuoteEmailNoIntent = function (sessionAttrs) {
-    var deferred = q.defer();
-    var retrieveQuoteSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-
-    speechOutput.text = "Thank you for chosing Allstate. You are in Good Hands.";
-    retrieveQuoteSpeechResp.speechOutput = speechOutput;
-    retrieveQuoteSpeechResp.repromptOutput = null;
-    deferred.resolve(retrieveQuoteSpeechResp);
-
-    return deferred.promise;
-};
-
-AOS.prototype.handleRetrieveQuoteEmailSendIntent = function (sessionAttrs) {
-    var deferred = q.defer();
-    var retrieveQuoteSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-
-    getFinalRetrieveQuoteSendEmailResponse(sessionAttrs)
-        .then(function (retrieveQuoteSpeechOutput) {
-            retrieveQuoteSpeechResp.speechOutput = retrieveQuoteSpeechOutput;
-            retrieveQuoteSpeechResp.repromptOutput = null;
-            deferred.resolve(retrieveQuoteSpeechResp);
-        });
-
-
-    return deferred.promise;
-
-};
-//#endregion
-
-//#endregion
-
-//#region PRIVATE METHODS
-
-//#region PRIVATE AGENT
-function getFinalAgentFindSendEmailResponse(sessionAttrs) {
-    var deferred = q.defer();
-    var finalSpeechOutput = new Speech();
-    var to = sessionAttrs.email;
-    var subject = "Allstate agent details: " + sessionAttrs.agent.name;
-    var body = buildAgentEmailBody(sessionAttrs.agent, to);
-    Utilities.sendEmail(to, subject, body)
-        .then(function (emailStatus) {
-            if (emailStatus) {
-                finalSpeechOutput.text = Utilities.GetRandomValue(EMAILSENTRESPAGENT) + "Thank you, for choosing Allstate.";
-            } else {
-                finalSpeechOutput.text = "Sorry! there was a problem while sending the email to you. Please try again later.";
-            }
-            deferred.resolve(finalSpeechOutput);
-        })
-
-
-    return deferred.promise;
-}
-
-function buildAgentEmailBody(agentInfo, to) {
-    var emailBody = "";
-
-    emailBody = emailBody + "\nThank you for your interest in Allstate agents.\n"
-    emailBody = emailBody + "\nBelow are details you requested regarding our agent: " + agentInfo.name;
-    emailBody = emailBody + "\n-------------------------------------------------------";
-    emailBody = emailBody + "\nAdderess: " + Utilities.getCombinedAddress(agentInfo);
-    emailBody = emailBody + "\nPhone: " + agentInfo.phoneNumber;
-    emailBody = emailBody + "\nEmail: " + agentInfo.emailAddress;
-
-    return emailBody;
-}
-
-function getFinalAgentFindResponse(sessionAttrs) {
-    var deferred = q.defer();
-    var finalSpeechOutput = new Speech();
-    var sessionInfo = new Session();
-    sessionInfo.zip = sessionAttrs.zip;
-
-    startAOSSession()
-        .then(function (id) {
-            sessionInfo.sessionId = id;
-            return getStateFromZip(sessionInfo.sessionId, sessionInfo.zip);
-        }).then(function (state) {
-            sessionInfo.state = state;
-            return getAgents(sessionInfo);
-        }).then(function (agentsResp) {
-            if (agentsResp && agentsResp.length > 0) {
-                sessionAttrs.agent = agentsResp[0];
-                var firstAgentName = agentsResp[0].name;
-                finalSpeechOutput.text = "nearest Allstate agent to you is, " + firstAgentName +
-                    ". You can call the agent at " + agentsResp[0].phoneNumber +
-                    ". Or, would you like me to email you the agent details?";
-            } else {
-                finalSpeechOutput.text = "sorry! no agents are available at zip " + sessionInfo.zip;
-            }
-            deferred.resolve(finalSpeechOutput);
-        }).catch(function (error) {
-            finalSpeechOutput.text = "something went wrong with agent service. Please try again later.";
-            deferred.resolve(finalSpeechOutput);
-        });
-
-    return deferred.promise;
-};
-
-function ProcessAgentResponse(agentServResp) {
-    var agents = [];
-    if (agentServResp && agentServResp.agentAvailable && agentServResp.agents.length > 0) {
-        for (var index = 0; index < agentServResp.agents.length; index++) {
-            var currServAgent = agentServResp.agents[index];
-            var agentInfo = new Agent();
-            agentInfo.id = currServAgent.id;
-            agentInfo.name = currServAgent.name;
-            agentInfo.addressLine1 = currServAgent.addressLine1;
-            agentInfo.city = currServAgent.city;
-            agentInfo.state = currServAgent.state;
-            agentInfo.zipCode = currServAgent.zipCode;
-            agentInfo.phoneNumber = currServAgent.phoneNumber;
-            agentInfo.imageUrl = currServAgent.imageURL;
-            agentInfo.emailAddress = currServAgent.emailAddress;
-            agents.push(agentInfo);
-        }
-    }
-
-    return agents;
-}
-//#endregion
 
 //#region PRIVATE RENTERS
 function getRentersSaveCustomerResponse(sessionAttrs) {
@@ -1100,10 +846,6 @@ function quoteResponse(sessionAttrs) {
     }
     return deferred.promise;
 }
-
-
-
-
 
 function getCustomerSaveInfo(sessionAttrs, sessionInfo) {
     var customerData = {};
@@ -1316,107 +1058,6 @@ function initializeRentersInfoRequest() {
 }
 //#endregion
 
-//#region PRIVATE RETRIEVEQUOTE
-function getSavedQuoteResponse(sessionAttrs) {
-    var deferred = q.defer();
-    var finalSpeechOutput = new Speech();
-    var sessionInfo = new Session();
-    sessionInfo.zipcode = sessionAttrs.zipcode;
-    sessionInfo.dob = sessionAttrs.dob;
-    sessionInfo.email = sessionAttrs.email;
-    sessionInfo.lastname = sessionAttrs.lastname;
-    startAutoAOSSession()
-        .then(function (id) {
-            sessionInfo.sessionId = id;
-            return getStateFromZip(sessionInfo.sessionId, sessionInfo.zipcode);
-        }).then(function (state) {
-            sessionInfo.state = state;
-            return getSavedQuote(sessionInfo);
-        }).then(function (quoteResp) {
-            if (quoteResp && quoteResp.length > 0) {
-                sessionAttrs.quotedetails = quoteResp;
-                var quoteDetails = quoteResp;
-                finalSpeechOutput.text = retrieveSpeachOutText(quoteResp);
-            } else {
-                finalSpeechOutput.text = "sorry! no saved policies are available with these inputs.Would you like to insure for renters?";
-            }
-            deferred.resolve(finalSpeechOutput);
-        }).catch(function (error) {
-            finalSpeechOutput.text = "something went wrong with retrieve quote service. Please try again later.";
-            deferred.resolve(finalSpeechOutput);
-        })
-
-    return deferred.promise;
-};
-
-function retrieveSpeachOutText(quotes) {
-    var textOut = null;
-    if (quotes) {
-        if (quotes.length == 1) {
-            if (quotes[0].policyNumber) {
-                textOut = "You have a " + quotes[0].product + " policy with policy number," + "<say-as interpret-as=\"characters\">" + quotes[0].policyNumber + "</say-as>"
-                    + " and the policy was purchased on," + quotes[0].startDate;
-            }
-        }
-        else if (quotes.length > 1) {
-            textOut = "Great!! you have multiple policies with,";
-            for (var index = 0; index < quotes.length; index++) {
-                if (quotes[index].policyNumber) {
-                    textOut = textOut + quotes[index].product + ", policy with the policy number," + quotes[index].policyNumber + " ,and the policy was purchased on," + quotes[index].startDate;
-                }
-            }
-        }
-        textOut = textOut + ", would you like me to email you the quote details?";
-    }
-    else {
-        textOut = "I see that you do not have any purchased policies with these inputs.";
-    }
-    return textOut;
-};
-
-function getFinalRetrieveQuoteSendEmailResponse(sessionAttrs) {
-    var deferred = q.defer();
-    var finalSpeechOutput = new Speech();
-    var to = sessionAttrs.email;
-    var subject = "Allstate policy details ";
-    var body = buildRetrieveQuoteEmailBody(sessionAttrs.quotedetails, to);
-    Utilities.sendEmail(to, subject, body)
-        .then(function (emailStatus) {
-            if (emailStatus) {
-                finalSpeechOutput.text = "We have sent an email with all the details. Thank you, for choosing Allstate.";
-            } else {
-                finalSpeechOutput.text = "Sorry! there was a problem while sending the email to you. Please try again later.";
-            }
-            deferred.resolve(finalSpeechOutput);
-        })
-
-
-    return deferred.promise;
-}
-
-function buildRetrieveQuoteEmailBody(policiesInfo, to) {
-    var emailBody = "";
-
-    emailBody = emailBody + "\nThank you for your purchasing Allstate insurance.\n"
-    if (policiesInfo) {
-        for (var index = 0; index < policiesInfo.length; index++) {
-            emailBody = emailBody + "\nBelow are details you requested regarding: " + policiesInfo[index].policyNumber;
-            emailBody = emailBody + "\n-------------------------------------------------------";
-            emailBody = emailBody + "\Product: " + policiesInfo[index].product;
-            emailBody = emailBody + "\nPurchased On: " + policiesInfo[index].startDate;
-            emailBody = emailBody + "\nAssociated Agent Name: " + policiesInfo[index].agentName;
-            emailBody = emailBody + "\nAssociated Agent Phone number: " + policiesInfo[index].agentPhoneNumber;
-            emailBody = emailBody + "\nAssociated Agent Email address: " + policiesInfo[index].agentEmailAddress;
-            emailBody = emailBody + "\n-------------------------------------------------------";
-            emailBody = emailBody + "\n-------------------------------------------------------";
-        }
-
-    }
-
-    return emailBody;
-}
-//#endregion
-//#endregion
 
 //#region AOS API CALLS
 function startAOSSession(zip) {
@@ -1682,103 +1323,5 @@ function ProcessQuoteResponse(retrieveQuoteServResp) {
 
 //#endregion
 
-//#region SPOUSE
-
-AOS.prototype.handlerAOSRentersIsSpouseYes = function (sessionAttrs) {
-    var deferred = q.defer();
-    var rentersFindSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-
-
-speechOutput.text = "Sure thing! I'll just need some basic info first. Please give your spouse's full name.";
-    rentersFindSpeechResp.speechOutput = speechOutput;
-    rentersFindSpeechResp.repromptOutput = speechOutput;
-    deferred.resolve(rentersFindSpeechResp);
-
-    return deferred.promise;
-}
-
-
-
-AOS.prototype.handleRentersSpouseInsuranceName = function (sessionAttrs) {
-    var deferred = q.defer();
-    var rentersFindSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-
-    if (sessionAttrs.lastName) {
-        speechOutput.text = "Please, Provide your spouse's date of birth";
-        rentersFindSpeechResp.speechOutput = speechOutput;
-        rentersFindSpeechResp.repromptOutput = speechOutput;
-    } else {
-        speechOutput.text = sessionAttrs.firstName + ", please provide your spouse's last name.";
-        rentersFindSpeechResp.speechOutput = speechOutput;
-        rentersFindSpeechResp.repromptOutput = speechOutput;
-    }
-    deferred.resolve(rentersFindSpeechResp);
-
-
-
-    return deferred.promise;
-}
-AOS.prototype.handleRentersSpouseInsuranceDOB = function (sessionAttrs) {
-    var deferred = q.defer();
-    var rentersFindSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-
-    speechOutput.text = "Great! I would need to know a little about your spouse's employment status. Like employed, self employed, unemployed, student, retired, home maker or military";
-    rentersFindSpeechResp.speechOutput = speechOutput;
-    rentersFindSpeechResp.repromptOutput = speechOutput;
-    deferred.resolve(rentersFindSpeechResp);
-
-    return deferred.promise;
-};
-
-AOS.prototype.handlerRentersSpouseEmpStatus = function (sessionAttrs) {
-    var deferred = q.defer();
-    var rentersFindSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-
-    speechOutput.text = "Now please mention your spouse's gender ";
-    rentersFindSpeechResp.speechOutput = speechOutput;
-    rentersFindSpeechResp.repromptOutput = speechOutput;
-    deferred.resolve(rentersFindSpeechResp);
-
-    return deferred.promise;
-};
-
-AOS.prototype.handlerRentersSpouseGender = function (sessionAttrs) {
-    var deferred = q.defer();
-    var rentersFindSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-
-    speechOutput.text = "Thanks! Have you lived in your residence for more than two years? ";
-    rentersFindSpeechResp.speechOutput = speechOutput;
-    rentersFindSpeechResp.repromptOutput = speechOutput;
-    deferred.resolve(rentersFindSpeechResp);
-
-    return deferred.promise;
-};
-
-AOS.prototype.handlerAOSRentersIsSpouseNo = function (sessionAttrs) {
-    var deferred = q.defer();
-    var rentersFindSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-
-    speechOutput.text = "OK! Have you lived in your residence for more than two years? ";
-    rentersFindSpeechResp.speechOutput = speechOutput;
-    rentersFindSpeechResp.repromptOutput = speechOutput;
-    deferred.resolve(rentersFindSpeechResp);
-
-    return deferred.promise;
-};
-
-
-//#endregion
 
 module.exports = new AOS();
