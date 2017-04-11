@@ -83,7 +83,7 @@ AOS.prototype.handleRentersInsuranceName = function (sessionAttrs) {
 
     return deferred.promise;
 }
-
+//Now what's your street address?, or say current location to take current address
 AOS.prototype.handleRentersInsuranceDOB = function (sessionAttrs) {
     var deferred = q.defer();
     var rentersFindSpeechResp = new SpeechResponse();
@@ -273,6 +273,22 @@ AOS.prototype.handlerRentersDiffAddress = function (sessionAttrs) {
         rentersFindSpeechResp.speechOutput = speechOutput;
         rentersFindSpeechResp.repromptOutput = speechOutput;
     }
+
+    return deferred.promise;
+};
+
+AOS.prototype.handlerCreditHistoryAuthorize = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    speechOutput.text = "Information from outside sources regarding credit history is used to provide you with a renters quote. A third party may be used to calculate your insurance score. This information, along with subsequently collected information, will be shared with outside parties that perform services on Allstate's behalf. ";
+    speechOutput.text = speechOutput.text + "   Privacy Policy:http://www.allstate.com/about/privacy-statement-aic.aspx ";
+    speechOutput.text = speechOutput.text + "   Type OK to authorize.";
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
 
     return deferred.promise;
 };
@@ -1335,7 +1351,6 @@ function ProcessAgentResponse(agentServResp) {
 
     return agents;
 }
-
 //#endregion
 
 
