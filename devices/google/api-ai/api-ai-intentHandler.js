@@ -133,7 +133,13 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
-        case "AOS-RENTERS-CREDITHISTORY-AUTHORIZE":
+        case "AOS-RENTERS-CREDITHISTORY-AUTHORIZE-YES":
+        handlerAOSRentersCrediHistoryAuthorize(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+         case "AOS-RENTERS-CREDITHISTORY-AUTHORIZE-NO":
         handlerAOSRentersCrediHistoryAuthorize(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
