@@ -253,7 +253,19 @@ function intentHandlers(body) {
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
                 });
-            break;           
+            break; 
+        case "AOS-RENTERS-GENERATEQUOTEURL-YES":
+            handlerAOSRenterGenerateURLYes(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;  
+        case "AOS-RENTERS-GENERATEQUOTEURL-NO":
+            handlerAOSRenterGenerateURLNo(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;            
         case "AOS-RENTERS-ISSPOUSEADDED-YES":
                handlerAOSRentersIsSpouseYes(body, deferred)
                 .then(function (responseInfo) {
@@ -290,7 +302,7 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
-      case "AOS-RENTERS-SPOUSE-GENDER":
+        case "AOS-RENTERS-SPOUSE-GENDER":
             handlerAOSRentersSpouseGender(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
@@ -874,6 +886,38 @@ function handlerAOSRenterValidCustomer(body, deferred) {
     return deferred.promise;
 }
 
+function handlerAOSRenterGenerateURLYes(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handlerRenterGenerateURLYes(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+function handlerAOSRenterGenerateURLNo(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handlerRenterGenerateURLNo(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
 function handlerAOSRentersInsuranceAddrCurLoc(body, deferred) {
     var rentersSpeechResp = {};
     rentersSpeechResp.speech = "To get your current location";
@@ -1020,7 +1064,8 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "prevstate" : undefined,
         "prevcity" : undefined,
         "prevaddrLine1" : undefined,
-        "isCreditAuthorized" : undefined
+        "isCreditAuthorized" : undefined,
+        "isgenerateurl" : undefined
     };
 
     if (contextInfo) {
@@ -1188,6 +1233,10 @@ function getAOSRentersSessionAttributes(contextInfo) {
         var isCreditAuthorized = contextInfo.parameters["isCreditAuthorized.original"];
         if (isCreditAuthorized && isCreditAuthorized.trim().length > 0) {
             sessionAttrs.isCreditAuthorized = contextInfo.parameters["isCreditAuthorized"];
+        }
+        var isgenerateurl = contextInfo.parameters["isgenerateurl.original"];
+        if (isgenerateurl && isgenerateurl.trim().length > 0) {
+            sessionAttrs.isgenerateurl = contextInfo.parameters["isgenerateurl"];
         }
         var prevcity = contextInfo.parameters["prevcity.original"];
         if (prevcity && prevcity.trim().length > 0) {
