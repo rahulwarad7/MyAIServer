@@ -892,7 +892,7 @@ function saveAndExitResponse(sessionAttrs) {
                 return saveAndExit(sessionAttrs.emailAddress, sessionAttrs.transactionToken); 
             }).then(function (response) {
                 if (!response) {                    
-                    quoteSpeechOutput.text = "Thank you for the inputs, Your details has been validated. would you like to get quote details? ";                    
+                    quoteSpeechOutput.text = "Thank you for the inputs, Your details has been saved. would you like to complete the transaction ? ";                    
                 }
                 deferred.resolve(quoteSpeechOutput);   
             }).catch(function (error) {
