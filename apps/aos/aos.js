@@ -26,6 +26,8 @@ var URL_RENTERS_BASE = "https://purchase-stest.allstate.com/onlinesalesapp-rente
 var URL_RENTERS_SAVECUSTOMER = URL_RENTERS_BASE + "/renters/customer";
 var URL_RENTERS_RENTERSINFO = URL_RENTERS_BASE + "/renters/renter-information";
 var URL_RENTERS_CONFIRMPROFILE = URL_RENTERS_BASE + "/renters/renter-information/confirm-profile";
+var URL_RENTERS_SAVEANDEXIT = URL_RENTERS_BASE + "/renters/save-and-exit";
+var URL_RENTERS_SAVEEXPLICIT = URL_RENTERS_BASE + "/renters/save-explicit";
 var URL_RENTERS_RESIDENCEINFO = URL_RENTERS_BASE + "/renters/residence-information";
 var URL_RENTERS_ORDERQUOTE = URL_RENTERS_BASE + "/renters/quote";
 
@@ -727,6 +729,54 @@ AOS.prototype.handlerRenterValidCustomer = function (sessionAttrs) {
     return deferred.promise;
 };
 
+AOS.prototype.handlerRenterGenerateURLYes = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersQuoteSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+    if (sessionAttrs.transactionToken) {
+        if(sessionAttrs.isValidRenterCustomer) {
+            saveAndExitResponse(sessionAttrs)
+            .then(function (quoteDetailsSpeechOutput) {
+                rentersQuoteSpeechResp.speechOutput = quoteDetailsSpeechOutput;
+                rentersQuoteSpeechResp.repromptOutput = null;
+                rentersQuoteSpeechResp.sessionAttrs = sessionAttrs;
+                deferred.resolve(rentersQuoteSpeechResp);
+            });
+        }
+        else {
+            speechOutput.text = "There are issues for generating URL. Please contact near by agent.";
+            rentersQuoteSpeechResp.speechOutput = speechOutput;
+            rentersQuoteSpeechResp.repromptOutput = speechOutput;
+        }
+        
+    } else {
+        speechOutput.text = "Please login to retrieve quote to see your saved quote. Login details are sent to your registered email id.";
+        rentersQuoteSpeechResp.speechOutput = speechOutput;
+        rentersQuoteSpeechResp.repromptOutput = speechOutput;
+    }
+
+    return deferred.promise;
+};
+
+AOS.prototype.handlerRenterGenerateURLNo = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+    if(sessionAttrs && sessionAttrs.agentDetails){
+        speechOutput.text = "Got it. Here is the agent you can contact for more information.  "  + sessionAttrs.agentDetails.name + ", Contact Information:"  + sessionAttrs.agentDetails.phoneNumber + " , Email at : " + sessionAttrs.agentDetails.emailAddress;
+    }
+    else {
+        speechOutput.text = "Please type help for assistance or type menu for menu options";
+    }
+    
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
+
+    return deferred.promise;
+};
 //#endregion
 
 
@@ -822,6 +872,26 @@ function getRentersQuoteResponse(sessionAttrs) {
             }).then(function (response) {
                 if (response) {
                     sessionAttrs.isValidRenterCustomer = response.isValidRenterCustomer;
+                    quoteSpeechOutput.text = "Thank you for the inputs, Your details has been validated. would you like to get quote details? ";                    
+                }
+                deferred.resolve(quoteSpeechOutput);   
+            }).catch(function (error) {
+                quoteSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
+                deferred.resolve(quoteSpeechOutput);
+            });
+    }
+    return deferred.promise;
+}
+
+function saveAndExitResponse(sessionAttrs) {
+    var deferred = q.defer();
+    var quoteSpeechOutput = new Speech();
+    if (sessionAttrs.transactionToken) {
+        saveAndExplicit(sessionAttrs.emailAddress, sessionAttrs.transactionToken)
+            .then(function (response) {
+                return saveAndExit(sessionAttrs.emailAddress, sessionAttrs.transactionToken); 
+            }).then(function (response) {
+                if (!response) {                    
                     quoteSpeechOutput.text = "Thank you for the inputs, Your details has been validated. would you like to get quote details? ";                    
                 }
                 deferred.resolve(quoteSpeechOutput);   
@@ -1274,6 +1344,78 @@ function getSavedQuote(sessionInfo) {
 
     return deferred.promise;
 }
+//saveAndExplicit
+function saveAndExplicit(emailid, transactionToken) {
+    var deferred = q.defer();
+    request(
+        {
+            method: "POST",
+            uri: URL_RENTERS_SAVEEXPLICIT,
+            "content-type": "application/json",
+            headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/save-quote" },
+            json: true,
+            body: { "email" : emailid , "moduleName" : "RentersQuote" , "quoteType" : "RENTER_SINGLE" }
+        },
+        function (error, response, body) {
+            if (error || response.statusCode !== 200) {
+                errormsg = "Error from server session";
+                deferred.reject(errormsg);
+            } else {
+                var responseJson = response.body;
+                deferred.resolve(responseJson);
+            }
+        });
+
+    return deferred.promise;
+}
+
+function saveAndExit(emailid, transactionToken) {
+    var deferred = q.defer();
+    request(
+        {
+            method: "POST",
+            uri: URL_RENTERS_SAVEANDEXIT,
+            "content-type": "application/json",
+            headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/save-quote" },
+            json: true,
+            body: { "email" : emailid , "moduleName" : "RentersQuote" , "quoteType" : "RENTER_SINGLE" }
+        },
+        function (error, response, body) {
+            if (error || response.statusCode !== 200) {
+                errormsg = "Error from server session";
+                deferred.reject(errormsg);
+            } else {
+                var responseJson = response.body;
+                deferred.resolve(responseJson);
+            }
+        });
+
+    return deferred.promise;
+}
+
+// function quoteRepositoryCall(emailid, transactionToken) {
+//     var deferred = q.defer();
+//     request(
+//         {
+//             method: "POST",
+//             uri: URL_RENTERS_SAVEEXPLICIT,
+//             "content-type": "application/json",
+//             headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/save-quote" },
+//             json: true,
+//             body: { "email" : emailid , "moduleName" : "RentersQuote" , "quoteType" : "RENTER_SINGLE" }
+//         },
+//         function (error, response, body) {
+//             if (error || response.statusCode !== 200) {
+//                 errormsg = "Error from server session";
+//                 deferred.reject(errormsg);
+//             } else {
+//                 var responseJson = response.body;
+//                 deferred.resolve(responseJson);
+//             }
+//         });
+
+//     return deferred.promise;
+// }
 
 function getAgents(sessionInfo) {
     var deferred = q.defer();
