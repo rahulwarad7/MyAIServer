@@ -20,13 +20,14 @@ var AOSTranData = [];
 var URL_COMMON = "https://purchase-itest1.allstate.com/onlinesalesapp-common/";
 var URL_RENTERS_SESSIONID = URL_COMMON + "api/transaction/RENTERS/sessionid";
 var URL_GETAGENTS = URL_COMMON + "api/common/agents";
-//var URL_AUTO_SESSIONID = URL_COMMON + "api/transaction/AUTO/sessionid";
+var URL_AUTO_SESSIONID = URL_COMMON + "api/transaction/AUTO/sessionid";
 var URL_GETSTATE = URL_COMMON + "api/location/{0}/state";
 var URL_RENTERS_BASE = "https://purchase-itest1.allstate.com/onlinesalesapp-renters/api";
 var URL_RENTERS_SAVECUSTOMER = URL_RENTERS_BASE + "/renters/customer";
 var URL_RENTERS_RENTERSINFO = URL_RENTERS_BASE + "/renters/renter-information";
 var URL_RENTERS_CONFIRMPROFILE = URL_RENTERS_BASE + "/renters/renter-information/confirm-profile";
 var URL_RENTERS_SAVEANDEXIT = URL_RENTERS_BASE + "/renters/save-and-exit";
+var URL_RENTERS_QUOTEREPOSITORY = URL_COMMON + "api/quote-repository";
 var URL_RENTERS_SAVEEXPLICIT = URL_RENTERS_BASE + "/renters/save-explicit";
 var URL_RENTERS_RESIDENCEINFO = URL_RENTERS_BASE + "/renters/residence-information";
 var URL_RENTERS_ORDERQUOTE = URL_RENTERS_BASE + "/renters/quote";
@@ -729,7 +730,7 @@ AOS.prototype.handlerRenterValidCustomer = function (sessionAttrs) {
     return deferred.promise;
 };
 
-AOS.prototype.handlerRenterGenerateURLYes = function (sessionAttrs) {
+AOS.prototype.handlerRenterSaveQuoteYes = function (sessionAttrs) {
     var deferred = q.defer();
     var rentersQuoteSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
@@ -737,6 +738,36 @@ AOS.prototype.handlerRenterGenerateURLYes = function (sessionAttrs) {
     if (sessionAttrs.transactionToken) {
         if(sessionAttrs.isValidRenterCustomer) {
             saveAndExitResponse(sessionAttrs)
+            .then(function (quoteDetailsSpeechOutput) {
+                rentersQuoteSpeechResp.speechOutput = quoteDetailsSpeechOutput;
+                rentersQuoteSpeechResp.repromptOutput = null;
+                rentersQuoteSpeechResp.sessionAttrs = sessionAttrs;
+                deferred.resolve(rentersQuoteSpeechResp);
+            });
+        }
+        else {
+            speechOutput.text = "There are issues for saving the quote. Please contact near by agent.";
+            rentersQuoteSpeechResp.speechOutput = speechOutput;
+            rentersQuoteSpeechResp.repromptOutput = speechOutput;
+        }
+        
+    } else {
+        speechOutput.text = "Please login to retrieve quote to see your saved quote. Login details are sent to your registered email id.";
+        rentersQuoteSpeechResp.speechOutput = speechOutput;
+        rentersQuoteSpeechResp.repromptOutput = speechOutput;
+    }
+
+    return deferred.promise;
+};
+
+AOS.prototype.handlerRenterQuoteURL = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersQuoteSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+    if (sessionAttrs.transactionToken) {
+        if(sessionAttrs.isValidRenterCustomer) {
+            quoteLandingURLResponse(sessionAttrs)
             .then(function (quoteDetailsSpeechOutput) {
                 rentersQuoteSpeechResp.speechOutput = quoteDetailsSpeechOutput;
                 rentersQuoteSpeechResp.repromptOutput = null;
@@ -759,7 +790,7 @@ AOS.prototype.handlerRenterGenerateURLYes = function (sessionAttrs) {
     return deferred.promise;
 };
 
-AOS.prototype.handlerRenterGenerateURLNo = function (sessionAttrs) {
+AOS.prototype.handlerRenterSaveQuoteNo = function (sessionAttrs) {
     var deferred = q.defer();
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
@@ -836,7 +867,6 @@ function getRentersInfoResponse(sessionAttrs) {
     return deferred.promise;
 }
 
-
 function confirmProfileResponse(sessionAttrs) {
     var deferred = q.defer();
     var rentersInfoSpeechOutput = new Speech();
@@ -900,6 +930,35 @@ function saveAndExitResponse(sessionAttrs) {
                 deferred.resolve(quoteSpeechOutput);
             });
     }
+    return deferred.promise;
+}
+
+function quoteLandingURLResponse(sessionAttrs) {
+    var deferred = q.defer();
+    var quoteURLSpeechOutput = new Speech();
+    var sessionInfo = new Session();
+    sessionInfo.zip = sessionAttrs.zip;
+    sessionInfo.newzip = sessionAttrs.newzip;
+    startAutoAOSSession()
+        .then(function (id) {
+            sessionInfo.sessionId = id;
+            return quoteRepository(sessionAttrs, sessionInfo.sessionId);
+        }).then(function (response) {            
+            if (response && response.quoteList) {
+                sessionAttrs.retrieveURL = response.quoteList[0].retrieveUrl;
+                quoteURLSpeechOutput.sessionAttrs = sessionAttrs;
+                quoteURLSpeechOutput.text = "Perfect. Here is the URL to connect to live quote page: ";
+                quoteURLSpeechOutput.text = sessionAttrs.retrieveURL;                
+            }
+            else{
+                quoteURLSpeechOutput.text = "Could not save your quote. Please contact near by agent for more details";                                
+            }
+            deferred.resolve(quoteURLSpeechOutput);
+        }).catch(function (error) {
+            quoteURLSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
+            deferred.resolve(quoteURLSpeechOutput);
+        });
+
     return deferred.promise;
 }
 
@@ -978,7 +1037,7 @@ function mapRentersInfo(sessionAttrs) {
 function mapRentersConfirmProfile(sessionAttrs) {
     var confProfileData = {};
     confProfileData.profiles = getProfiles(sessionAttrs);
-    confProfileData.addresses = getAddresses(sessionAttrs);
+    confProfileData.addresses = getAddresses(sessionAttrs);    
     return confProfileData;
 }
 
@@ -1228,7 +1287,7 @@ function saveRentersInfo(rentersInfo, transactionToken) {
 }
 
 function postConfirmProfile(confirmInfo, transactionToken) {
-    var deferred = q.defer();
+    var deferred = q.defer();    
     request(
         {
             method: "POST",
@@ -1343,7 +1402,7 @@ function getSavedQuote(sessionInfo) {
 
     return deferred.promise;
 }
-//saveAndExplicit
+
 function saveAndExplicit(emailid, transactionToken) {
     var deferred = q.defer();
     request(
@@ -1392,29 +1451,29 @@ function saveAndExit(emailid, transactionToken) {
     return deferred.promise;
 }
 
-// function quoteRepositoryCall(emailid, transactionToken) {
-//     var deferred = q.defer();
-//     request(
-//         {
-//             method: "POST",
-//             uri: URL_RENTERS_SAVEEXPLICIT,
-//             "content-type": "application/json",
-//             headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/save-quote" },
-//             json: true,
-//             body: { "email" : emailid , "moduleName" : "RentersQuote" , "quoteType" : "RENTER_SINGLE" }
-//         },
-//         function (error, response, body) {
-//             if (error || response.statusCode !== 200) {
-//                 errormsg = "Error from server session";
-//                 deferred.reject(errormsg);
-//             } else {
-//                 var responseJson = response.body;
-//                 deferred.resolve(responseJson);
-//             }
-//         });
+function quoteRepository(sessionAttrs, sessionID) {
+    var deferred = q.defer();
+    request(
+        {
+            method: "POST",
+            uri: URL_RENTERS_QUOTEREPOSITORY,
+            "content-type": "application/json",
+            headers: { "X-TID": sessionID, "X-PD": "AUTO", "X-VID": "/" },
+            json: true,
+            body: { "dateOfBirth" : sessionAttrs.dob , "emailID" : sessionAttrs.emailAddress , "lastName" : sessionAttrs.lastName ,"zipCode" : sessionAttrs.zip }
+        },
+        function (error, response, body) {
+            if (error || response.statusCode !== 200) {
+                errormsg = "Error from server session";
+                deferred.reject(errormsg);
+            } else {
+                var responseJson = response.body;
+                deferred.resolve(responseJson);
+            }
+        });
 
-//     return deferred.promise;
-// }
+    return deferred.promise;
+}
 
 function getAgents(sessionInfo) {
     var deferred = q.defer();
