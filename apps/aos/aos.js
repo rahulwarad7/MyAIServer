@@ -1074,7 +1074,7 @@ function mapAddress(address, sessionAttrs) {
     else{
         address.addressLine1 = sessionAttrs.addrLine1;
         address.city = sessionAttrs.city;
-        address.state = sessionAttrs.state;
+        address.state = sessionAttrs.transactionToken.state;
         address.zipCode = sessionAttrs.zip;    
     }
     return address;
@@ -1184,7 +1184,6 @@ function getStateFromZip(sessionId, zip) {
 
 function rentersSaveCustomer(customerSaveInfo, sessionId) {
     var deferred = q.defer();
-    console.log(customerSaveInfo);
     request(
         {
             method: "POST",
