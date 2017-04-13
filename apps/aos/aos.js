@@ -1017,7 +1017,7 @@ function getAddresses(sessionAttrs) {
     addrs.address.addressLine1 = sessionAttrs.addrLine1;
     addrs.address.aptOrUnit = null;
     addrs.address.city = sessionAttrs.city;
-    addrs.address.state = sessionAttrs.state;
+    addrs.address.state = sessionAttrs.transactionToken.state;
     addrs.address.zipCode = sessionAttrs.zip;
     addrs.address.stateReadOnly = true;
     addrs.address.zipCodeReadOnly = true;
