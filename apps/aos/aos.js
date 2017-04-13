@@ -760,7 +760,7 @@ AOS.prototype.handlerRenterSaveQuoteYes = function (sessionAttrs) {
     return deferred.promise;
 };
 
-AOS.prototype.handlerRenterQuoteURL = function (sessionAttrs) {
+AOS.prototype.handlerRenterGenerateURL = function (sessionAttrs) {
     var deferred = q.defer();
     var rentersQuoteSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
@@ -1453,6 +1453,10 @@ function saveAndExit(emailid, transactionToken) {
 
 function quoteRepository(sessionAttrs, sessionID) {
     var deferred = q.defer();
+    var dob;
+    if(sessionAttrs && sessionAttrs.dob){
+         dob = DateUtil.getFormattedDate(sessionAttrs.dob, "MMDDYYYY");
+    }
     request(
         {
             method: "POST",
@@ -1460,7 +1464,7 @@ function quoteRepository(sessionAttrs, sessionID) {
             "content-type": "application/json",
             headers: { "X-TID": sessionID, "X-PD": "AUTO", "X-VID": "/" },
             json: true,
-            body: { "dateOfBirth" : sessionAttrs.dob , "emailID" : sessionAttrs.emailAddress , "lastName" : sessionAttrs.lastName ,"zipCode" : sessionAttrs.zip }
+            body: { "dateOfBirth" : dob , "emailID" : sessionAttrs.emailAddress , "lastName" : sessionAttrs.lastName ,"zipCode" : sessionAttrs.zip }
         },
         function (error, response, body) {
             if (error || response.statusCode !== 200) {
