@@ -254,14 +254,20 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break; 
-        case "AOS-RENTERS-GENERATEQUOTEURL-YES":
-            handlerAOSRenterGenerateURLYes(body, deferred)
+        case "AOS-RENTERS-SAVEQUOTE-YES":
+            handlerAOSRenterSaveQuoteYes(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
                 });
             break;  
-        case "AOS-RENTERS-GENERATEQUOTEURL-NO":
-            handlerAOSRenterGenerateURLNo(body, deferred)
+        case "AOS-RENTERS-SAVEQUOTE-NO":
+            handlerAOSRenterSaveQuoteNo(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AOS-RENTERS-GENERATEQUOTEURL":
+            handlerAOSRenterGenerateURL(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
                 });
@@ -886,13 +892,13 @@ function handlerAOSRenterValidCustomer(body, deferred) {
     return deferred.promise;
 }
 
-function handlerAOSRenterGenerateURLYes(body, deferred) {
+function handlerAOSRenterSaveQuoteYes(body, deferred) {
     var rentersWelcomeSpeechResp = {};
     var result = body.result;
     var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
     var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
 
-    aos.handlerRenterGenerateURLYes(sessionAttrs)
+    aos.handlerRenterSaveQuoteYes(sessionAttrs)
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
             rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
@@ -902,13 +908,29 @@ function handlerAOSRenterGenerateURLYes(body, deferred) {
     return deferred.promise;
 }
 
-function handlerAOSRenterGenerateURLNo(body, deferred) {
+function handlerAOSRenterGenerateURL(body, deferred) {
     var rentersWelcomeSpeechResp = {};
     var result = body.result;
     var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
     var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
 
-    aos.handlerRenterGenerateURLNo(sessionAttrs)
+    aos.handlerRenterSaveQuoteYes(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+function handlerAOSRenterSaveQuoteNo(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handlerRenterSaveQuoteNo(sessionAttrs)
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
             rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
@@ -1310,7 +1332,6 @@ function handleMenuIntent(body, deferred) {
     return deferred.promise;
 }
 
-
 function handleAosRentersQuoteStart(body, deferred) {
     var helpSpeechResp = {};
     helpSpeechResp.speech = "At this time, I can only provide a quote for renters insurance. Would you like to get a renters quote?   ";
@@ -1318,7 +1339,6 @@ function handleAosRentersQuoteStart(body, deferred) {
     deferred.resolve(helpSpeechResp);
     return deferred.promise;
 }
-
 
 function handleAosRentersQuoteStartNo(body, deferred) {
     var helpSpeechResp = {};
