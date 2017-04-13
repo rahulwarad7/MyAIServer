@@ -914,7 +914,7 @@ function handlerAOSRenterGenerateURL(body, deferred) {
     var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
     var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
 
-    aos.handlerRenterSaveQuoteYes(sessionAttrs)
+    aos.handlerRenterGenerateURL(sessionAttrs)
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
             rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
