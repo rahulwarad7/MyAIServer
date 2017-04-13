@@ -948,7 +948,7 @@ function quoteLandingURLResponse(sessionAttrs) {
                 sessionAttrs.retrieveURL = response.quoteList[0].retrieveUrl;
                 quoteURLSpeechOutput.sessionAttrs = sessionAttrs;
                 quoteURLSpeechOutput.text = "Perfect. Here is the URL to connect to live quote page: ";
-                quoteURLSpeechOutput.text = sessionAttrs.retrieveURL;                
+                quoteURLSpeechOutput.text = quoteURLSpeechOutput.text + sessionAttrs.retrieveURL;                
             }
             else{
                 quoteURLSpeechOutput.text = "Could not save your quote. Please contact near by agent for more details";                                
