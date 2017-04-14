@@ -414,7 +414,18 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
-
+            case "AOS-RENTERS-DE-PROPERTY-NO":
+            handlerAOSRentersInsuranceCtResidenceNo(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AOS-RENTERS-DE-PROPERTY-YES":
+            handlerAOSRentersInsuranceCtResidenceYes(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
         case "HELPINTENT":
         default:
             var message = "Type help to get help and menu for options!";
