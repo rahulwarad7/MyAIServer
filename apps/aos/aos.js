@@ -285,12 +285,15 @@ AOS.prototype.handlerCreditHistoryAuthorize = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-
+    if(sessionAttrs.state != "KS")  {
     speechOutput.text = "Great! Next I'll need to know a little about your employment status. Are you employed, self employed, unemployed, student, retired, home maker or military";
+}
+else {
+    speechOutput.text = "Thanks. Would you like to add a spouse to your quote?";
+}
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     deferred.resolve(rentersFindSpeechResp);
-
     return deferred.promise;
 };
 
@@ -309,8 +312,13 @@ AOS.prototype.handlerRentersEmpStatus = function (sessionAttrs) {
             .then(function (agentDetails) {
                 if(agentDetails && agentDetails.length > 0 ){
                     sessionAttrs.agentDetails = agentDetails[0];
-                }                
+                } 
+                if(sessionAttrs.state != "FL") {              
                 speechOutput.text = "Now please mention your gender ";
+            }
+            else{
+                 speechOutput.text = "Thanks! Have you lived in your residence for more than two years?";
+            }
                 rentersFindSpeechResp.speechOutput = speechOutput;
                 rentersFindSpeechResp.repromptOutput = speechOutput;
                 rentersFindSpeechResp.sessionAttrs = sessionAttrs;
@@ -326,7 +334,15 @@ AOS.prototype.handlerRentersGender = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    speechOutput.text = "Thanks. Would you like to add a spouse to your quote? ";
+    if(sessionAttrs.state != "CA" && sessionAttrs.state != "CT" && sessionAttrs.state != "MD" && sessionAttrs.state != "OR" && sessionAttrs.state != "PA" && sessionAttrs.state != "NY"){
+        speechOutput.text = "Thanks. Would you like to add a spouse to your quote? ";
+    }
+    else{
+        speechOutput.text = "Thanks. Now Tell me about your marital status like single, married and lived with spouse, divorced, legally married but separated, widowed, domestic partnership";
+    }
+
+
+   // speechOutput.text = "Thanks. Would you like to add a spouse to your quote? ";
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     rentersFindSpeechResp.sessionAttrs = sessionAttrs;
@@ -335,6 +351,24 @@ AOS.prototype.handlerRentersGender = function (sessionAttrs) {
     return deferred.promise;
 };
 
+AOS.prototype.handlerRentersMeritalStatus = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+    if(sessionAttrs.maritalstatus == "02" || sessionAttrs.maritalstatus == "08") {
+       speechOutput.text = "Thanks. Please give your spouse name ";
+     }
+    else{
+       speechOutput.text = "Thanks! Have you lived in your residence for more than two years? ";
+    }
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    rentersFindSpeechResp.sessionAttrs = sessionAttrs;
+    deferred.resolve(rentersFindSpeechResp);
+
+    return deferred.promise;
+};
 AOS.prototype.handlerRentersLivedMoreThanTwoYrsYes = function (sessionAttrs) {
     var deferred = q.defer();
     var rentersFindSpeechResp = new SpeechResponse();
