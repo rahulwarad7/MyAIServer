@@ -485,6 +485,13 @@ function intentHandlers(body) {
                 });
             break;
             
+             case "AOS-RENTERS-MA":
+            handlerAOSRentersInsuranceCaClaims(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+            
         case "HELPINTENT":
         default:
             var message = "Type help to get help and menu for options!";
@@ -1254,6 +1261,7 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "isClaims":undefined,
         "date":undefined,
         "time":undefined,
+        "Location":undefined,
         "Devices":undefined,
         "livedmorethantwo": undefined,
         "transactionToken": {},
@@ -1409,6 +1417,11 @@ function getAOSRentersSessionAttributes(contextInfo) {
          var isClaims = contextInfo.parameters["isClaims.original"];
         if (isClaims && isClaims.trim().length > 0) {
             sessionAttrs.isClaims = contextInfo.parameters["isClaims"];
+        }
+        
+        var Location = contextInfo.parameters["Location.original"];
+        if (Location && Location.trim().length > 0) {
+            sessionAttrs.Location = contextInfo.parameters["Location"];
         }
         var date = contextInfo.parameters["date.original"];
         if (date && date.trim().length > 0) {
