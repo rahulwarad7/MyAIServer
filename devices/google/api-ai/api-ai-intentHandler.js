@@ -376,7 +376,7 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
-        case "AOS-RENTERS-CA-CLAIMS":
+        case "AOS-RENTERS-CA-DEVICES":
             handlerAOSRentersInsuranceCaClaims(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
