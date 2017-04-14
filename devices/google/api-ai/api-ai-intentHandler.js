@@ -33,12 +33,12 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
-         case "MENU":
+        case "MENU":
             handleMenuIntent(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
                 });
-            break;  
+            break;
         case "AOS-RENTERS-QUOTESTART":
             handleAosRentersQuoteStart(body, deferred)
                 .then(function (responseInfo) {
@@ -50,7 +50,7 @@ function intentHandlers(body) {
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
                 });
-            break;      
+            break;
         case "AOS-RENTERS-INSURANCE":
             handlerAOSRentersInsuranceStart(body, deferred)
                 .then(function (responseInfo) {
@@ -82,7 +82,7 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
-        case "AOS-RENTERS-CURCITY-ZIP":        
+        case "AOS-RENTERS-CURCITY-ZIP":
             handlerAOSRentersInsuranceCityZip(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
@@ -97,7 +97,7 @@ function intentHandlers(body) {
             break;
         case "AOS-RENTERS-PHONENUMBER-AUTHORIZE-NO":
         case "AOS-RENTERS-PHONENUMBER-AUTHORIZE-YES":
-                handlerAOSRentersPhoneNumberAuthorize(body, deferred)
+            handlerAOSRentersPhoneNumberAuthorize(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
                 });
@@ -115,7 +115,7 @@ function intentHandlers(body) {
                 });
             break;
 
-        case "AOS-RENTERS-INSADDRSAME-NO":        
+        case "AOS-RENTERS-INSADDRSAME-NO":
             handlerAOSRentersInsuranceInsuredAddrDiff(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
@@ -134,13 +134,13 @@ function intentHandlers(body) {
                 });
             break;
         case "AOS-RENTERS-CREDITHISTORY-AUTHORIZE-YES":
-        handlerAOSRentersCrediHistoryAuthorize(body, deferred)
+            handlerAOSRentersCrediHistoryAuthorize(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
                 });
             break;
-         case "AOS-RENTERS-CREDITHISTORY-AUTHORIZE-NO":
-        handlerAOSRentersCrediHistoryAuthorize(body, deferred)
+        case "AOS-RENTERS-CREDITHISTORY-AUTHORIZE-NO":
+            handlerAOSRentersCrediHistoryAuthorize(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
                 });
@@ -157,13 +157,19 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
+        case "AOS-RENTERS-MARITALSTATUS":
+            handlerAOSRentersMaritalStatus(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
         case "AOS-RENTERS-LIVEDMORETHANTWOYRS-YES":
             handlerAOSRentersLivedMoreThanTwoYrsYes(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
                 });
             break;
-         case "AOS-RENTERS-RESIDENCEPROCEED":
+        case "AOS-RENTERS-RESIDENCEPROCEED":
             handlerAOSRentersResidence(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
@@ -187,7 +193,7 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
-        
+
         case "AOS-RENTERS-ISPRIMARYRESIDENCE-YES":
             handlerAOSRentersIsPrimaryResYes(body, deferred)
                 .then(function (responseInfo) {
@@ -242,7 +248,7 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
-         case "AOS-RENTERS-PERSONALITEMSVALUE":
+        case "AOS-RENTERS-PERSONALITEMSVALUE":
             handlerAOSRentersPersonalItemsValue(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
@@ -253,13 +259,13 @@ function intentHandlers(body) {
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
                 });
-            break; 
+            break;
         case "AOS-RENTERS-SAVEQUOTE-YES":
             handlerAOSRenterSaveQuoteYes(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
                 });
-            break;  
+            break;
         case "AOS-RENTERS-SAVEQUOTE-NO":
             handlerAOSRenterSaveQuoteNo(body, deferred)
                 .then(function (responseInfo) {
@@ -271,21 +277,21 @@ function intentHandlers(body) {
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
                 });
-            break;            
+            break;
         case "AOS-RENTERS-ISSPOUSEADDED-YES":
-               handlerAOSRentersIsSpouseYes(body, deferred)
+            handlerAOSRentersIsSpouseYes(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
                 });
-          break;
+            break;
 
-          case "AOS-RENTERS-ISSPOUSEADDED-NO":
-                handlerAOSRentersIsSpouseNo(body, deferred)
+        case "AOS-RENTERS-ISSPOUSEADDED-NO":
+            handlerAOSRentersIsSpouseNo(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
                 });
 
-          break;
+            break;
 
         case "AOS-RENTERS-SPOUSE-NAME":
         case "AOS-RENTERS-SPOUSE-LASTNAME":
@@ -301,7 +307,7 @@ function intentHandlers(body) {
                 });
             break;
 
-         case "AOS-RENTERS-SPOUSE-EMPSTATUS":
+        case "AOS-RENTERS-SPOUSE-EMPSTATUS":
             handlerAOSRentersSpouseEmpStatus(body, deferred)
                 .then(function (responseInfo) {
                     //employed, self employed, student, retired, unemployed, homemaker,military
@@ -322,8 +328,8 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
-            
-            
+
+
         case "HELPINTENT":
         default:
             var message = "Type help to get help and menu for options!";
@@ -517,7 +523,7 @@ function handlerAOSRentersPhoneNumberAuthorize(body, deferred) {
     var result = body.result;
     var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
     var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
-   
+
     aos.handlerRentersPhoneNumberAuthorize(sessionAttrs)
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
@@ -631,6 +637,21 @@ function handlerAOSRentersGender(body, deferred) {
     var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
     var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
     aos.handlerRentersGender(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
+function handlerAOSRentersMaritalStatus(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+    aos.handlerRentersMeritalStatus(sessionAttrs)
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
             rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
@@ -1052,60 +1073,61 @@ function getAOSRentersSessionAttributes(contextInfo) {
     var sessionAttrs = {
         "firstName": undefined,
         "lastName": undefined,
-        "middleName":undefined,
+        "middleName": undefined,
         "dob": undefined,
         "addrLine1": undefined,
         "city": undefined,
         "zip": undefined,
+        "state": undefined,
         "IsInsuredAddrSame": undefined,
-        "phoneNumber" : undefined,
-        "isAuthorize" : undefined,
-        "emailAddress" : undefined,
-        "businessoutofresidence" : undefined,
-        "employmentStatus" : undefined,
-        "unitsInBuilding" : undefined,
-        "locatedInDormOrMilitaryBarracks" : undefined,
-        "residenceBuildingType" : undefined,
-        "primaryResidence" : undefined,
-        "isCurrentAddressSameAsInsuredAddress" : undefined,
-        "gender" : undefined,
-        "livedmorethantwo" : undefined,
-        "transactionToken" : {},
-        "agentDetails" :{},
-        "isSpouseAdded" : undefined,
+        "phoneNumber": undefined,
+        "isAuthorize": undefined,
+        "emailAddress": undefined,
+        "businessoutofresidence": undefined,
+        "employmentStatus": undefined,
+        "unitsInBuilding": undefined,
+        "locatedInDormOrMilitaryBarracks": undefined,
+        "residenceBuildingType": undefined,
+        "primaryResidence": undefined,
+        "isCurrentAddressSameAsInsuredAddress": undefined,
+        "gender": undefined,
+        "maritalstatus":undefined,
+        "livedmorethantwo": undefined,
+        "transactionToken": {},
+        "agentDetails": {},
+        "isSpouseAdded": undefined,
         "spousefirstName": undefined,
         "spouselastName": undefined,
-        "spousemiddleName":undefined,
+        "spousemiddleName": undefined,
         "spouseDob": undefined,
-        "spouseEmpStatus" : undefined,
-        "spouseGender" : undefined,
-        "newcity" : undefined,
-        "newzip" : undefined,
-        "newaddrLine1" : undefined,
-        "prevzipcode" : undefined,
-        "prevstate" : undefined,
-        "prevcity" : undefined,
-        "prevaddrLine1" : undefined,
-        "isCreditAuthorized" : undefined,
-        "isgenerateurl" : undefined
+        "spouseEmpStatus": undefined,
+        "spouseGender": undefined,
+        "newcity": undefined,
+        "newzip": undefined,
+        "newaddrLine1": undefined,
+        "prevzipcode": undefined,
+        "prevstate": undefined,
+        "prevcity": undefined,
+        "prevaddrLine1": undefined,
+        "isCreditAuthorized": undefined,
+        "isgenerateurl": undefined
     };
 
     if (contextInfo) {
 
-        
         var givenname = contextInfo.parameters["given-name.original"];
         if (givenname && givenname.length > 0) {
             givenname = contextInfo.parameters["given-name"];
             var arr = givenname.split(" ");
-            if(arr.length <=2){
-            sessionAttrs.firstName = arr[0];
-            sessionAttrs.lastName = arr[1];
-           }
-           else{
-               sessionAttrs.firstName = arr[0];
-               sessionAttrs.middleName = arr[1];
-               sessionAttrs.lastName = arr[2];
-           }
+            if (arr.length <= 2) {
+                sessionAttrs.firstName = arr[0];
+                sessionAttrs.lastName = arr[1];
+            }
+            else {
+                sessionAttrs.firstName = arr[0];
+                sessionAttrs.middleName = arr[1];
+                sessionAttrs.lastName = arr[2];
+            }
         }
         var lastName = contextInfo.parameters["last-name.original"];
         if (lastName && lastName.trim().length > 0) {
@@ -1130,6 +1152,9 @@ function getAOSRentersSessionAttributes(contextInfo) {
                 sessionAttrs.zip = "0" + sessionAttrs.zip;
             }
         }
+        if (newaddrLine1 && newaddrLine1.trim().length > 0) {
+            sessionAttrs.newaddrLine1 = contextInfo.parameters["newaddress"];
+        }
         var newaddrLine1 = contextInfo.parameters["newaddress.original"];
         if (newaddrLine1 && newaddrLine1.trim().length > 0) {
             sessionAttrs.newaddrLine1 = contextInfo.parameters["newaddress"];
@@ -1147,91 +1172,96 @@ function getAOSRentersSessionAttributes(contextInfo) {
         }
         var phoneNumber = contextInfo.parameters["phone-number.original"];
         if (phoneNumber && phoneNumber.trim().length > 0) {
-            sessionAttrs.phoneNumber = contextInfo.parameters["phone-number"];           
+            sessionAttrs.phoneNumber = contextInfo.parameters["phone-number"];
         }
-         var isAuthorize = contextInfo.parameters["isAuthorize.original"];
+        var isAuthorize = contextInfo.parameters["isAuthorize.original"];
         if (isAuthorize && isAuthorize.trim().length > 0) {
-            sessionAttrs.isAuthorize = contextInfo.parameters["isAuthorize"];           
+            sessionAttrs.isAuthorize = contextInfo.parameters["isAuthorize"];
         }
-         var emailAddress = contextInfo.parameters["email.original"];
+        var emailAddress = contextInfo.parameters["email.original"];
         if (emailAddress && emailAddress.trim().length > 0) {
-            sessionAttrs.emailAddress = contextInfo.parameters["email"];           
+            sessionAttrs.emailAddress = contextInfo.parameters["email"];
         }
         var businessoutofresidence = contextInfo.parameters["isBusinessOperated.original"];
         if (businessoutofresidence && businessoutofresidence.trim().length > 0) {
-            sessionAttrs.businessoutofresidence = contextInfo.parameters["isBusinessOperated"];           
+            sessionAttrs.businessoutofresidence = contextInfo.parameters["isBusinessOperated"];
         }
         var employmentStatus = contextInfo.parameters["aos-renters-employmentType.original"];
         if (employmentStatus && employmentStatus.trim().length > 0) {
-            sessionAttrs.employmentStatus = contextInfo.parameters["aos-renters-employmentType"];           
+            sessionAttrs.employmentStatus = contextInfo.parameters["aos-renters-employmentType"];
         }
         var unitsInBuilding = contextInfo.parameters["isfiveormoreunits.original"];
         if (unitsInBuilding && unitsInBuilding.trim().length > 0) {
-            sessionAttrs.unitsInBuilding = contextInfo.parameters["isfiveormoreunits"];           
+            sessionAttrs.unitsInBuilding = contextInfo.parameters["isfiveormoreunits"];
         }
         var locatedInDormOrMilitaryBarracks = contextInfo.parameters["residenceLocation.original"];
         if (locatedInDormOrMilitaryBarracks && locatedInDormOrMilitaryBarracks.trim().length > 0) {
-            sessionAttrs.locatedInDormOrMilitaryBarracks = contextInfo.parameters["residenceLocation"];           
+            sessionAttrs.locatedInDormOrMilitaryBarracks = contextInfo.parameters["residenceLocation"];
         }
         var personalItemsValue = contextInfo.parameters["valueofPersonalItems.original"];
         if (personalItemsValue && personalItemsValue.trim().length > 0) {
-            sessionAttrs.personalItemsValue = contextInfo.parameters["valueofPersonalItems"];           
-        }        
+            sessionAttrs.personalItemsValue = contextInfo.parameters["valueofPersonalItems"];
+        }
         var residenceBuildingType = contextInfo.parameters["aos-renters-typeOfBuilding.original"];
         if (residenceBuildingType && residenceBuildingType.trim().length > 0) {
-            sessionAttrs.residenceBuildingType = contextInfo.parameters["aos-renters-typeOfBuilding"];           
+            sessionAttrs.residenceBuildingType = contextInfo.parameters["aos-renters-typeOfBuilding"];
         }
         var primaryResidence = contextInfo.parameters["isprimaryresidence.original"];
         if (primaryResidence && primaryResidence.trim().length > 0) {
-            sessionAttrs.primaryResidence = contextInfo.parameters["isprimaryresidence"];           
+            sessionAttrs.primaryResidence = contextInfo.parameters["isprimaryresidence"];
         }
         var isCurrentAddressSameAsInsuredAddress = contextInfo.parameters["IsInsuredAddrSame.original"];
         if (isCurrentAddressSameAsInsuredAddress && isCurrentAddressSameAsInsuredAddress.trim().length > 0) {
-            sessionAttrs.isCurrentAddressSameAsInsuredAddress = contextInfo.parameters["IsInsuredAddrSame"];           
+            sessionAttrs.isCurrentAddressSameAsInsuredAddress = contextInfo.parameters["IsInsuredAddrSame"];
         }
         var gender = contextInfo.parameters["aos-gender.original"];
         if (gender && gender.trim().length > 0) {
-            sessionAttrs.gender = contextInfo.parameters["aos-gender"];           
-        }        
+            sessionAttrs.gender = contextInfo.parameters["aos-gender"];
+        }
+        var maritalstatus = contextInfo.parameters["maritalstatus.original"];
+        if (maritalstatus && maritalstatus.trim().length > 0) {
+            sessionAttrs.maritalstatus = contextInfo.parameters["maritalstatus"];
+        }
         var livedmorethantwo = contextInfo.parameters["livedmorethantwo.original"];
         if (livedmorethantwo && livedmorethantwo.trim().length > 0) {
-            sessionAttrs.livedmorethantwo = contextInfo.parameters["livedmorethantwo"];           
+            sessionAttrs.livedmorethantwo = contextInfo.parameters["livedmorethantwo"];
         }
         if (contextInfo.parameters.transactionToken) {
             sessionAttrs.transactionToken = contextInfo.parameters.transactionToken;
+            sessionAttrs.state = contextInfo.parameters.transactionToken.state;
         }
         if (contextInfo.parameters.agentDetails) {
             sessionAttrs.agentDetails = contextInfo.parameters.agentDetails;
         }
-         if (contextInfo.parameters.creditHit != null) {
+        if (contextInfo.parameters.creditHit != null) {
             sessionAttrs.creditHit = contextInfo.parameters.creditHit;
         }
-         if (contextInfo.parameters.isRenterReOrderData != null) {
+        if (contextInfo.parameters.isRenterReOrderData != null) {
             sessionAttrs.isRenterReOrderData = contextInfo.parameters.isRenterReOrderData;
         }
-         if (contextInfo.parameters.isValidRenterCustomer != null) {
+        if (contextInfo.parameters.isValidRenterCustomer != null) {
             sessionAttrs.isValidRenterCustomer = contextInfo.parameters.isValidRenterCustomer;
         }
         var isSpouseAdded = contextInfo.parameters["isSpouseAdded.original"];
         if (isSpouseAdded && isSpouseAdded.trim().length > 0) {
-            sessionAttrs.isSpouseAdded = contextInfo.parameters["isSpouseAdded"];           
+            sessionAttrs.isSpouseAdded = contextInfo.parameters["isSpouseAdded"];
         }
 
         var spouseName = contextInfo.parameters["spouse-name.original"];
         if (spouseName && spouseName.length > 0) {
             spouseName = contextInfo.parameters["spouse-name"];
             var arr = spouseName.split(" ");
-            if(arr.length <=2){
-            sessionAttrs.spousefirstName = arr[0];
-            sessionAttrs.spouselastName = arr[1];
-           }
-           else{
-               sessionAttrs.spousefirstName = arr[0];
-               sessionAttrs.spouselastName = arr[2];
-               sessionAttrs.spousemiddleName = arr[1];
-           }
+            if (arr.length <= 2) {
+                sessionAttrs.spousefirstName = arr[0];
+                sessionAttrs.spouselastName = arr[1];
+            }
+            else {
+                sessionAttrs.spousefirstName = arr[0];
+                sessionAttrs.spouselastName = arr[2];
+                sessionAttrs.spousemiddleName = arr[1];
+            }
         }
-        
+
         var spouselastName = contextInfo.parameters["spouselastName.original"];
         if (spouselastName && spouselastName.trim().length > 0) {
             sessionAttrs.spouselastName = contextInfo.parameters["spouselastName"];
@@ -1242,11 +1272,11 @@ function getAOSRentersSessionAttributes(contextInfo) {
         }
         var spouseEmpStatus = contextInfo.parameters["spouseEmpStatus.original"];
         if (spouseEmpStatus && spouseEmpStatus.trim().length > 0) {
-            sessionAttrs.spouseEmpStatus = contextInfo.parameters["spouseEmpStatus"];           
+            sessionAttrs.spouseEmpStatus = contextInfo.parameters["spouseEmpStatus"];
         }
         var spouseGender = contextInfo.parameters["spouseGender.original"];
         if (spouseGender && spouseGender.trim().length > 0) {
-            sessionAttrs.spouseGender = contextInfo.parameters["spouseGender"];           
+            sessionAttrs.spouseGender = contextInfo.parameters["spouseGender"];
         }
         var prevaddrLine1 = contextInfo.parameters["prevaddress.original"];
         if (prevaddrLine1 && prevaddrLine1.trim().length > 0) {
@@ -1271,28 +1301,28 @@ function getAOSRentersSessionAttributes(contextInfo) {
                 sessionAttrs.prevzip = "0" + sessionAttrs.prevzip;
             }
         }
-         if (contextInfo.parameters.prevstate != null) {
+        if (contextInfo.parameters.prevstate != null) {
             sessionAttrs.prevstate = contextInfo.parameters.prevstate;
-        }    
-        if(contextInfo.parameters["IsInsuredAddrSame"] === false || contextInfo.parameters["IsInsuredAddrSame"] === "false" ){
+        }
+        if (contextInfo.parameters["IsInsuredAddrSame"] === false || contextInfo.parameters["IsInsuredAddrSame"] === "false") {
             sessionAttrs.IsInsuredAddrSame = false;
         }
-        else{
+        else {
             sessionAttrs.IsInsuredAddrSame = true;
         }
-        if(contextInfo.parameters["isSpouseAdded"] === true || contextInfo.parameters["isSpouseAdded"] === "true" ){
+        if (contextInfo.parameters["isSpouseAdded"] === true || contextInfo.parameters["isSpouseAdded"] === "true") {
             sessionAttrs.spouseAdded = true;
         }
-        else{
+        else {
             sessionAttrs.spouseAdded = false;
         }
-        if(contextInfo.parameters["livedmorethantwo"] === false || contextInfo.parameters["livedmorethantwo"] === "false" ){
+        if (contextInfo.parameters["livedmorethantwo"] === false || contextInfo.parameters["livedmorethantwo"] === "false") {
             sessionAttrs.livedmorethantwo = false;
         }
-        else{
+        else {
             sessionAttrs.livedmorethantwo = true;
         }
-        
+
 
     }
 
