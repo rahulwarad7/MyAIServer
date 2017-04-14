@@ -377,7 +377,7 @@ function intentHandlers(body) {
             break;
             
 
-        case "AOS-RENTERS-CA-UNOCCUPIED-YESNO":
+        case "AOS-RENTERS-CA-UNOCCUPIED-YES":
             handlerAOSRentersInsuranceCaUnOccupiedYesNo(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
