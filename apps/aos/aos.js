@@ -583,9 +583,7 @@ AOS.prototype.handlerRentersIsPrimaryResYes = function (sessionAttrs) {
     else if (sessionAttrs.state == "AL" || sessionAttrs.state == "LA" || sessionAttrs.state == "SC") {
         speechOutput.text = "Got it. Is the property within city limits? ";
     }
-    else if( sessionAttrs.state == "MA" ){
-        speechOutput.text = "And what was the address of the loss location? ";
-    }
+    
     else if( sessionAttrs.state == "MD" && sessionAttrs.state == "NY"){
         speechOutput.text = "Are there any additional residents?";
     }
@@ -601,7 +599,7 @@ AOS.prototype.handlerRentersIsPrimaryResYes = function (sessionAttrs) {
         speechOutput.text = "Got it, Have you had property insurance for at least 1 year?";
     }
 
-      else if( sessionAttrs.state == "OR" ){
+      else if( sessionAttrs.state == "OR" || || sessionAttrs.state == "MA" ){
           speechOutput.text = "Have you filed any claims in the last 3 years?";
       }
 
@@ -725,9 +723,7 @@ AOS.prototype.handlerRentersResidenceType = function (sessionAttrs) {
     else if (sessionAttrs.state == "AL" || sessionAttrs.state == "LA" || sessionAttrs.state == "SC") {
         speechOutput.text = "Got it. Is the property within city limits? ";
     }
-    else if( sessionAttrs.state == "MA" ){
-        speechOutput.text = "And what was the address of the loss location? ";
-    }
+    
     else if( sessionAttrs.state == "MD" && sessionAttrs.state == "NY"){
         speechOutput.text = "Are there any additional residents?";
     }
@@ -743,7 +739,7 @@ AOS.prototype.handlerRentersResidenceType = function (sessionAttrs) {
         speechOutput.text = "Got it, Have you had property insurance for at least 1 year?";
     }
 
-      else if( sessionAttrs.state == "OR" ){
+      else if( sessionAttrs.state == "OR" || || sessionAttrs.state == "MA"){
           speechOutput.text = "Have you filed any claims in the last 3 years?";
       }
 
