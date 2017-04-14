@@ -1166,6 +1166,9 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "maritalstatus":undefined,
         "isResidence": undefined,
         "isDog": undefined,
+        "CalVet":undefined,
+        "unOccupied":undefined,
+        "isClaims":undefined,
         "livedmorethantwo": undefined,
         "transactionToken": {},
         "agentDetails": {},
@@ -1306,6 +1309,22 @@ function getAOSRentersSessionAttributes(contextInfo) {
         if (isDog && isDog.trim().length > 0) {
             sessionAttrs.isDog = contextInfo.parameters["isDog"];
         }
+        
+        var unOccupied = contextInfo.parameters["unOccupied.original"];
+        if (unOccupied && unOccupied.trim().length > 0) {
+            sessionAttrs.unOccupied = contextInfo.parameters["unOccupied"];
+        }
+        
+        var CalVet = contextInfo.parameters["CalVet.original"];
+        if (CalVet && unOccupied.trim().length > 0) {
+            sessionAttrs.CalVet = contextInfo.parameters["CalVet"];
+        }
+        
+         var isClaims = contextInfo.parameters["isClaims.original"];
+        if (isClaims && isClaims.trim().length > 0) {
+            sessionAttrs.isClaims = contextInfo.parameters["isClaims"];
+        }
+        
         var livedmorethantwo = contextInfo.parameters["livedmorethantwo.original"];
         if (livedmorethantwo && livedmorethantwo.trim().length > 0) {
             sessionAttrs.livedmorethantwo = contextInfo.parameters["livedmorethantwo"];
