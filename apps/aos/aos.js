@@ -479,7 +479,7 @@ AOS.prototype.handlerAOSRentersIsSpouseYes = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    speechOutput.text = "Sure thing! I'll just need some basic info first. Please give your spouse's full name.";
+    speechOutput.text = "Sure! Please give your spouse's full name.";
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     deferred.resolve(rentersFindSpeechResp);
@@ -570,7 +570,46 @@ AOS.prototype.handlerRentersIsPrimaryResYes = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    speechOutput.text = "Sounds good! I'll just need a few more details. Are you located in a dorm, military barracks, farm or assisted living facility? ";
+    //speechOutput.text = "Sounds good! I'll just need a few more details. Are you located in a dorm, military barracks, farm or assisted living facility? ";
+    if (sessionAttrs.state == "CT") {
+        speechOutput.text = "Got it. Is your residence located within 2,600 feet of the coast? ";
+    }
+    else if (sessionAttrs.state == "CA") {
+        speechOutput.text = "Got it. Are you insured by Cal-Vet? ";
+    }
+    else if (sessionAttrs.state == "DE") {
+        speechOutput.text = "Got it. Is the property located within 1,000 feet of the ocean or bay? ";
+    }
+    else if (sessionAttrs.state == "AL" || sessionAttrs.state == "LA" || sessionAttrs.state == "SC") {
+        speechOutput.text = "Got it. Is the property within city limits? ";
+    }
+    else if( sessionAttrs.state == "MA" ){
+        speechOutput.text = "And what was the address of the loss location? ";
+    }
+    else if( sessionAttrs.state == "MD" && sessionAttrs.state == "NY"){
+        speechOutput.text = "Are there any additional residents?";
+    }
+    else if (sessionAttrs.state == "AR" || sessionAttrs.state == "CO" || sessionAttrs.state == "GA"
+        || sessionAttrs.state == "ID" || sessionAttrs.state == "IN" || sessionAttrs.state == "IA" || 
+        sessionAttrs.state == "ME" || sessionAttrs.state == "MI" || sessionAttrs.state == "NV" || sessionAttrs.state == "NH" || sessionAttrs.state == "NM" ||
+         sessionAttrs.state == "NC" || sessionAttrs.state == "OK" || sessionAttrs.state == "RI" ||
+        sessionAttrs.state == "UT" || sessionAttrs.state == "VA" || sessionAttrs.state == "WV" || sessionAttrs.state == "WI") {
+        speechOutput.text = " Got it, Does your property have any of the following protective devices?";
+    }
+
+    else if(sessionAttrs.state == "NE" || sessionAttrs.state == "TN" || sessionAttrs.state == "VT" || sessionAttrs.state == "WY"){
+        speechOutput.text = "Got it, Have you had property insurance for at least 1 year?";
+    }
+
+      else if( sessionAttrs.state == "OR" ){
+          speechOutput.text = "Have you filed any claims in the last 3 years?";
+      }
+
+     else if( sessionAttrs.state == "AK" || sessionAttrs.state == "DC" || sessionAttrs.state == "HI" || sessionAttrs.state == "MT" || 
+     sessionAttrs.state == "NJ" || sessionAttrs.state == "ND" || sessionAttrs.state == "PA" || sessionAttrs.state == "SD"){
+      
+      speechOutput ="Alright! Do you have any dogs?";
+     }
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     deferred.resolve(rentersFindSpeechResp);
@@ -674,12 +713,50 @@ AOS.prototype.handlerRentersResidenceType = function (sessionAttrs) {
         rentersFindSpeechResp.repromptOutput = speechOutput;
         deferred.resolve(rentersFindSpeechResp);
     }
-    else {
-        speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence? ";
+    else if (sessionAttrs.state == "CT") {
+        speechOutput.text = "Got it. Is your residence located within 2,600 feet of the coast? ";
+    }
+    else if (sessionAttrs.state == "CA") {
+        speechOutput.text = "Got it. Are you insured by Cal-Vet? ";
+    }
+    else if (sessionAttrs.state == "DE") {
+        speechOutput.text = "Got it. Is the property located within 1,000 feet of the ocean or bay? ";
+    }
+    else if (sessionAttrs.state == "AL" || sessionAttrs.state == "LA" || sessionAttrs.state == "SC") {
+        speechOutput.text = "Got it. Is the property within city limits? ";
+    }
+    else if( sessionAttrs.state == "MA" ){
+        speechOutput.text = "And what was the address of the loss location? ";
+    }
+    else if( sessionAttrs.state == "MD" && sessionAttrs.state == "NY"){
+        speechOutput.text = "Are there any additional residents?";
+    }
+    else if (sessionAttrs.state == "AR" || sessionAttrs.state == "CO" || sessionAttrs.state == "GA"
+        || sessionAttrs.state == "ID" || sessionAttrs.state == "IN" || sessionAttrs.state == "IA" || 
+        sessionAttrs.state == "ME" || sessionAttrs.state == "MI" || sessionAttrs.state == "NV" || sessionAttrs.state == "NH" || sessionAttrs.state == "NM" ||
+         sessionAttrs.state == "NC" || sessionAttrs.state == "OK" || sessionAttrs.state == "RI" ||
+        sessionAttrs.state == "UT" || sessionAttrs.state == "VA" || sessionAttrs.state == "WV" || sessionAttrs.state == "WI") {
+        speechOutput.text = " Got it, Does your property have any of the following protective devices?";
+    }
+
+    else if(sessionAttrs.state == "NE" || sessionAttrs.state == "TN" || sessionAttrs.state == "VT" || sessionAttrs.state == "WY"){
+        speechOutput.text = "Got it, Have you had property insurance for at least 1 year?";
+    }
+
+      else if( sessionAttrs.state == "OR" ){
+          speechOutput.text = "Have you filed any claims in the last 3 years?";
+      }
+
+     else if( sessionAttrs.state == "AK" || sessionAttrs.state == "DC" || sessionAttrs.state == "HI" || sessionAttrs.state == "MT" || 
+     sessionAttrs.state == "NJ" || sessionAttrs.state == "ND" || sessionAttrs.state == "PA" || sessionAttrs.state == "SD"){
+      
+      speechOutput ="Alright! Do you have any dogs?";
+     } 
+        //speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence? ";
         rentersFindSpeechResp.speechOutput = speechOutput;
         rentersFindSpeechResp.repromptOutput = speechOutput;
         deferred.resolve(rentersFindSpeechResp);
-    }
+    
 
     return deferred.promise;
 };
