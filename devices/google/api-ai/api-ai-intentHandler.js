@@ -328,7 +328,40 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
+             //start 
 
+            case "AOS-RENTERS-CT-RESIDENCE-YES":
+            handlerAOSRentersInsuranceCtResidenceYes(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AOS-RENTERS-CT-RESIDENCE-NO":
+            handlerAOSRentersInsuranceCtResidenceNo(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+
+        case "AOS-RENTERS-DOG-YES":
+            handlerAOSRentersInsuranceDogBreed(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AOS-RENTERS-DOG-NO":
+            handlerAOSRentersInsuranceDormArea(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+
+        case "AOS-RENTERS-DOG-BREED":
+            handlerAOSRentersInsuranceDormArea(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
 
         case "HELPINTENT":
         default:
@@ -1092,6 +1125,8 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "isCurrentAddressSameAsInsuredAddress": undefined,
         "gender": undefined,
         "maritalstatus":undefined,
+        "isResidence": undefined,
+        "isDog": undefined,
         "livedmorethantwo": undefined,
         "transactionToken": {},
         "agentDetails": {},
@@ -1220,7 +1255,17 @@ function getAOSRentersSessionAttributes(contextInfo) {
         }
         var maritalstatus = contextInfo.parameters["maritalstatus.original"];
         if (maritalstatus && maritalstatus.trim().length > 0) {
-            sessionAttrs.maritalstatus = contextInfo.parameters["maritalstatus"];
+            sessionAttrs.maritalstatus = contextInfo.parameters["maritalstatus"]; 
+        }
+        
+        var isResidence = contextInfo.parameters["isResidence.original"];
+        if (isResidence && isResidence.trim().length > 0) {
+            sessionAttrs.isResidence = contextInfo.parameters["isResidence"];
+        }
+
+        var isDog = contextInfo.parameters["isDog.original"];
+        if (isDog && isDog.trim().length > 0) {
+            sessionAttrs.isDog = contextInfo.parameters["isDog"];
         }
         var livedmorethantwo = contextInfo.parameters["livedmorethantwo.original"];
         if (livedmorethantwo && livedmorethantwo.trim().length > 0) {
@@ -1375,6 +1420,69 @@ function handleAosRentersQuoteStartNo(body, deferred) {
     helpSpeechResp.speech = "Type help to get a help   ";
     helpSpeechResp.displayText = helpSpeechResp.speech;
     deferred.resolve(helpSpeechResp);
+    return deferred.promise;
+}
+
+//#region state variation
+function handlerAOSRentersInsuranceCtResidenceYes(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handlerRentersIsPrimaryResNo(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+    return deferred.promise;
+}
+
+
+function handlerAOSRentersInsuranceCtResidenceNo(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handlerRentersDogs(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+
+        });
+    return deferred.promise;
+}
+
+function handlerAOSRentersInsuranceDogBreed(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handlerRentersDogBreed(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+    return deferred.promise;
+}
+
+function handlerAOSRentersInsuranceDormArea(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handlerRentersDormArea(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
     return deferred.promise;
 }
 
