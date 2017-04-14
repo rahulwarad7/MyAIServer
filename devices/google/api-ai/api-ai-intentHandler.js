@@ -363,14 +363,27 @@ function intentHandlers(body) {
                 });
             break;
             
-            case "AOS-RENTERS-CA-CALVET-YESNO":
+            case "AOS-RENTERS-CA-CALVET-YES":
             handlerAOSRentersInsuranceCaCalVetYesNo(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
                 });
             break;
+            case "AOS-RENTERS-CA-CALVET-NO":
+            handlerAOSRentersInsuranceCaCalVetYesNo(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+            
 
         case "AOS-RENTERS-CA-UNOCCUPIED-YESNO":
+            handlerAOSRentersInsuranceCaUnOccupiedYesNo(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+            case "AOS-RENTERS-CA-UNOCCUPIED-NO":
             handlerAOSRentersInsuranceCaUnOccupiedYesNo(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
