@@ -426,6 +426,65 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
+            
+            case "AOS-RENTERS-ALLASC-DEVICE":
+            handlerAOSRentersInsuranceCaUnOccupiedYesNo(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AOS-RENTERS-ALLASC-CLAIMS":
+            handlerAOSRentersInsuranceCaClaims(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AOS-RENTERS-ALLASC-CLAIMS-YES":
+            handlerAOSRentersInsuranceCaClaimsYes(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AOS-RENTERS-ALLASC-CLAIMS-NO":
+            handlerAOSRentersInsuranceCtResidenceNo(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+            
+            
+        case "AOS-RENTERS-ALLASC-LIMITS-YES":
+        case "AOS-RENTERS-ALLASC-LIMITS-NO":
+            handlerAOSRentersInsuranceCaUnOccupiedYesNo(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AOS-RENTERS-ALLASC-CLAIMS":
+            handlerAOSRentersInsuranceCaClaims(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AOS-RENTERS-ALLASC-CLAIMS-YES":
+            handlerAOSRentersInsuranceCaClaimsYes(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AOS-RENTERS-ALLASC-CLAIMS-NO":
+            handlerAOSRentersInsuranceDormArea(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+            case "AOS-RENTERS-ALLASC-DATETIME":
+            handlerAOSRentersInsuranceDormArea(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+            
         case "HELPINTENT":
         default:
             var message = "Type help to get help and menu for options!";
