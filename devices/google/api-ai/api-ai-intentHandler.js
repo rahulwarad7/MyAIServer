@@ -362,6 +362,45 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
+            
+            case "AOS-RENTERS-CA-CALVET-YESNO":
+            handlerAOSRentersInsuranceCaCalVetYesNo(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+
+        case "AOS-RENTERS-CA-UNOCCUPIED-YESNO":
+            handlerAOSRentersInsuranceCaUnOccupiedYesNo(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AOS-RENTERS-CA-CLAIMS":
+            handlerAOSRentersInsuranceCaClaims(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+
+        case "AOS-RENTERS-CA-CLAIMS-YES":
+            handlerAOSRentersInsuranceCaClaimsYes(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AOS-RENTERS-CA-CLAIMS-NO":
+            handlerAOSRentersInsuranceCtResidenceNo(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+            case "AOS-RENTERS-CA-DATETIME":
+                 handlerAOSRentersInsuranceCtResidenceNo(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
 
         case "HELPINTENT":
         default:
@@ -1485,6 +1524,52 @@ function handlerAOSRentersInsuranceDormArea(body, deferred) {
         });
     return deferred.promise;
 }
+
+function handlerAOSRentersInsuranceCaCalVetYesNo(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handlerRentersCaCalVetYesNo(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+    return deferred.promise;
+}
+
+function handlerAOSRentersInsuranceCaClaims(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handlerRentersCaClaims(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+    return deferred.promise;
+}
+
+function handlerAOSRentersInsuranceCaClaimsYes(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handlerRentersCaClaimsYes(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+    return deferred.promise;
+}
+
 
 module.exports = new ApiAiIntentHandler();
 
