@@ -1524,6 +1524,20 @@ function handlerAOSRentersInsuranceDormArea(body, deferred) {
         });
     return deferred.promise;
 }
+function handlerAOSRentersInsuranceCaUnOccupiedYesNo(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handlerRentersCaUnOccupiedYesNo(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+    return deferred.promise;
+}
 
 function handlerAOSRentersInsuranceCaCalVetYesNo(body, deferred) {
     var rentersWelcomeSpeechResp = {};
