@@ -1169,6 +1169,9 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "CalVet":undefined,
         "unOccupied":undefined,
         "isClaims":undefined,
+        "date":undefined,
+        "time":undefined,
+        "Devices":undefined,
         "livedmorethantwo": undefined,
         "transactionToken": {},
         "agentDetails": {},
@@ -1324,6 +1327,20 @@ function getAOSRentersSessionAttributes(contextInfo) {
         if (isClaims && isClaims.trim().length > 0) {
             sessionAttrs.isClaims = contextInfo.parameters["isClaims"];
         }
+        var date = contextInfo.parameters["date.original"];
+        if (date && date.trim().length > 0) {
+            sessionAttrs.date = contextInfo.parameters["date"];
+        }
+        var time = contextInfo.parameters["time.original"];
+        if (time && time.trim().length > 0) {
+            sessionAttrs.time = contextInfo.parameters["time"];
+        }
+        
+         var Devices = contextInfo.parameters["Devices.original"];
+        if (Devices && Devices.trim().length > 0) {
+            sessionAttrs.Devices = contextInfo.parameters["Devices"];
+        }
+        
         
         var livedmorethantwo = contextInfo.parameters["livedmorethantwo.original"];
         if (livedmorethantwo && livedmorethantwo.trim().length > 0) {
