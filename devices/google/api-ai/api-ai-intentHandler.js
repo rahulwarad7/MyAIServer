@@ -433,25 +433,7 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
-        case "AOS-RENTERS-ALLASC-CLAIMS":
-            handlerAOSRentersInsuranceCaClaims(body, deferred)
-                .then(function (responseInfo) {
-                    deferred.resolve(responseInfo);
-                });
-            break;
-        case "AOS-RENTERS-ALLASC-CLAIMS-YES":
-            handlerAOSRentersInsuranceCaClaimsYes(body, deferred)
-                .then(function (responseInfo) {
-                    deferred.resolve(responseInfo);
-                });
-            break;
-        case "AOS-RENTERS-ALLASC-CLAIMS-NO":
-            handlerAOSRentersInsuranceCtResidenceNo(body, deferred)
-                .then(function (responseInfo) {
-                    deferred.resolve(responseInfo);
-                });
-            break;
-            
+               
             
         case "AOS-RENTERS-ALLASC-LIMITS-YES":
         case "AOS-RENTERS-ALLASC-LIMITS-NO":
