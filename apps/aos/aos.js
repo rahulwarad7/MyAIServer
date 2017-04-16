@@ -777,8 +777,7 @@ AOS.prototype.handlerRentersStSpecQuestionOne = function (sessionAttrs) {
     var repromptOutput = new Speech();
 
     if (sessionAttrs.state === "CA") {
-        sessionAttrs.
-            speechOutput.text = "Ok. Is this residence regularly unoccupied for 24 hours or more? ";
+           speechOutput.text = "Ok. Is this residence regularly unoccupied for 24 hours or more? ";
     }
     else if (sessionAttrs.state === "CT") {
         if (sessionAttrs && sessionAttrs.agentDetails && sessionAttrs.isResidence2600ftFromCoastVisible) {
