@@ -110,7 +110,7 @@ AOS.prototype.handlerRentersEmailAddress = function (sessionAttrs) {
     rentersFindSpeechResp.contextOut = [];
     speechOutput.text = "Okay, great! Now I need some info on where you live. What's the CITY and ZIP code of your current address?";
     rentersFindSpeechResp.speechOutput = speechOutput;
-    rentersFindSpeechResp.repromptOutput = speechOutput;   
+    rentersFindSpeechResp.repromptOutput = speechOutput;
     rentersFindSpeechResp.sessionAttrs = sessionAttrs;
     deferred.resolve(rentersFindSpeechResp);
 
@@ -135,7 +135,7 @@ AOS.prototype.handleRentersInsuranceCityZip = function (sessionAttrs) {
         rentersFindSpeechResp.speechOutput = speechOutput;
         rentersFindSpeechResp.repromptOutput = speechOutput;
     }
-     rentersFindSpeechResp.sessionAttrs = sessionAttrs;
+    rentersFindSpeechResp.sessionAttrs = sessionAttrs;
     deferred.resolve(rentersFindSpeechResp);
     return deferred.promise;
 };
@@ -150,17 +150,17 @@ AOS.prototype.handleRentersInsuranceInsuredAddrSame = function (sessionAttrs) {
         getRentersSaveCustomerResponse(sessionAttrs)
             .then(function (saveCustSpeechOutput) {
                 rentersFindSpeechResp.speechOutput = saveCustSpeechOutput;
-               rentersFindSpeechResp.repromptOutput = speechOutput;
-            rentersFindSpeechResp.sessionAttrs = sessionAttrs;
+                rentersFindSpeechResp.repromptOutput = speechOutput;
+                rentersFindSpeechResp.sessionAttrs = sessionAttrs;
                 deferred.resolve(rentersFindSpeechResp);
-                
+
             });
     } else {
         speechOutput.text = "Is this the address you'd like to insure?";
         rentersFindSpeechResp.speechOutput = speechOutput;
         rentersFindSpeechResp.repromptOutput = speechOutput;
-         rentersFindSpeechResp.sessionAttrs = sessionAttrs;
-         deferred.resolve(rentersFindSpeechResp);
+        rentersFindSpeechResp.sessionAttrs = sessionAttrs;
+        deferred.resolve(rentersFindSpeechResp);
     }
 
     return deferred.promise;
@@ -171,14 +171,14 @@ AOS.prototype.handlerRentersPhoneNumber = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    if(sessionAttrs.phoneNumber.length == 10) {
-           speechOutput.text = "I agree that Allstate can call me at the provided phone number regarding my insurance quote request."+ 
-           "I understand the call may be automatically dialed, that my consent is not a condition of any purchase, and that I can revoke my "+
-           "consent at any time. say OK to authorize" ;
-      }
-   else {
-         speechOutput.text = "Please provide the valid phone number";
-     }
+    if (sessionAttrs.phoneNumber.length == 10) {
+        speechOutput.text = "I agree that Allstate can call me at the provided phone number regarding my insurance quote request." +
+            "I understand the call may be automatically dialed, that my consent is not a condition of any purchase, and that I can revoke my " +
+            "consent at any time. say OK to authorize";
+    }
+    else {
+        speechOutput.text = "Please provide the valid phone number";
+    }
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     rentersFindSpeechResp.sessionAttrs = sessionAttrs;
@@ -192,12 +192,12 @@ AOS.prototype.handlerRentersPhoneNumberAuthorize = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    if(sessionAttrs.isAuthorize === "true") {
-         speechOutput.text = "Finally, email address." ;
-      } 
+    if (sessionAttrs.isAuthorize === "true") {
+        speechOutput.text = "Finally, email address.";
+    }
     else {
-         speechOutput.text = "you need to authorize to move further so say \"authorize\"";
-      }
+        speechOutput.text = "you need to authorize to move further so say \"authorize\"";
+    }
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     rentersFindSpeechResp.sessionAttrs = sessionAttrs;
@@ -225,10 +225,10 @@ AOS.prototype.handlerRentersInsuranceInsuredAddrDiff = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    rentersFindSpeechResp.contextOut = [];    
+    rentersFindSpeechResp.contextOut = [];
     speechOutput.text = "Okay, ! Now I need know What is the CITY and ZIP code you want to insure for?";
     rentersFindSpeechResp.speechOutput = speechOutput;
-    rentersFindSpeechResp.repromptOutput = speechOutput;    
+    rentersFindSpeechResp.repromptOutput = speechOutput;
     deferred.resolve(rentersFindSpeechResp);
 
     return deferred.promise;
@@ -285,12 +285,12 @@ AOS.prototype.handlerCreditHistoryAuthorize = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    if(sessionAttrs.state != "KS")  {
-    speechOutput.text = "Great! Next I'll need to know a little about your employment status. Are you employed, self employed, unemployed, student, retired, home maker or military";
-}
-else {
-    speechOutput.text = "Thanks. Would you like to add a spouse to your quote?";
-}
+    if (sessionAttrs.state != "KS") {
+        speechOutput.text = "Great! Next I'll need to know a little about your employment status. Are you employed, self employed, unemployed, student, retired, home maker or military";
+    }
+    else {
+        speechOutput.text = "Thanks. Would you like to add a spouse to your quote?";
+    }
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     deferred.resolve(rentersFindSpeechResp);
@@ -302,7 +302,7 @@ AOS.prototype.handlerRentersEmpStatus = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var sessionInfo = new Session();
-    
+
     var repromptOutput = new Speech();
     if (sessionAttrs.transactionToken) {
         sessionInfo.sessionId = sessionAttrs.transactionToken.sessionID;
@@ -310,15 +310,15 @@ AOS.prototype.handlerRentersEmpStatus = function (sessionAttrs) {
         sessionInfo.zip = sessionAttrs.transactionToken.zipCode;
         getAgents(sessionInfo)
             .then(function (agentDetails) {
-                if(agentDetails && agentDetails.length > 0 ){
+                if (agentDetails && agentDetails.length > 0) {
                     sessionAttrs.agentDetails = agentDetails[0];
-                } 
-                if(sessionAttrs.state != "FL") {              
-                speechOutput.text = "Now please mention your gender ";
-            }
-            else{
-                 speechOutput.text = "Thanks! Have you lived in your residence for more than two years?";
-            }
+                }
+                if (sessionAttrs.state != "FL") {
+                    speechOutput.text = "Now please mention your gender ";
+                }
+                else {
+                    speechOutput.text = "Thanks! Have you lived in your residence for more than two years?";
+                }
                 rentersFindSpeechResp.speechOutput = speechOutput;
                 rentersFindSpeechResp.repromptOutput = speechOutput;
                 rentersFindSpeechResp.sessionAttrs = sessionAttrs;
@@ -334,15 +334,15 @@ AOS.prototype.handlerRentersGender = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    if(sessionAttrs.state != "CA" && sessionAttrs.state != "CT" && sessionAttrs.state != "MD" && sessionAttrs.state != "OR" && sessionAttrs.state != "PA" && sessionAttrs.state != "NY"){
+    if (sessionAttrs.state != "CA" && sessionAttrs.state != "CT" && sessionAttrs.state != "MD" && sessionAttrs.state != "OR" && sessionAttrs.state != "PA" && sessionAttrs.state != "NY") {
         speechOutput.text = "Thanks. Would you like to add a spouse to your quote? ";
     }
-    else{
+    else {
         speechOutput.text = "Thanks. Now Tell me about your marital status like single, married and lived with spouse, divorced, legally married but separated, widowed, domestic partnership";
     }
 
 
-   // speechOutput.text = "Thanks. Would you like to add a spouse to your quote? ";
+    // speechOutput.text = "Thanks. Would you like to add a spouse to your quote? ";
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     rentersFindSpeechResp.sessionAttrs = sessionAttrs;
@@ -356,11 +356,11 @@ AOS.prototype.handlerRentersMeritalStatus = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    if(sessionAttrs.maritalstatus == "02" || sessionAttrs.maritalstatus == "08") {
-       speechOutput.text = "Thanks. Please give your spouse name ";
-     }
-    else{
-       speechOutput.text = "Thanks! Have you lived in your residence for more than two years? ";
+    if (sessionAttrs.maritalstatus == "02" || sessionAttrs.maritalstatus == "08") {
+        speechOutput.text = "Thanks. Please give your spouse name ";
+    }
+    else {
+        speechOutput.text = "Thanks! Have you lived in your residence for more than two years? ";
     }
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
@@ -432,18 +432,18 @@ AOS.prototype.handlerRentersPrevCityZip = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    if(sessionAttrs.prevzip && sessionAttrs.transactionToken){
+    if (sessionAttrs.prevzip && sessionAttrs.transactionToken) {
         getStateFromZip(sessionAttrs.transactionToken.sessionID, sessionAttrs.prevzip)
             .then(function (state) {
-            sessionAttrs.prevstate = state;
-            speechOutput.text = "Now what's previous street address? ";
-            rentersFindSpeechResp.speechOutput = speechOutput;
-            rentersFindSpeechResp.repromptOutput = speechOutput;
-            rentersFindSpeechResp.sessionAttrs = sessionAttrs;
-            deferred.resolve(rentersFindSpeechResp);
+                sessionAttrs.prevstate = state;
+                speechOutput.text = "Now what's previous street address? ";
+                rentersFindSpeechResp.speechOutput = speechOutput;
+                rentersFindSpeechResp.repromptOutput = speechOutput;
+                rentersFindSpeechResp.sessionAttrs = sessionAttrs;
+                deferred.resolve(rentersFindSpeechResp);
             });
     }
-    else{
+    else {
         speechOutput.text = "prevous address is not proper. Please provide valid city and zipcode";
         rentersFindSpeechResp.speechOutput = speechOutput;
         rentersFindSpeechResp.repromptOutput = speechOutput;
@@ -479,7 +479,7 @@ AOS.prototype.handlerAOSRentersIsSpouseYes = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    speechOutput.text = "Sure! Please give your spouse's full name.";
+    speechOutput.text = "Sure thing! I'll just need some basic info first. Please give your spouse's full name.";
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     deferred.resolve(rentersFindSpeechResp);
@@ -570,44 +570,7 @@ AOS.prototype.handlerRentersIsPrimaryResYes = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    //speechOutput.text = "Sounds good! I'll just need a few more details. Are you located in a dorm, military barracks, farm or assisted living facility? ";
-    if (sessionAttrs.state == "CT") {
-        speechOutput.text = "Got it. Is your residence located within 2,600 feet of the coast? ";
-    }
-    else if (sessionAttrs.state == "CA") {
-        speechOutput.text = "Got it. Are you insured by Cal-Vet? ";
-    }
-    else if (sessionAttrs.state == "DE") {
-        speechOutput.text = "Got it. Is the property located within 1,000 feet of the ocean or bay? ";
-    }
-    else if (sessionAttrs.state == "AL" || sessionAttrs.state == "LA" || sessionAttrs.state == "SC") {
-        speechOutput.text = "Got it. Is the property within city limits? ";
-    }
-    
-    else if( sessionAttrs.state == "MD" && sessionAttrs.state == "NY"){
-        speechOutput.text = "Are there any additional residents?";
-    }
-    else if (sessionAttrs.state == "AR" || sessionAttrs.state == "CO" || sessionAttrs.state == "GA"
-        || sessionAttrs.state == "ID" || sessionAttrs.state == "IN" || sessionAttrs.state == "IA" || 
-        sessionAttrs.state == "ME" || sessionAttrs.state == "MI" || sessionAttrs.state == "NV" || sessionAttrs.state == "NH" || sessionAttrs.state == "NM" ||
-         sessionAttrs.state == "NC" || sessionAttrs.state == "OK" || sessionAttrs.state == "RI" ||
-        sessionAttrs.state == "UT" || sessionAttrs.state == "VA" || sessionAttrs.state == "WV" || sessionAttrs.state == "WI") {
-        speechOutput.text = " Got it, Does your property have any of the following protective devices?";
-    }
-
-    else if(sessionAttrs.state == "NE" || sessionAttrs.state == "TN" || sessionAttrs.state == "VT" || sessionAttrs.state == "WY"){
-        speechOutput.text = "Got it, Have you had property insurance for at least 1 year?";
-    }
-
-      else if( sessionAttrs.state == "OR" || || sessionAttrs.state == "MA" ){
-          speechOutput.text = "Have you filed any claims in the last 3 years?";
-      }
-
-     else if( sessionAttrs.state == "AK" || sessionAttrs.state == "DC" || sessionAttrs.state == "HI" || sessionAttrs.state == "MT" || 
-     sessionAttrs.state == "NJ" || sessionAttrs.state == "ND" || sessionAttrs.state == "PA" || sessionAttrs.state == "SD"){
-      
-      speechOutput ="Alright! Do you have any dogs?";
-     }
+    speechOutput.text = "Sounds good! I'll just need a few more details. Are you located in a dorm, military barracks, farm or assisted living facility? ";
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     deferred.resolve(rentersFindSpeechResp);
@@ -621,8 +584,8 @@ AOS.prototype.handlerRentersIsPrimaryResNo = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    if(sessionAttrs && sessionAttrs.agentDetails){
-        speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. Here is agent close to you: " + sessionAttrs.agentDetails.name + " , you can call at, " + sessionAttrs.agentDetails.phoneNumber + " , or email at, " + sessionAttrs.agentDetails.emailAddress ;
+    if (sessionAttrs && sessionAttrs.agentDetails) {
+        speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. Here is agent close to you: " + sessionAttrs.agentDetails.name + " , you can call at, " + sessionAttrs.agentDetails.phoneNumber + " , or email at, " + sessionAttrs.agentDetails.emailAddress;
     }
     else {
         speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. ";
@@ -640,8 +603,8 @@ AOS.prototype.handlerRentersResidenceLocYes = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    if(sessionAttrs && sessionAttrs.agentDetails){
-        speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. Here is agent close to you: " + sessionAttrs.agentDetails.name + " , you can call at, " + sessionAttrs.agentDetails.phoneNumber + " , or email at, " + sessionAttrs.agentDetails.emailAddress ;
+    if (sessionAttrs && sessionAttrs.agentDetails) {
+        speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. Here is agent close to you: " + sessionAttrs.agentDetails.name + " , you can call at, " + sessionAttrs.agentDetails.phoneNumber + " , or email at, " + sessionAttrs.agentDetails.emailAddress;
     }
     else {
         speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. ";
@@ -673,8 +636,8 @@ AOS.prototype.handlerRentersIsBusinessOperatedYes = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    if(sessionAttrs && sessionAttrs.agentDetails){
-        speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. Here is agent close to you: " + sessionAttrs.agentDetails.name + " , you can call at, " + sessionAttrs.agentDetails.phoneNumber + " , or email at, " + sessionAttrs.agentDetails.emailAddress ;
+    if (sessionAttrs && sessionAttrs.agentDetails) {
+        speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. Here is agent close to you: " + sessionAttrs.agentDetails.name + " , you can call at, " + sessionAttrs.agentDetails.phoneNumber + " , or email at, " + sessionAttrs.agentDetails.emailAddress;
     }
     else {
         speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. ";
@@ -711,48 +674,12 @@ AOS.prototype.handlerRentersResidenceType = function (sessionAttrs) {
         rentersFindSpeechResp.repromptOutput = speechOutput;
         deferred.resolve(rentersFindSpeechResp);
     }
-    else if (sessionAttrs.state == "CT") {
-        speechOutput.text = "Got it. Is your residence located within 2,600 feet of the coast? ";
-    }
-    else if (sessionAttrs.state == "CA") {
-        speechOutput.text = "Got it. Are you insured by Cal-Vet? ";
-    }
-    else if (sessionAttrs.state == "DE") {
-        speechOutput.text = "Got it. Is the property located within 1,000 feet of the ocean or bay? ";
-    }
-    else if (sessionAttrs.state == "AL" || sessionAttrs.state == "LA" || sessionAttrs.state == "SC") {
-        speechOutput.text = "Got it. Is the property within city limits? ";
-    }
-    
-    else if( sessionAttrs.state == "MD" && sessionAttrs.state == "NY"){
-        speechOutput.text = "Are there any additional residents?";
-    }
-    else if (sessionAttrs.state == "AR" || sessionAttrs.state == "CO" || sessionAttrs.state == "GA"
-        || sessionAttrs.state == "ID" || sessionAttrs.state == "IN" || sessionAttrs.state == "IA" || 
-        sessionAttrs.state == "ME" || sessionAttrs.state == "MI" || sessionAttrs.state == "NV" || sessionAttrs.state == "NH" || sessionAttrs.state == "NM" ||
-         sessionAttrs.state == "NC" || sessionAttrs.state == "OK" || sessionAttrs.state == "RI" ||
-        sessionAttrs.state == "UT" || sessionAttrs.state == "VA" || sessionAttrs.state == "WV" || sessionAttrs.state == "WI") {
-        speechOutput.text = " Got it, Does your property have any of the following protective devices?";
-    }
-
-    else if(sessionAttrs.state == "NE" || sessionAttrs.state == "TN" || sessionAttrs.state == "VT" || sessionAttrs.state == "WY"){
-        speechOutput.text = "Got it, Have you had property insurance for at least 1 year?";
-    }
-
-      else if( sessionAttrs.state == "OR" || || sessionAttrs.state == "MA"){
-          speechOutput.text = "Have you filed any claims in the last 3 years?";
-      }
-
-     else if( sessionAttrs.state == "AK" || sessionAttrs.state == "DC" || sessionAttrs.state == "HI" || sessionAttrs.state == "MT" || 
-     sessionAttrs.state == "NJ" || sessionAttrs.state == "ND" || sessionAttrs.state == "PA" || sessionAttrs.state == "SD"){
-      
-      speechOutput ="Alright! Do you have any dogs?";
-     } 
-        //speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence? ";
+    else {
+        speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence? ";
         rentersFindSpeechResp.speechOutput = speechOutput;
         rentersFindSpeechResp.repromptOutput = speechOutput;
         deferred.resolve(rentersFindSpeechResp);
-    
+    }
 
     return deferred.promise;
 };
@@ -763,7 +690,36 @@ AOS.prototype.handlerRentersIsFiveOrMoreUnitsYes = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?  ";
+    if (sessionAttrs.state === "CT") {
+        speechOutput.text = "Got it. Is your residence located within 2,600 feet of the coast? ";
+    }
+    else if (sessionAttrs.state === "CA") {
+        speechOutput.text = "Got it. Are you insured by Cal-Vet? ";
+    }
+    else if (sessionAttrs.state === "DE") {
+        speechOutput.text = "Got it. Is the property located within 1,000 feet of the ocean or bay? ";
+    }
+    else if (sessionAttrs.state === "AL" || sessionAttrs.state == "LA" || sessionAttrs.state === "SC") {
+        speechOutput.text = "Got it. Is the property within city limits? ";
+    }
+    else if (sessionAttrs.state === "AL" || sessionAttrs.state === "AR" || sessionAttrs.state === "CO"
+        || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "IN" ||
+        sessionAttrs.state === "IA" || sessionAttrs.state === "LA" || sessionAttrs.state === "ME" || sessionAttrs.state === "MD" || sessionAttrs.state === "MA" ||
+        sessionAttrs.state === "MI" || sessionAttrs.state === "NV" || sessionAttrs.state === "NH" || sessionAttrs.state === "RI" || sessionAttrs.state === "SC" ||
+        sessionAttrs.state === "TN" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" || sessionAttrs.state === "WI" ||
+        sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "OR") {
+        speechOutput.text = "Got it. Have you filed any claims in last 3 years";
+    }
+    else if (sessionAttrs.state == "NE" || sessionAttrs.state == "VT" || sessionAttrs.state == "WY") {
+        speechOutput.text = "Got it, Have you had property insurance for at least 1 year?";
+    }
+    else if (sessionAttrs.state == "AK" || sessionAttrs.state == "DC" || sessionAttrs.state == "HI" || sessionAttrs.state == "MT" ||
+        sessionAttrs.state == "NJ" || sessionAttrs.state == "ND" || sessionAttrs.state == "PA" || sessionAttrs.state == "SD") {
+        speechOutput = "Alright! Do you have any dogs?";
+    }
+    else {
+        speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
+    }
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     deferred.resolve(rentersFindSpeechResp);
@@ -777,11 +733,439 @@ AOS.prototype.handlerRentersIsFiveOrMoreUnitsNo = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?  ";
+    if (sessionAttrs.state === "CT") {
+        speechOutput.text = "Got it. Is your residence located within 2,600 feet of the coast? ";
+    }
+    else if (sessionAttrs.state === "CA") {
+        speechOutput.text = "Got it. Are you insured by Cal-Vet? ";
+    }
+    else if (sessionAttrs.state === "DE") {
+        speechOutput.text = "Got it. Is the property located within 1,000 feet of the ocean or bay? ";
+    }
+    else if (sessionAttrs.state === "AL" || sessionAttrs.state == "LA" || sessionAttrs.state === "SC") {
+        speechOutput.text = "Got it. Is the property within city limits? ";
+    }
+    else if (sessionAttrs.state === "AL" || sessionAttrs.state === "AR" || sessionAttrs.state === "CO"
+        || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "IN" ||
+        sessionAttrs.state === "IA" || sessionAttrs.state === "LA" || sessionAttrs.state === "ME" || sessionAttrs.state === "MD" || sessionAttrs.state === "MA" ||
+        sessionAttrs.state === "MI" || sessionAttrs.state === "NV" || sessionAttrs.state === "NH" || sessionAttrs.state === "RI" || sessionAttrs.state === "SC" ||
+        sessionAttrs.state === "TN" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" || sessionAttrs.state === "WI" ||
+        sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "OR") {
+        speechOutput.text = "Got it. Have you filed any claims in last 3 years";
+    }
+    else if (sessionAttrs.state == "NE" || sessionAttrs.state == "VT" || sessionAttrs.state == "WY") {
+        speechOutput.text = "Got it, Have you had property insurance for at least 1 year?";
+    }
+    else if (sessionAttrs.state == "AK" || sessionAttrs.state == "DC" || sessionAttrs.state == "HI" || sessionAttrs.state == "MT" ||
+        sessionAttrs.state == "NJ" || sessionAttrs.state == "ND" || sessionAttrs.state == "PA" || sessionAttrs.state == "SD") {
+        speechOutput = "Alright! Do you have any dogs?";
+    }
+    else {
+        speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
+    }
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     deferred.resolve(rentersFindSpeechResp);
 
+    return deferred.promise;
+};
+
+AOS.prototype.handlerRentersStSpecQuestionOne = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    if (sessionAttrs.state === "CA") {
+        sessionAttrs.
+            speechOutput.text = "Ok. Is this residence regularly unoccupied for 24 hours or more? ";
+    }
+    else if (sessionAttrs.state === "CT") {
+        if (sessionAttrs && sessionAttrs.agentDetails && sessionAttrs.isResidence2600ftFromCoastVisible) {
+            speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. Here is agent close to you: " + sessionAttrs.agentDetails.name + " , you can call at, " + sessionAttrs.agentDetails.phoneNumber + " , or email at, " + sessionAttrs.agentDetails.emailAddress;
+        }
+        else {
+            speechOutput.text = "Alright do you have any dogs? ";
+        }
+    }
+    else if (sessionAttrs.state === "AL" || sessionAttrs.state === "AR" || sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" ||
+        sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "LA" || sessionAttrs.state === "ME" || sessionAttrs.state === "MD" ||
+        sessionAttrs.state === "MA" || sessionAttrs.state === "MI" || sessionAttrs.state === "NV" || sessionAttrs.state === "NH" || sessionAttrs.state === "RI" ||
+        sessionAttrs.state === "SC" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" || sessionAttrs.state === "WI" ||
+        sessionAttrs.state === "TN" || sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "OR") {
+        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQOneAns
+        if (sessionAttrs.propertyInsuranceClaims) {
+
+            speechOutput.text = "Okay. I'll need to know the date and type of claim like fire, theft, liability, vandalism water or other type of claim.";
+        }
+        else {
+            sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQOneAns
+            if (!sessionAttrs.propertyInsuranceClaims && sessionAttrs.state === "MA") {
+                speechOutput.text = "Alright, Do you have any dogs?";
+            }
+            else if (sessionAttrs.state === "TN") {
+                speechOutput.text = "Have you had property insurance for at least 1 year?";
+            }
+            else {
+                speechOutput.text = "Does your property have any of the protective devices like Smoke Detectors, Fire Extinguishers, Deadbolt Locks, Central Fire Alarm, Fire Sprinklers, 24-Hour Manned Security, Central Burglar Alarm that reports to a monitoring center, Burglar Alarm that sounds in the home";
+            }
+        }
+    }
+    else if (sessionAttrs.state === "DE" || sessionAttrs.state == "NE" || sessionAttrs.state == "VT" || sessionAttrs.state == "WY") {
+        speechOutput.text = "Alright, Do you have any dogs?";
+    }
+    else if (sessionAttrs.state == "AK" || sessionAttrs.state == "DC" || sessionAttrs.state == "HI" || sessionAttrs.state == "MT" ||
+        sessionAttrs.state == "NJ" || sessionAttrs.state == "ND" || sessionAttrs.state == "PA" || sessionAttrs.state == "SD") {
+        sessionAttrs.isDogAdded = sessionAttrs.stateSpecQOneAns;
+        if (sessionAttrs.isDogAdded) {
+            speechOutput = "Please list the dominant breed of your dog or dogs.";
+        }
+    }
+    else {
+        speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
+    }
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
+
+    return deferred.promise;
+};
+
+AOS.prototype.handlerRentersStSpecQuestionTwo = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+    if (sessionAttrs.state === "CA") {
+        speechOutput.text = "Does your property have any of the following protective devices?Smoke Detectors, Fire Extinguishers, Deadbolt Locks, Central Fire Alarm, Fire Sprinklers, 24-Hour Manned Security, Central Burglar Alarm that reports to a monitoring center, Burglar Alarm that sounds in the home";
+    }
+    else if (sessionAttrs.state === "CT") {
+        if (sessionAttrs && sessionAttrs.isResidence2600ftFromCoastVisible) {
+            speechOutput.text = "Alright do you have any dogs? ";
+        }
+        else {
+            speechOutput.text = "Please list the dominant breed of your dog or dogs";
+        }
+    }
+    else if (sessionAttrs.state === "AL" || sessionAttrs.state === "AR" || sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" ||
+        sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "LA" || sessionAttrs.state === "ME" || sessionAttrs.state === "MD" ||
+        sessionAttrs.state === "MI" || sessionAttrs.state === "NV" || sessionAttrs.state === "NH" || sessionAttrs.state === "RI" ||
+        sessionAttrs.state === "SC" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" || sessionAttrs.state === "WI" ||
+        sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "OR") {
+        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQTwoAns
+        if (sessionAttrs.propertyInsuranceClaims) {
+            speechOutput.text = "Does your property have any of the following protective devices?Smoke Detectors, Fire Extinguishers, Deadbolt Locks, Central Fire Alarm, Fire Sprinklers, 24-Hour Manned Security, Central Burglar Alarm that reports to a monitoring center, Burglar Alarm that sounds in the home";
+        }
+        else if (sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "ME" || sessionAttrs.state === "MD" ||
+            sessionAttrs.state === "NV" || sessionAttrs.state === "NH" || sessionAttrs.state === "TN") {
+            speechOutput.text = "Have you had property insurance for at least 1 year?";
+        }
+        else if (sessionAttrs.state === "NY") {
+            speechOutput.text = "Are there any additional residents?";
+        }
+        else if (sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "RI" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV") {
+            speechOutput.text = "Alright, Do you have any dogs?";
+        }
+    }
+    else if (sessionAttrs.state === "MA") {
+        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQTwoAns
+        if (sessionAttrs.propertyInsuranceClaims) {
+            speechOutput.text = "And what was the address of the loss location?";
+        }
+        else {
+            speechOutput.text = "Please list the dominant breed of your dog or dogs";
+        }
+
+    }
+    else if (sessionAttrs.state === "TN") {
+        speechOutput.text = "Alright, Do you have any dogs?";
+    }
+    else if (sessionAttrs.state === "DE" || sessionAttrs.state == "NE" || sessionAttrs.state == "VT" || sessionAttrs.state == "WY") {
+        sessionAttrs.isDogAdded = sessionAttrs.stateSpecQTwoAns;
+        if (sessionAttrs.isDogAdded) {
+            speechOutput.text = "Please list the dominant breed of your dog or dogs.";
+        }
+    }
+    else {
+        speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
+    }
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
+
+    return deferred.promise;
+};
+
+AOS.prototype.handlerRentersStSpecQuestionThree = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    if (sessionAttrs.state === "CA") {
+        speechOutput.text = "Have you filed any claims in the last 3 years";
+    }
+    else if (sessionAttrs.state === "CT") {
+        if (sessionAttrs && sessionAttrs.isResidence2600ftFromCoastVisible && sessionAttrs.isDogAdded) {
+            speechOutput.text = "Please list the dominant breed of your dog or dogs ";
+        }
+    }
+    else if (sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "ME" || sessionAttrs.state === "MD" ||
+        sessionAttrs.state === "NV" || sessionAttrs.state === "NH" || sessionAttrs.state === "TN") {
+        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQThreeAns
+        if (sessionAttrs.propertyInsuranceClaims) {
+            speechOutput.text = "Have you had property insurance for at least 1 year?";
+        }
+        else {
+            if (sessionAttrs.state === "CO" || sessionAttrs.state === "ID" || sessionAttrs.state === "ME" ||
+                sessionAttrs.state === "NH") {
+                speechOutput.text = "Alright, Do you have any dogs?";
+            }
+            if (sessionAttrs.state === "MD") {
+                speechOutput.text = "Are there any additional residents?";
+            }
+            else if (sessionAttrs.state === "TN") {
+                sessionAttrs.isDogAdded = sessionAttrs.stateSpecQThreeAns;
+                if (sessionAttrs.isDogAdded) {
+                    speechOutput = "Please list the dominant breed of your dog or dogs.";
+                }
+            }
+        }
+    }
+    else if (sessionAttrs.state === "NY") {
+        if (sessionAttrs.isAdditionResidents) {
+            speechOutput.text = "Please provide their name, relationship, age, employment and marital status.";
+        }
+        else {
+            speechOutput.text = "Alright, Do you have any dogs?";
+        }
+    }
+    else if (sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "RI" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV") {
+        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQThreeAns
+        if (sessionAttrs.propertyInsuranceClaims) {
+            speechOutput.text = "Alright, Do you have any dogs?";
+        }
+        else {
+            sessionAttrs.isDogAdded = sessionAttrs.stateSpecQThreeAns;
+            if (sessionAttrs.isDogAdded) {
+                speechOutput = "Please list the dominant breed of your dog or dogs.";
+            }
+        }
+    }
+    else if (sessionAttrs.state === "MA") {
+        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQThreeAns
+        if (sessionAttrs.propertyInsuranceClaims) {
+            speechOutput.text = "Please list the dominant breed of your dog or dogs";
+        }
+    }
+    else if (sessionAttrs.state === "TN") {
+        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQThreeAns
+        if (sessionAttrs.propertyInsuranceClaims) {
+            speechOutput.text = "Alright, Do you have any dogs?";
+        }
+    }
+    else {
+        speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
+    }
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
+
+    return deferred.promise;
+};
+
+AOS.prototype.handlerRentersStSpecQuestionFour = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    if (sessionAttrs.state === "CA") {
+        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQFourAns;
+        if (sessionAttrs.propertyInsuranceClaims) {
+            speechOutput.text = "Okay. I'll need to know the date and type of claim like fire, theft, liability, vandalism water or other type of claim.";
+        }
+        else {
+            speechOutput.text = "Alright, Do you have any dogs?";
+        }
+    }
+    else if (sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "ME" || sessionAttrs.state === "MD" ||
+        sessionAttrs.state === "NV" || sessionAttrs.state === "NH" || sessionAttrs.state === "TN") {
+        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQFourAns;
+        if (sessionAttrs.propertyInsuranceClaims) {
+            speechOutput.text = "Alright, Do you have any dogs?";
+        }
+        else {
+            if (sessionAttrs.state === "CO" || sessionAttrs.state === "ID" || sessionAttrs.state === "ME" ||
+                sessionAttrs.state === "NH") {
+                sessionAttrs.isDogAdded = sessionAttrs.stateSpecQFourAns;
+                if (sessionAttrs.isDogAdded) {
+                    speechOutput = "Please list the dominant breed of your dog or dogs.";
+                }
+            }
+            if (sessionAttrs.state === "MD") {
+                if (sessionAttrs.isAdditionResidents) {
+                    speechOutput.text = "Please provide their name, relationship, age, employment and marital status.";
+                }
+                else {
+                    speechOutput.text = "Alright, Do you have any dogs?";
+                }
+            }
+        }
+    }
+    else if (sessionAttrs.state === "NY") {
+        if (sessionAttrs.isAdditionResidents) {
+            speechOutput.text = "Alright, Do you have any dogs?";
+        }
+        else {
+            sessionAttrs.isDogAdded = sessionAttrs.stateSpecQFourAns;
+            if (sessionAttrs.isDogAdded) {
+                speechOutput = "Please list the dominant breed of your dog or dogs.";
+            }
+        }
+    }
+    else if (sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "RI" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV") {
+        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQFourAns;
+        if (sessionAttrs.propertyInsuranceClaims) {
+            if (sessionAttrs.isDogAdded) {
+                speechOutput = "Please list the dominant breed of your dog or dogs.";
+            }
+        }
+    }
+    else if (sessionAttrs.state === "TN") {
+        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQFourAns;
+        if (sessionAttrs.propertyInsuranceClaims) {
+            if (sessionAttrs.isDogAdded) {
+                speechOutput = "Please list the dominant breed of your dog or dogs.";
+            }
+        }
+    }
+    else {
+        speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
+    }
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
+
+    return deferred.promise;
+};
+
+AOS.prototype.handlerRentersStSpecQuestionFive = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    if (sessionAttrs.state === "CA") {        
+        if (sessionAttrs.propertyInsuranceClaims) {
+            speechOutput.text = "Alright, Do you have any dogs?";
+        }
+        else {
+            sessionAttrs.isDogAdded = sessionAttrs.stateSpecQFiveAns;
+            if (sessionAttrs.isDogAdded) {
+                speechOutput = "Please list the dominant breed of your dog or dogs.";
+            }
+        }
+    }
+    else if (sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "ME" || sessionAttrs.state === "MD" ||
+        sessionAttrs.state === "NV" || sessionAttrs.state === "NH" || sessionAttrs.state === "TN") {
+        if (sessionAttrs.propertyInsuranceClaims) {
+            sessionAttrs.isDogAdded = sessionAttrs.stateSpecQFiveAns;
+            if (sessionAttrs.isDogAdded) {
+                speechOutput = "Please list the dominant breed of your dog or dogs.";
+            }
+        }
+        else {
+            if (sessionAttrs.state === "MD") {
+                if (sessionAttrs.isAdditionResidents) {
+                    speechOutput.text = "Alright, Do you have any dogs?";
+                }
+                else {
+                    sessionAttrs.isDogAdded = sessionAttrs.stateSpecQFiveAns;
+                    if (sessionAttrs.isDogAdded) {
+                        speechOutput = "Please list the dominant breed of your dog or dogs.";
+                    }
+                }
+            }
+        }
+    }
+    else if (sessionAttrs.state === "NY") {
+        if (sessionAttrs.isAdditionResidents) {
+            sessionAttrs.isDogAdded = sessionAttrs.stateSpecQFiveAns;
+            if (sessionAttrs.isDogAdded) {
+                speechOutput = "Please list the dominant breed of your dog or dogs.";
+            }
+        }
+    }
+    else {
+        speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
+    }
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
+
+    return deferred.promise;
+};
+
+AOS.prototype.handlerRentersStSpecQuestionSix = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    if (sessionAttrs.state === "CA") {
+        if (sessionAttrs.propertyInsuranceClaims) {
+            sessionAttrs.isDogAdded = sessionAttrs.stateSpecQSixAns;
+            if (sessionAttrs.isDogAdded) {
+                speechOutput = "Please list the dominant breed of your dog or dogs.";
+            }
+        }
+    }
+    else if (sessionAttrs.state === "MD") {
+        if (sessionAttrs.isAdditionResidents) {
+            sessionAttrs.isDogAdded = sessionAttrs.stateSpecQSixAns;
+            if (sessionAttrs.isDogAdded) {
+                speechOutput = "Please list the dominant breed of your dog or dogs.";
+            }
+        }
+    }
+    else {
+        speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
+    }
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
+
+    return deferred.promise;
+};
+
+AOS.prototype.handlerRentersStSpecQuestionSeven = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    if (sessionAttrs.state === "CA" || sessionAttrs.state === "MD") {
+        speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
+        rentersFindSpeechResp.speechOutput = speechOutput;
+        rentersFindSpeechResp.repromptOutput = speechOutput;
+        deferred.resolve(rentersFindSpeechResp);
+    }
+    else {
+        if (sessionAttrs.transactionToken) {
+            getRentersQuoteResponse(sessionAttrs)
+                .then(function (quoteDetailsSpeechOutput) {
+                    rentersQuoteSpeechResp.speechOutput = quoteDetailsSpeechOutput;
+                    rentersQuoteSpeechResp.repromptOutput = null;
+                    rentersQuoteSpeechResp.sessionAttrs = sessionAttrs;
+                    deferred.resolve(rentersQuoteSpeechResp);
+                });
+        } else {
+            speechOutput.text = "Please login to retrieve quote to see your saved quote. Login details are sent to your registered email id.";
+            rentersQuoteSpeechResp.speechOutput = speechOutput;
+            rentersQuoteSpeechResp.repromptOutput = speechOutput;
+        }
+    }
     return deferred.promise;
 };
 
@@ -813,21 +1197,21 @@ AOS.prototype.handlerRenterValidCustomer = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
     if (sessionAttrs.transactionToken) {
-        if(sessionAttrs.isValidRenterCustomer) {
+        if (sessionAttrs.isValidRenterCustomer) {
             quoteResponse(sessionAttrs)
-            .then(function (quoteDetailsSpeechOutput) {
-                rentersQuoteSpeechResp.speechOutput = quoteDetailsSpeechOutput;
-                rentersQuoteSpeechResp.repromptOutput = null;
-                rentersQuoteSpeechResp.sessionAttrs = sessionAttrs;
-                deferred.resolve(rentersQuoteSpeechResp);
-            });
+                .then(function (quoteDetailsSpeechOutput) {
+                    rentersQuoteSpeechResp.speechOutput = quoteDetailsSpeechOutput;
+                    rentersQuoteSpeechResp.repromptOutput = null;
+                    rentersQuoteSpeechResp.sessionAttrs = sessionAttrs;
+                    deferred.resolve(rentersQuoteSpeechResp);
+                });
         }
         else {
             speechOutput.text = "Thank you for the inputs, Near by agent will contact you for further information";
             rentersQuoteSpeechResp.speechOutput = speechOutput;
             rentersQuoteSpeechResp.repromptOutput = speechOutput;
         }
-        
+
     } else {
         speechOutput.text = "Please login to retrieve quote to see your saved quote. Login details are sent to your registered email id.";
         rentersQuoteSpeechResp.speechOutput = speechOutput;
@@ -843,21 +1227,21 @@ AOS.prototype.handlerRenterSaveQuoteYes = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
     if (sessionAttrs.transactionToken) {
-        if(sessionAttrs.isValidRenterCustomer) {
+        if (sessionAttrs.isValidRenterCustomer) {
             saveAndExitResponse(sessionAttrs)
-            .then(function (quoteDetailsSpeechOutput) {
-                rentersQuoteSpeechResp.speechOutput = quoteDetailsSpeechOutput;
-                rentersQuoteSpeechResp.repromptOutput = null;
-                rentersQuoteSpeechResp.sessionAttrs = sessionAttrs;
-                deferred.resolve(rentersQuoteSpeechResp);
-            });
+                .then(function (quoteDetailsSpeechOutput) {
+                    rentersQuoteSpeechResp.speechOutput = quoteDetailsSpeechOutput;
+                    rentersQuoteSpeechResp.repromptOutput = null;
+                    rentersQuoteSpeechResp.sessionAttrs = sessionAttrs;
+                    deferred.resolve(rentersQuoteSpeechResp);
+                });
         }
         else {
             speechOutput.text = "There are issues for saving the quote. Please contact near by agent.";
             rentersQuoteSpeechResp.speechOutput = speechOutput;
             rentersQuoteSpeechResp.repromptOutput = speechOutput;
         }
-        
+
     } else {
         speechOutput.text = "Please login to retrieve quote to see your saved quote. Login details are sent to your registered email id.";
         rentersQuoteSpeechResp.speechOutput = speechOutput;
@@ -873,21 +1257,21 @@ AOS.prototype.handlerRenterGenerateURL = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
     if (sessionAttrs.transactionToken) {
-        if(sessionAttrs.isValidRenterCustomer) {
+        if (sessionAttrs.isValidRenterCustomer) {
             quoteLandingURLResponse(sessionAttrs)
-            .then(function (quoteDetailsSpeechOutput) {
-                rentersQuoteSpeechResp.speechOutput = quoteDetailsSpeechOutput;
-                rentersQuoteSpeechResp.repromptOutput = null;
-                rentersQuoteSpeechResp.sessionAttrs = sessionAttrs;
-                deferred.resolve(rentersQuoteSpeechResp);
-            });
+                .then(function (quoteDetailsSpeechOutput) {
+                    rentersQuoteSpeechResp.speechOutput = quoteDetailsSpeechOutput;
+                    rentersQuoteSpeechResp.repromptOutput = null;
+                    rentersQuoteSpeechResp.sessionAttrs = sessionAttrs;
+                    deferred.resolve(rentersQuoteSpeechResp);
+                });
         }
         else {
             speechOutput.text = "There are issues for generating URL. Please contact near by agent.";
             rentersQuoteSpeechResp.speechOutput = speechOutput;
             rentersQuoteSpeechResp.repromptOutput = speechOutput;
         }
-        
+
     } else {
         speechOutput.text = "Please login to retrieve quote to see your saved quote. Login details are sent to your registered email id.";
         rentersQuoteSpeechResp.speechOutput = speechOutput;
@@ -902,13 +1286,13 @@ AOS.prototype.handlerRenterSaveQuoteNo = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    if(sessionAttrs && sessionAttrs.agentDetails){
-        speechOutput.text = "Got it. Here is the agent you can contact for more information.  "  + sessionAttrs.agentDetails.name + ", Contact Information:"  + sessionAttrs.agentDetails.phoneNumber + " , Email at : " + sessionAttrs.agentDetails.emailAddress;
+    if (sessionAttrs && sessionAttrs.agentDetails) {
+        speechOutput.text = "Got it. Here is the agent you can contact for more information.  " + sessionAttrs.agentDetails.name + ", Contact Information:" + sessionAttrs.agentDetails.phoneNumber + " , Email at : " + sessionAttrs.agentDetails.emailAddress;
     }
     else {
         speechOutput.text = "Please type help for assistance or type menu for menu options";
     }
-    
+
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     deferred.resolve(rentersFindSpeechResp);
@@ -931,10 +1315,10 @@ function getRentersSaveCustomerResponse(sessionAttrs) {
             return getStateFromZip(sessionInfo.sessionId, sessionInfo.zip);
         }).then(function (state) {
             sessionAttrs.state = state;
-            if(sessionAttrs.newzip){
-             return getStateFromZip(sessionInfo.sessionId, sessionInfo.newzip);
+            if (sessionAttrs.newzip) {
+                return getStateFromZip(sessionInfo.sessionId, sessionInfo.newzip);
             }
-         }).then(function (newstate) {
+        }).then(function (newstate) {
             sessionAttrs.newstate = newstate;
             var customerSaveInfo = getCustomerSaveInfo(sessionAttrs, sessionInfo);
             return rentersSaveCustomer(customerSaveInfo, sessionInfo.sessionId);
@@ -944,7 +1328,7 @@ function getRentersSaveCustomerResponse(sessionAttrs) {
                 saveCustSpeechOutput.sessionAttrs = sessionAttrs;
                 saveCustSpeechOutput.text = "Information from outside sources regarding credit history is used to provide you with a renters quote. A third party may be used to calculate your insurance score. This information, along with subsequently collected information, will be shared with outside parties that perform services on Allstate's behalf. ";
                 saveCustSpeechOutput.text = saveCustSpeechOutput.text + "   Privacy Policy:http://www.allstate.com/about/privacy-statement-aic.aspx ";
-                saveCustSpeechOutput.text = saveCustSpeechOutput.text + "   Type OK to authorize.";                
+                saveCustSpeechOutput.text = saveCustSpeechOutput.text + "   Type OK to authorize.";
             }
             deferred.resolve(saveCustSpeechOutput);
         }).catch(function (error) {
@@ -957,11 +1341,11 @@ function getRentersSaveCustomerResponse(sessionAttrs) {
 
 function getRentersInfoResponse(sessionAttrs) {
     var deferred = q.defer();
-    var rentersInfoSpeechOutput = new Speech();	
-    if (sessionAttrs.transactionToken) {        
-        var rentersInfo = mapRentersInfo(sessionAttrs);         
-            saveRentersInfo(rentersInfo, sessionAttrs.transactionToken)
-                .then(function (result) {
+    var rentersInfoSpeechOutput = new Speech();
+    if (sessionAttrs.transactionToken) {
+        var rentersInfo = mapRentersInfo(sessionAttrs);
+        saveRentersInfo(rentersInfo, sessionAttrs.transactionToken)
+            .then(function (result) {
                 sessionAttrs.creditHit = result.creditHit;
                 sessionAttrs.isRenterReOrderData = result.isRenterReOrderData;
                 rentersInfoSpeechOutput.text = "Thank you for the basic renters information. Would you like to proceed."
@@ -979,20 +1363,20 @@ function confirmProfileResponse(sessionAttrs) {
     var rentersInfoSpeechOutput = new Speech();
     if (sessionAttrs.transactionToken) {
         var confirmProfileInfo = mapRentersConfirmProfile(sessionAttrs);
-        if(sessionAttrs && !sessionAttrs.creditHit && !sessionAttrs.isRenterReOrderData){
-             postConfirmProfile(confirmProfileInfo, sessionAttrs.transactionToken)                        
-            .then(function (result) {
-                rentersInfoSpeechOutput.text = "Great! Now is the residence you are wanting to insure your primary residence? ";
-                deferred.resolve(rentersInfoSpeechOutput);
-            }).catch(function (error) {
-                rentersInfoSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
-                deferred.resolve(rentersInfoSpeechOutput);
-            });
+        if (sessionAttrs && !sessionAttrs.creditHit && !sessionAttrs.isRenterReOrderData) {
+            postConfirmProfile(confirmProfileInfo, sessionAttrs.transactionToken)
+                .then(function (result) {
+                    rentersInfoSpeechOutput.text = "Great! Now is the residence you are wanting to insure your primary residence? ";
+                    deferred.resolve(rentersInfoSpeechOutput);
+                }).catch(function (error) {
+                    rentersInfoSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
+                    deferred.resolve(rentersInfoSpeechOutput);
+                });
         }
-        else{
+        else {
             rentersInfoSpeechOutput.text = "Now is the residence you are wanting to insure your primary residence? ";
             deferred.resolve(rentersInfoSpeechOutput);
-        }       
+        }
     }
     return deferred.promise;
 }
@@ -1009,9 +1393,9 @@ function getRentersQuoteResponse(sessionAttrs) {
             }).then(function (response) {
                 if (response) {
                     sessionAttrs.isValidRenterCustomer = response.isValidRenterCustomer;
-                    quoteSpeechOutput.text = "Thank you for the inputs, Your details has been validated. would you like to get quote details? ";                    
+                    quoteSpeechOutput.text = "Thank you for the inputs, Your details has been validated. would you like to get quote details? ";
                 }
-                deferred.resolve(quoteSpeechOutput);   
+                deferred.resolve(quoteSpeechOutput);
             }).catch(function (error) {
                 quoteSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
                 deferred.resolve(quoteSpeechOutput);
@@ -1026,12 +1410,12 @@ function saveAndExitResponse(sessionAttrs) {
     if (sessionAttrs.transactionToken) {
         saveAndExplicit(sessionAttrs.emailAddress, sessionAttrs.transactionToken)
             .then(function (response) {
-                return saveAndExit(sessionAttrs.emailAddress, sessionAttrs.transactionToken); 
+                return saveAndExit(sessionAttrs.emailAddress, sessionAttrs.transactionToken);
             }).then(function (response) {
-                if (!response) {                    
-                    quoteSpeechOutput.text = "Thank you for the inputs, Your details has been saved. would you like to complete the transaction ? ";                    
+                if (!response) {
+                    quoteSpeechOutput.text = "Thank you for the inputs, Your details has been saved. would you like to complete the transaction ? ";
                 }
-                deferred.resolve(quoteSpeechOutput);   
+                deferred.resolve(quoteSpeechOutput);
             }).catch(function (error) {
                 quoteSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
                 deferred.resolve(quoteSpeechOutput);
@@ -1050,15 +1434,15 @@ function quoteLandingURLResponse(sessionAttrs) {
         .then(function (id) {
             sessionInfo.sessionId = id;
             return quoteRepository(sessionAttrs, sessionInfo.sessionId);
-        }).then(function (response) {            
+        }).then(function (response) {
             if (response && response.quoteList) {
                 sessionAttrs.retrieveURL = response.quoteList[0].retrieveUrl;
                 quoteURLSpeechOutput.sessionAttrs = sessionAttrs;
                 quoteURLSpeechOutput.text = "Perfect. Here is the URL to connect to live quote page: ";
-                quoteURLSpeechOutput.text = quoteURLSpeechOutput.text + sessionAttrs.retrieveURL;                
+                quoteURLSpeechOutput.text = quoteURLSpeechOutput.text + sessionAttrs.retrieveURL;
             }
-            else{
-                quoteURLSpeechOutput.text = "Could not save your quote. Please contact near by agent for more details";                                
+            else {
+                quoteURLSpeechOutput.text = "Could not save your quote. Please contact near by agent for more details";
             }
             deferred.resolve(quoteURLSpeechOutput);
         }).catch(function (error) {
@@ -1108,13 +1492,13 @@ function getCustomerSaveInfo(sessionAttrs, sessionInfo) {
     customerData.insuredAddress.city = '';
     customerData.insuredAddress.state = '';
     customerData.insuredAddress.zipCode = '';
-    if(!sessionAttrs.IsInsuredAddrSame){
-        if(customerData.insuredAddress){
+    if (!sessionAttrs.IsInsuredAddrSame) {
+        if (customerData.insuredAddress) {
             customerData.insuredAddress.addressLine1 = sessionAttrs.newaddrLine1;
             customerData.insuredAddress.aptOrUnit = '';
             customerData.insuredAddress.city = sessionAttrs.newcity;
-            customerData.insuredAddress.state =  sessionAttrs.newstate;
-            customerData.insuredAddress.zipCode =  sessionAttrs.newzip;
+            customerData.insuredAddress.state = sessionAttrs.newstate;
+            customerData.insuredAddress.zipCode = sessionAttrs.newzip;
         }
     }
     customerData.isInsuredAddressSameAsCurrent = sessionAttrs.IsInsuredAddrSame;
@@ -1128,7 +1512,7 @@ function mapRentersInfo(sessionAttrs) {
         rentersInfoData = mapResident(rentersInfoData, sessionAttrs);
         rentersInfoData.insuredAddress = mapAddress(rentersInfoData.insuredAddress, sessionAttrs);
         rentersInfoData.currentAddress = mapAddress(rentersInfoData.currentAddress, sessionAttrs);
-        if(!sessionAttrs.livedmorethantwo){           
+        if (!sessionAttrs.livedmorethantwo) {
             rentersInfoData.previousAddress = mapAddress(rentersInfoData.previousAddress, sessionAttrs);
         }
         rentersInfoData = mapContactInfo(rentersInfoData, sessionAttrs);
@@ -1144,7 +1528,7 @@ function mapRentersInfo(sessionAttrs) {
 function mapRentersConfirmProfile(sessionAttrs) {
     var confProfileData = {};
     confProfileData.profiles = getProfiles(sessionAttrs);
-    confProfileData.addresses = getAddresses(sessionAttrs);    
+    confProfileData.addresses = getAddresses(sessionAttrs);
     return confProfileData;
 }
 
@@ -1161,7 +1545,7 @@ function getProfiles(sessionAttrs) {
     profile.dateOfBirth = DateUtil.getFormattedDate(sessionAttrs.dob, "MMDDYYYY");;
     profile.id = "dvEditPrimary";
     profiles.push(profile);
-    if(sessionAttrs.spouseAdded){
+    if (sessionAttrs.spouseAdded) {
         profile.driverGUID = null;
         profile.driverNumber = null;
         profile.relationshipToPrimaryDriver = null;
@@ -1171,7 +1555,7 @@ function getProfiles(sessionAttrs) {
         profile.suffix = null;
         profile.dateOfBirth = DateUtil.getFormattedDate(sessionAttrs.spouseDob, "MMDDYYYY");;
         profile.id = "dvEditSpouse";
-        profiles.push(profile);   
+        profiles.push(profile);
     }
     return profiles;
 }
@@ -1202,6 +1586,10 @@ function mapResident(rentersInfoData, sessionAttrs) {
         rentersInfoData.primaryRenter.lastName = sessionAttrs.lastName;
         rentersInfoData.primaryRenter.gender = sessionAttrs.gender;
         rentersInfoData.primaryRenter.employmentStatus = sessionAttrs.employmentStatus;
+        if (sessionAttrs.state === "CA" || sessionAttrs.state === "CT" || sessionAttrs.state === "MD" || sessionAttrs.state === "OR" || sessionAttrs.state === "PA" || sessionAttrs.state === "NY") {
+            rentersInfoData.primaryRenter.maritalStatus = sessionAttrs.maritalstatus;
+        }
+
         rentersInfoData.primaryRenter.dateOfBirth = DateUtil.getFormattedDate(sessionAttrs.dob, "MMDDYYYY");
         if (sessionAttrs.dob) {
             var birthdate = new Date(sessionAttrs.dob);
@@ -1237,11 +1625,11 @@ function mapAddress(address, sessionAttrs) {
         address.state = sessionAttrs.prevstate;
         address.zipCode = sessionAttrs.prevzipcode;
     }
-    else{
+    else {
         address.addressLine1 = sessionAttrs.addrLine1;
         address.city = sessionAttrs.city;
         address.state = sessionAttrs.transactionToken.state;
-        address.zipCode = sessionAttrs.zip;    
+        address.zipCode = sessionAttrs.zip;
     }
     return address;
 }
@@ -1371,6 +1759,7 @@ function rentersSaveCustomer(customerSaveInfo, sessionId) {
 }
 
 function saveRentersInfo(rentersInfo, transactionToken) {
+    console.log(rentersInfo);
     var deferred = q.defer();
     request(
         {
@@ -1394,7 +1783,7 @@ function saveRentersInfo(rentersInfo, transactionToken) {
 }
 
 function postConfirmProfile(confirmInfo, transactionToken) {
-    var deferred = q.defer();    
+    var deferred = q.defer();
     request(
         {
             method: "POST",
@@ -1519,7 +1908,7 @@ function saveAndExplicit(emailid, transactionToken) {
             "content-type": "application/json",
             headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/save-quote" },
             json: true,
-            body: { "email" : emailid , "moduleName" : "RentersQuote" , "quoteType" : "RENTER_SINGLE" }
+            body: { "email": emailid, "moduleName": "RentersQuote", "quoteType": "RENTER_SINGLE" }
         },
         function (error, response, body) {
             if (error || response.statusCode !== 200) {
@@ -1543,7 +1932,7 @@ function saveAndExit(emailid, transactionToken) {
             "content-type": "application/json",
             headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/save-quote" },
             json: true,
-            body: { "email" : emailid , "moduleName" : "RentersQuote" , "quoteType" : "RENTER_SINGLE" }
+            body: { "email": emailid, "moduleName": "RentersQuote", "quoteType": "RENTER_SINGLE" }
         },
         function (error, response, body) {
             if (error || response.statusCode !== 200) {
@@ -1561,8 +1950,8 @@ function saveAndExit(emailid, transactionToken) {
 function quoteRepository(sessionAttrs, sessionID) {
     var deferred = q.defer();
     var dob;
-    if(sessionAttrs && sessionAttrs.dob){
-         dob = DateUtil.getFormattedDate(sessionAttrs.dob, "MMDDYYYY");
+    if (sessionAttrs && sessionAttrs.dob) {
+        dob = DateUtil.getFormattedDate(sessionAttrs.dob, "MMDDYYYY");
     }
     request(
         {
@@ -1571,7 +1960,7 @@ function quoteRepository(sessionAttrs, sessionID) {
             "content-type": "application/json",
             headers: { "X-TID": sessionID, "X-PD": "AUTO", "X-VID": "/" },
             json: true,
-            body: { "dateOfBirth" : dob , "emailID" : sessionAttrs.emailAddress , "lastName" : sessionAttrs.lastName ,"zipCode" : sessionAttrs.zip }
+            body: { "dateOfBirth": dob, "emailID": sessionAttrs.emailAddress, "lastName": sessionAttrs.lastName, "zipCode": sessionAttrs.zip }
         },
         function (error, response, body) {
             if (error || response.statusCode !== 200) {
@@ -1662,101 +2051,6 @@ function ProcessAgentResponse(agentServResp) {
     return agents;
 }
 //#endregion
-
-//#region state variations
-AOS.prototype.handlerRentersDogs = function (sessionAttrs) {
-    var deferred = q.defer();
-    var rentersFindSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-
-    speechOutput.text = "Alright! Do you have any dogs? ";
-    rentersFindSpeechResp.speechOutput = speechOutput;
-    rentersFindSpeechResp.repromptOutput = speechOutput;
-    deferred.resolve(rentersFindSpeechResp);
-
-    return deferred.promise;
-};
-AOS.prototype.handlerRentersDogBreed = function (sessionAttrs) {
-    var deferred = q.defer();
-    var rentersFindSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-
-    speechOutput.text = "Please provide the dominant breed of your dog or dogs. like akita, boxer, chow, collie, doberman pinscher, great dane, german shepherd, husky ";
-    rentersFindSpeechResp.speechOutput = speechOutput;
-    rentersFindSpeechResp.repromptOutput = speechOutput;
-    deferred.resolve(rentersFindSpeechResp);
-
-    return deferred.promise;
-};
-AOS.prototype.handlerRentersDormArea = function (sessionAttrs) {
-    var deferred = q.defer();
-    var rentersFindSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-
-    speechOutput.text = "Sounds good! I'll just need a few more details. Are you located in a dorm, military barracks, farm or assisted living facility? ";
-    rentersFindSpeechResp.speechOutput = speechOutput;
-    rentersFindSpeechResp.repromptOutput = speechOutput;
-    deferred.resolve(rentersFindSpeechResp);
-
-    return deferred.promise;
-};
-AOS.prototype.handlerRentersCaCalVetYesNo = function (sessionAttrs) {
-    var deferred = q.defer();
-    var rentersFindSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-
-    speechOutput.text = "Is this residence regularly unoccupied for 24 hours or more? ";
-    rentersFindSpeechResp.speechOutput = speechOutput;
-    rentersFindSpeechResp.repromptOutput = speechOutput;
-    deferred.resolve(rentersFindSpeechResp);
-
-    return deferred.promise;
-};
-AOS.prototype.handlerRentersCaUnOccupiedYesNo = function (sessionAttrs) {
-    var deferred = q.defer();
-    var rentersFindSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-
-    speechOutput.text = "Does your property have any of the following protective devices?, Smoke Detectors, Fire Extinguishers, Deadbolt Locks, Central Fire Alarm, Fire Sprinklers, 24-Hour Manned Security, Central Burglar Alarm that reports to a monitoring center, Burglar Alarm that sounds in the home ";
-    rentersFindSpeechResp.speechOutput = speechOutput;
-    rentersFindSpeechResp.repromptOutput = speechOutput;
-    deferred.resolve(rentersFindSpeechResp);
-
-    return deferred.promise;
-};
-
-AOS.prototype.handlerRentersCaClaims = function (sessionAttrs) {
-    var deferred = q.defer();
-    var rentersFindSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-
-    speechOutput.text = "Have you filed any claims in the last 3 years?";
-    rentersFindSpeechResp.speechOutput = speechOutput;
-    rentersFindSpeechResp.repromptOutput = speechOutput;
-    deferred.resolve(rentersFindSpeechResp);
-
-    return deferred.promise;
-};
-AOS.prototype.handlerRentersCaClaimsYes = function (sessionAttrs) {
-    var deferred = q.defer();
-    var rentersFindSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
-
-    speechOutput.text = "Okay. I'll need to know the date and type of claim.";
-    rentersFindSpeechResp.speechOutput = speechOutput;
-    rentersFindSpeechResp.repromptOutput = speechOutput;
-    deferred.resolve(rentersFindSpeechResp);
-
-    return deferred.promise;
-};
-
 
 
 module.exports = new AOS();
