@@ -702,16 +702,17 @@ AOS.prototype.handlerRentersIsFiveOrMoreUnitsYes = function (sessionAttrs) {
     else if (sessionAttrs.state === "AL" || sessionAttrs.state == "LA" || sessionAttrs.state === "SC") {
         speechOutput.text = "Got it. Is the property within city limits? ";
     }
-    else if (sessionAttrs.state === "AL" || sessionAttrs.state === "AR" || sessionAttrs.state === "CO"
-        || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "IN" ||
-        sessionAttrs.state === "IA" || sessionAttrs.state === "LA" || sessionAttrs.state === "ME" || sessionAttrs.state === "MD" || sessionAttrs.state === "MA" ||
-        sessionAttrs.state === "MI" || sessionAttrs.state === "NV" || sessionAttrs.state === "NH" || sessionAttrs.state === "RI" || sessionAttrs.state === "SC" ||
-        sessionAttrs.state === "TN" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" || sessionAttrs.state === "WI" ||
-        sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "OR") {
-        speechOutput.text = "Got it. Have you filed any claims in last 3 years";
+    else if (sessionAttrs.state === "AR" || sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "IN" ||
+        sessionAttrs.state === "IA" || sessionAttrs.state === "ME" || sessionAttrs.state === "MD" || sessionAttrs.state === "MI" || sessionAttrs.state === "NV" ||
+        sessionAttrs.state === "NH" || sessionAttrs.state === "RI" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
+        sessionAttrs.state === "WI" || sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "OK") {
+        speechOutput.text = "Does your property have any of the protective devices like Smoke Detectors, Fire Extinguishers, Deadbolt Locks, Central Fire Alarm, Fire Sprinklers, 24-Hour Manned Security, Central Burglar Alarm that reports to a monitoring center, Burglar Alarm that sounds in the home";
     }
-    else if (sessionAttrs.state == "NE" || sessionAttrs.state == "VT" || sessionAttrs.state == "WY") {
+    else if (sessionAttrs.state == "NE" || sessionAttrs.state == "VT" || sessionAttrs.state == "WY" || sessionAttrs.state == "TN") {
         speechOutput.text = "Got it, Have you had property insurance for at least 1 year?";
+    }
+    else if (sessionAttrs.state == "MA" || sessionAttrs.state == "OR") {
+        speechOutput.text = "Got it, Have you filed any claims in the last 3 years?";
     }
     else if (sessionAttrs.state == "AK" || sessionAttrs.state == "DC" || sessionAttrs.state == "HI" || sessionAttrs.state == "MT" ||
         sessionAttrs.state == "NJ" || sessionAttrs.state == "ND" || sessionAttrs.state == "PA" || sessionAttrs.state == "SD") {
@@ -745,16 +746,17 @@ AOS.prototype.handlerRentersIsFiveOrMoreUnitsNo = function (sessionAttrs) {
     else if (sessionAttrs.state === "AL" || sessionAttrs.state == "LA" || sessionAttrs.state === "SC") {
         speechOutput.text = "Got it. Is the property within city limits? ";
     }
-    else if (sessionAttrs.state === "AL" || sessionAttrs.state === "AR" || sessionAttrs.state === "CO"
-        || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "IN" ||
-        sessionAttrs.state === "IA" || sessionAttrs.state === "LA" || sessionAttrs.state === "ME" || sessionAttrs.state === "MD" || sessionAttrs.state === "MA" ||
-        sessionAttrs.state === "MI" || sessionAttrs.state === "NV" || sessionAttrs.state === "NH" || sessionAttrs.state === "RI" || sessionAttrs.state === "SC" ||
-        sessionAttrs.state === "TN" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" || sessionAttrs.state === "WI" ||
-        sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "OR") {
-        speechOutput.text = "Got it. Have you filed any claims in last 3 years";
+    else if (sessionAttrs.state === "AR" || sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "IN" ||
+        sessionAttrs.state === "IA" || sessionAttrs.state === "ME" || sessionAttrs.state === "MD" || sessionAttrs.state === "MI" || sessionAttrs.state === "NV" ||
+        sessionAttrs.state === "NH" || sessionAttrs.state === "RI" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
+        sessionAttrs.state === "WI" || sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "OK") {
+        speechOutput.text = "Does your property have any of the protective devices like Smoke Detectors, Fire Extinguishers, Deadbolt Locks, Central Fire Alarm, Fire Sprinklers, 24-Hour Manned Security, Central Burglar Alarm that reports to a monitoring center, Burglar Alarm that sounds in the home";
     }
-    else if (sessionAttrs.state == "NE" || sessionAttrs.state == "VT" || sessionAttrs.state == "WY") {
+    else if (sessionAttrs.state == "NE" || sessionAttrs.state == "VT" || sessionAttrs.state == "WY" || sessionAttrs.state == "TN") {
         speechOutput.text = "Got it, Have you had property insurance for at least 1 year?";
+    }
+    else if (sessionAttrs.state == "MA" || sessionAttrs.state == "OR") {
+        speechOutput.text = "Got it, Have you filed any claims in the last 3 years?";
     }
     else if (sessionAttrs.state == "AK" || sessionAttrs.state == "DC" || sessionAttrs.state == "HI" || sessionAttrs.state == "MT" ||
         sessionAttrs.state == "NJ" || sessionAttrs.state == "ND" || sessionAttrs.state == "PA" || sessionAttrs.state == "SD") {
@@ -777,7 +779,7 @@ AOS.prototype.handlerRentersStSpecQuestionOne = function (sessionAttrs) {
     var repromptOutput = new Speech();
 
     if (sessionAttrs.state === "CA") {
-           speechOutput.text = "Ok. Is this residence regularly unoccupied for 24 hours or more? ";
+        speechOutput.text = "Ok. Is your residence regularly unoccupied for 24 hours or more? ";
     }
     else if (sessionAttrs.state === "CT") {
         if (sessionAttrs && sessionAttrs.agentDetails && sessionAttrs.isResidence2600ftFromCoastVisible) {
@@ -787,27 +789,24 @@ AOS.prototype.handlerRentersStSpecQuestionOne = function (sessionAttrs) {
             speechOutput.text = "Alright do you have any dogs? ";
         }
     }
-    else if (sessionAttrs.state === "AL" || sessionAttrs.state === "AR" || sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" ||
-        sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "LA" || sessionAttrs.state === "ME" || sessionAttrs.state === "MD" ||
-        sessionAttrs.state === "MA" || sessionAttrs.state === "MI" || sessionAttrs.state === "NV" || sessionAttrs.state === "NH" || sessionAttrs.state === "RI" ||
-        sessionAttrs.state === "SC" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" || sessionAttrs.state === "WI" ||
-        sessionAttrs.state === "TN" || sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "OR") {
-        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQOneAns
+    else if (sessionAttrs.state === "AL" || sessionAttrs.state === "LA" || sessionAttrs.state === "SC") {
+        speechOutput.text = "Does your property have any of the protective devices like Smoke Detectors, Fire Extinguishers, Deadbolt Locks, Central Fire Alarm, Fire Sprinklers, 24-Hour Manned Security, Central Burglar Alarm that reports to a monitoring center, Burglar Alarm that sounds in the home";
+    }
+    else if (sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "ME" || sessionAttrs.state === "MD" ||
+        sessionAttrs.state === "NV" || sessionAttrs.state === "NH" || sessionAttrs.state === "WI") {
+        speechOutput.text = "Have you had property insurance for at least 1 year?";
+    }
+    else if (sessionAttrs.state === "AR" || sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "MA" || sessionAttrs.state === "MI" ||
+        sessionAttrs.state === "RI" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
+        sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "OR" || sessionAttrs.state === "TN") {
+        speechOutput.text = "Got it, have you filed any claims in the last 3 years?";
+    }
+    else if (sessionAttrs.state == "MA" || sessionAttrs.state == "OR") {
         if (sessionAttrs.propertyInsuranceClaims) {
-
-            speechOutput.text = "Okay. I'll need to know the date and type of claim like fire, theft, liability, vandalism water or other type of claim.";
+            speachOutput.text = "Okay. I need to know date and type of the claim. Claim can be Fire, Theft, Liability, Vandalism, Water or other. "
         }
-        else {
-            sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQOneAns
-            if (!sessionAttrs.propertyInsuranceClaims && sessionAttrs.state === "MA") {
-                speechOutput.text = "Alright, Do you have any dogs?";
-            }
-            else if (sessionAttrs.state === "TN") {
-                speechOutput.text = "Have you had property insurance for at least 1 year?";
-            }
-            else {
-                speechOutput.text = "Does your property have any of the protective devices like Smoke Detectors, Fire Extinguishers, Deadbolt Locks, Central Fire Alarm, Fire Sprinklers, 24-Hour Manned Security, Central Burglar Alarm that reports to a monitoring center, Burglar Alarm that sounds in the home";
-            }
+        else if (sessionAttrs.state == "MA") {
+            speachOutput.text = "Alright! Do you have any dogs? "
         }
     }
     else if (sessionAttrs.state === "DE" || sessionAttrs.state == "NE" || sessionAttrs.state == "VT" || sessionAttrs.state == "WY") {
@@ -839,50 +838,46 @@ AOS.prototype.handlerRentersStSpecQuestionTwo = function (sessionAttrs) {
         speechOutput.text = "Does your property have any of the following protective devices?Smoke Detectors, Fire Extinguishers, Deadbolt Locks, Central Fire Alarm, Fire Sprinklers, 24-Hour Manned Security, Central Burglar Alarm that reports to a monitoring center, Burglar Alarm that sounds in the home";
     }
     else if (sessionAttrs.state === "CT") {
-        if (sessionAttrs && sessionAttrs.isResidence2600ftFromCoastVisible) {
-            speechOutput.text = "Alright do you have any dogs? ";
+        if (sessionAttrs && !sessionAttrs.isResidence2600ftFromCoastVisible) {
+            if (sessionAttrs.isDogAdded) {
+                speechOutput.text = "Please list the dominant breed of your dog or dogs";
+            }
+        }
+    }
+    else if (sessionAttrs.state === "AL" || sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" ||
+        sessionAttrs.state === "LA" || sessionAttrs.state === "ME" || sessionAttrs.state === "MD" ||
+        sessionAttrs.state === "NV" || sessionAttrs.state === "NH" || sessionAttrs.state === "SC" || sessionAttrs.state === "WI") {
+        speachOutput.text = "Have you filed any claims in the last 3 years?";
+    }
+    else if (sessionAttrs.state === "AR" || sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "MA" || sessionAttrs.state === "MI" ||
+        sessionAttrs.state === "RI" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
+        sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "OR" || sessionAttrs.state === "TN") {
+        if (sessionAttrs.propertyInsuranceClaims) {
+            speachOutput.text = "Okay. I need to know date and type of the claim. Claim can be Fire, Theft, Liability, Vandalism, Water or other. "
         }
         else {
-            speechOutput.text = "Please list the dominant breed of your dog or dogs";
+            if (sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "RI" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
+                sessionAttrs.state === "TN") {
+                speechOutput.text = "Alright, Do you have any dogs?";
+            }
+            else if (sessionAttrs.state == "MA") {
+                if (sessionAttrs.propertyInsuranceClaims) {
+                    speachOutput.text = "And what was the address of the loss location? ";
+                }
+                else if (sessionAttrs.state == "MA") {
+                    if (sessionAttrs.isDogAdded) {
+                        speechOutput = "Please list the dominant breed of your dog or dogs.";
+                    }
+                }
+            }
+            else if (sessionAttrs.state === "NY") {
+                speechOutput = "Are there any additional residents?";
+            }
         }
-    }
-    else if (sessionAttrs.state === "AL" || sessionAttrs.state === "AR" || sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" ||
-        sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "LA" || sessionAttrs.state === "ME" || sessionAttrs.state === "MD" ||
-        sessionAttrs.state === "MI" || sessionAttrs.state === "NV" || sessionAttrs.state === "NH" || sessionAttrs.state === "RI" ||
-        sessionAttrs.state === "SC" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" || sessionAttrs.state === "WI" ||
-        sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "OR") {
-        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQTwoAns
-        if (sessionAttrs.propertyInsuranceClaims) {
-            speechOutput.text = "Does your property have any of the following protective devices?Smoke Detectors, Fire Extinguishers, Deadbolt Locks, Central Fire Alarm, Fire Sprinklers, 24-Hour Manned Security, Central Burglar Alarm that reports to a monitoring center, Burglar Alarm that sounds in the home";
-        }
-        else if (sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "ME" || sessionAttrs.state === "MD" ||
-            sessionAttrs.state === "NV" || sessionAttrs.state === "NH" || sessionAttrs.state === "TN") {
-            speechOutput.text = "Have you had property insurance for at least 1 year?";
-        }
-        else if (sessionAttrs.state === "NY") {
-            speechOutput.text = "Are there any additional residents?";
-        }
-        else if (sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "RI" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV") {
-            speechOutput.text = "Alright, Do you have any dogs?";
-        }
-    }
-    else if (sessionAttrs.state === "MA") {
-        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQTwoAns
-        if (sessionAttrs.propertyInsuranceClaims) {
-            speechOutput.text = "And what was the address of the loss location?";
-        }
-        else {
-            speechOutput.text = "Please list the dominant breed of your dog or dogs";
-        }
-
-    }
-    else if (sessionAttrs.state === "TN") {
-        speechOutput.text = "Alright, Do you have any dogs?";
     }
     else if (sessionAttrs.state === "DE" || sessionAttrs.state == "NE" || sessionAttrs.state == "VT" || sessionAttrs.state == "WY") {
-        sessionAttrs.isDogAdded = sessionAttrs.stateSpecQTwoAns;
         if (sessionAttrs.isDogAdded) {
-            speechOutput.text = "Please list the dominant breed of your dog or dogs.";
+            speechOutput = "Please list the dominant breed of your dog or dogs.";
         }
     }
     else {
@@ -904,63 +899,39 @@ AOS.prototype.handlerRentersStSpecQuestionThree = function (sessionAttrs) {
     if (sessionAttrs.state === "CA") {
         speechOutput.text = "Have you filed any claims in the last 3 years";
     }
-    else if (sessionAttrs.state === "CT") {
-        if (sessionAttrs && sessionAttrs.isResidence2600ftFromCoastVisible && sessionAttrs.isDogAdded) {
-            speechOutput.text = "Please list the dominant breed of your dog or dogs ";
-        }
-    }
-    else if (sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "ME" || sessionAttrs.state === "MD" ||
-        sessionAttrs.state === "NV" || sessionAttrs.state === "NH" || sessionAttrs.state === "TN") {
-        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQThreeAns
+    else if (sessionAttrs.state === "AL" || sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "LA" ||
+        sessionAttrs.state === "ME" || sessionAttrs.state === "MD" || sessionAttrs.state === "NV" || sessionAttrs.state === "NH" || sessionAttrs.state === "SC" ||
+        sessionAttrs.state === "WI") {
         if (sessionAttrs.propertyInsuranceClaims) {
-            speechOutput.text = "Have you had property insurance for at least 1 year?";
+            speachOutput.text = "Okay. I need to know date and type of the claim. Claim can be Fire, Theft, Liability, Vandalism, Water or other. ";
         }
         else {
-            if (sessionAttrs.state === "CO" || sessionAttrs.state === "ID" || sessionAttrs.state === "ME" ||
-                sessionAttrs.state === "NH") {
+            if (sessionAttrs.state === "CO" || sessionAttrs.state === "ID" || sessionAttrs.state === "ME" || sessionAttrs.state === "NH") {
                 speechOutput.text = "Alright, Do you have any dogs?";
             }
             if (sessionAttrs.state === "MD") {
                 speechOutput.text = "Are there any additional residents?";
             }
-            else if (sessionAttrs.state === "TN") {
-                sessionAttrs.isDogAdded = sessionAttrs.stateSpecQThreeAns;
-                if (sessionAttrs.isDogAdded) {
-                    speechOutput = "Please list the dominant breed of your dog or dogs.";
+        }
+    }
+    else if (sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "MA" ||
+        sessionAttrs.state === "RI" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
+        sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "TN") {
+        if (sessionAttrs.propertyInsuranceClaims) {
+            if (sessionAttrs.state === "MA" || sessionAttrs.state === "NY") {
+                speechOutput.text = "Alright, Do you have any dogs?";
+            }
+        }
+        else {
+            if (sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "RI" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
+                sessionAttrs.state === "TN") {
+                speechOutput.text = "Alright, Do you have any dogs?";
+            }
+            else if (sessionAttrs.state === "NY") {
+                if (sessionAttrs.additionalResidents) {
+                    speechOutput = "Got it! Please provide their name, relationship, age, employment and marital status.";
                 }
             }
-        }
-    }
-    else if (sessionAttrs.state === "NY") {
-        if (sessionAttrs.isAdditionResidents) {
-            speechOutput.text = "Please provide their name, relationship, age, employment and marital status.";
-        }
-        else {
-            speechOutput.text = "Alright, Do you have any dogs?";
-        }
-    }
-    else if (sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "RI" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV") {
-        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQThreeAns
-        if (sessionAttrs.propertyInsuranceClaims) {
-            speechOutput.text = "Alright, Do you have any dogs?";
-        }
-        else {
-            sessionAttrs.isDogAdded = sessionAttrs.stateSpecQThreeAns;
-            if (sessionAttrs.isDogAdded) {
-                speechOutput = "Please list the dominant breed of your dog or dogs.";
-            }
-        }
-    }
-    else if (sessionAttrs.state === "MA") {
-        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQThreeAns
-        if (sessionAttrs.propertyInsuranceClaims) {
-            speechOutput.text = "Please list the dominant breed of your dog or dogs";
-        }
-    }
-    else if (sessionAttrs.state === "TN") {
-        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQThreeAns
-        if (sessionAttrs.propertyInsuranceClaims) {
-            speechOutput.text = "Alright, Do you have any dogs?";
         }
     }
     else {
@@ -988,54 +959,45 @@ AOS.prototype.handlerRentersStSpecQuestionFour = function (sessionAttrs) {
             speechOutput.text = "Alright, Do you have any dogs?";
         }
     }
-    else if (sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "ME" || sessionAttrs.state === "MD" ||
-        sessionAttrs.state === "NV" || sessionAttrs.state === "NH" || sessionAttrs.state === "TN") {
-        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQFourAns;
+    else if (sessionAttrs.state === "CO" || sessionAttrs.state === "ID" ||
+        sessionAttrs.state === "ME" || sessionAttrs.state === "MD" || sessionAttrs.state === "NH") {
         if (sessionAttrs.propertyInsuranceClaims) {
-            speechOutput.text = "Alright, Do you have any dogs?";
+            if (sessionAttrs.state === "MD") {
+                speechOutput.text = "Are there any additional residents?";
+            }
+            else {
+                speachOutput.text = "Alright, Do you have any dogs? ";
+            }
         }
         else {
-            if (sessionAttrs.state === "CO" || sessionAttrs.state === "ID" || sessionAttrs.state === "ME" ||
-                sessionAttrs.state === "NH") {
-                sessionAttrs.isDogAdded = sessionAttrs.stateSpecQFourAns;
+            if (sessionAttrs.state === "MD") {
+                if (sessionAttrs.additionalResidents) {
+                    speechOutput = "Alright, Do you have any dogs?";
+                }
+            }
+        }
+    }
+    else if (sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "MA" ||
+        sessionAttrs.state === "RI" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
+        sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "TN") {
+        if (sessionAttrs.propertyInsuranceClaims) {
+            if (sessionAttrs.state === "MA" || sessionAttrs.state === "NY") {
                 if (sessionAttrs.isDogAdded) {
                     speechOutput = "Please list the dominant breed of your dog or dogs.";
                 }
             }
-            if (sessionAttrs.state === "MD") {
-                if (sessionAttrs.isAdditionResidents) {
-                    speechOutput.text = "Please provide their name, relationship, age, employment and marital status.";
-                }
-                else {
-                    speechOutput.text = "Alright, Do you have any dogs?";
-                }
-            }
-        }
-    }
-    else if (sessionAttrs.state === "NY") {
-        if (sessionAttrs.isAdditionResidents) {
-            speechOutput.text = "Alright, Do you have any dogs?";
         }
         else {
-            sessionAttrs.isDogAdded = sessionAttrs.stateSpecQFourAns;
-            if (sessionAttrs.isDogAdded) {
-                speechOutput = "Please list the dominant breed of your dog or dogs.";
+            if (sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "RI" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
+                sessionAttrs.state === "TN") {
+                if (sessionAttrs.isDogAdded) {
+                    speechOutput = "Please list the dominant breed of your dog or dogs.";
+                }
             }
-        }
-    }
-    else if (sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "RI" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV") {
-        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQFourAns;
-        if (sessionAttrs.propertyInsuranceClaims) {
-            if (sessionAttrs.isDogAdded) {
-                speechOutput = "Please list the dominant breed of your dog or dogs.";
-            }
-        }
-    }
-    else if (sessionAttrs.state === "TN") {
-        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQFourAns;
-        if (sessionAttrs.propertyInsuranceClaims) {
-            if (sessionAttrs.isDogAdded) {
-                speechOutput = "Please list the dominant breed of your dog or dogs.";
+            else if (sessionAttrs.state === "NY") {
+                if (sessionAttrs.additionalResidents) {
+                    speachOutput.text = "Alright, Do you have any dogs? ";
+                }
             }
         }
     }
@@ -1055,7 +1017,7 @@ AOS.prototype.handlerRentersStSpecQuestionFive = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    if (sessionAttrs.state === "CA") {        
+    if (sessionAttrs.state === "CA") {
         if (sessionAttrs.propertyInsuranceClaims) {
             speechOutput.text = "Alright, Do you have any dogs?";
         }
@@ -1066,34 +1028,31 @@ AOS.prototype.handlerRentersStSpecQuestionFive = function (sessionAttrs) {
             }
         }
     }
-    else if (sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "ME" || sessionAttrs.state === "MD" ||
-        sessionAttrs.state === "NV" || sessionAttrs.state === "NH" || sessionAttrs.state === "TN") {
+    else if (sessionAttrs.state === "CO" || sessionAttrs.state === "ID" ||
+        sessionAttrs.state === "ME" || sessionAttrs.state === "MD" || sessionAttrs.state === "NH") {
         if (sessionAttrs.propertyInsuranceClaims) {
-            sessionAttrs.isDogAdded = sessionAttrs.stateSpecQFiveAns;
-            if (sessionAttrs.isDogAdded) {
-                speechOutput = "Please list the dominant breed of your dog or dogs.";
+            if (sessionAttrs.state === "MD") {
+                if (sessionAttrs.additionalResidents) {
+                    speechOutput = "Got it! Please provide their name, relationship, age, employment and marital status.";
+                }
+            }
+            else {
+                if (sessionAttrs.isDogAdded) {
+                    speechOutput = "Please list the dominant breed of your dog or dogs.";
+                }
             }
         }
         else {
             if (sessionAttrs.state === "MD") {
-                if (sessionAttrs.isAdditionResidents) {
-                    speechOutput.text = "Alright, Do you have any dogs?";
-                }
-                else {
-                    sessionAttrs.isDogAdded = sessionAttrs.stateSpecQFiveAns;
-                    if (sessionAttrs.isDogAdded) {
-                        speechOutput = "Please list the dominant breed of your dog or dogs.";
-                    }
+                if (sessionAttrs.additionalResidents) {
+                    speechOutput = "Alright, Do you have any dogs?";
                 }
             }
         }
     }
     else if (sessionAttrs.state === "NY") {
-        if (sessionAttrs.isAdditionResidents) {
-            sessionAttrs.isDogAdded = sessionAttrs.stateSpecQFiveAns;
-            if (sessionAttrs.isDogAdded) {
-                speechOutput = "Please list the dominant breed of your dog or dogs.";
-            }
+        if (sessionAttrs.additionalResidents) {
+            speachOutput.text = "Alright, Do you have any dogs? ";
         }
     }
     else {
@@ -1121,8 +1080,25 @@ AOS.prototype.handlerRentersStSpecQuestionSix = function (sessionAttrs) {
         }
     }
     else if (sessionAttrs.state === "MD") {
-        if (sessionAttrs.isAdditionResidents) {
-            sessionAttrs.isDogAdded = sessionAttrs.stateSpecQSixAns;
+        if (sessionAttrs.propertyInsuranceClaims) {
+            if (sessionAttrs.state === "MD") {
+                if (sessionAttrs.additionalResidents) {
+                    speechOutput = "Alright, Do you have any dogs?";
+                }
+            }
+        }
+        else {
+            if (sessionAttrs.state === "MD") {
+                if (sessionAttrs.additionalResidents) {
+                    if (sessionAttrs.isDogAdded) {
+                        speechOutput = "Please list the dominant breed of your dog or dogs.";
+                    }
+                }
+            }
+        }
+    }
+    else if (sessionAttrs.state === "NY") {
+        if (sessionAttrs.propertyInsuranceClaims && sessionAttrs.additionalResidents) {
             if (sessionAttrs.isDogAdded) {
                 speechOutput = "Please list the dominant breed of your dog or dogs.";
             }
@@ -1145,9 +1121,54 @@ AOS.prototype.handlerRentersStSpecQuestionSeven = function (sessionAttrs) {
     var repromptOutput = new Speech();
 
     if (sessionAttrs.state === "CA" || sessionAttrs.state === "MD") {
-        speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
-        rentersFindSpeechResp.speechOutput = speechOutput;
-        rentersFindSpeechResp.repromptOutput = speechOutput;
+        if (sessionAttrs.propertyInsuranceClaims) {
+            if (sessionAttrs.state === "MD") {
+                if (sessionAttrs.isDogAdded) {
+                    speechOutput = "Please list the dominant breed of your dog or dogs.";
+                }
+            }
+        }
+        else {
+            speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
+            rentersFindSpeechResp.speechOutput = speechOutput;
+            rentersFindSpeechResp.repromptOutput = speechOutput;
+        }
+        deferred.resolve(rentersFindSpeechResp);
+    }
+    else {
+        if (sessionAttrs.transactionToken) {
+            getRentersQuoteResponse(sessionAttrs)
+                .then(function (quoteDetailsSpeechOutput) {
+                    rentersQuoteSpeechResp.speechOutput = quoteDetailsSpeechOutput;
+                    rentersQuoteSpeechResp.repromptOutput = null;
+                    rentersQuoteSpeechResp.sessionAttrs = sessionAttrs;
+                    deferred.resolve(rentersQuoteSpeechResp);
+                });
+        } else {
+            speechOutput.text = "Please login to retrieve quote to see your saved quote. Login details are sent to your registered email id.";
+            rentersQuoteSpeechResp.speechOutput = speechOutput;
+            rentersQuoteSpeechResp.repromptOutput = speechOutput;
+        }
+    }
+    return deferred.promise;
+};
+
+AOS.prototype.handlerRentersStSpecQuestionEight = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+
+    if (sessionAttrs.state === "MD") {
+        if (sessionAttrs.propertyInsuranceClaims) {
+            if (sessionAttrs.state === "MD") {
+                if (sessionAttrs.isDogAdded) {
+                    speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
+                    rentersFindSpeechResp.speechOutput = speechOutput;
+                    rentersFindSpeechResp.repromptOutput = speechOutput;
+                }
+            }
+        }
         deferred.resolve(rentersFindSpeechResp);
     }
     else {
