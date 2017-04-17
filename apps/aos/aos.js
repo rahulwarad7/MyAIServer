@@ -835,6 +835,7 @@ AOS.prototype.handlerRentersStSpecQuestionTwo = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
     if (sessionAttrs.state === "CA") {
+        sessionAttrs.unOccupiedResidence = sessionAttrs.stateSpecQTwoAns;
         speechOutput.text = "Does your property have any of the following protective devices?Smoke Detectors, Fire Extinguishers, Deadbolt Locks, Central Fire Alarm, Fire Sprinklers, 24-Hour Manned Security, Central Burglar Alarm that reports to a monitoring center, Burglar Alarm that sounds in the home";
     }
     else if (sessionAttrs.state === "CT") {
@@ -852,6 +853,7 @@ AOS.prototype.handlerRentersStSpecQuestionTwo = function (sessionAttrs) {
     else if (sessionAttrs.state === "AR" || sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "MA" || sessionAttrs.state === "MI" ||
         sessionAttrs.state === "RI" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
         sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "OR" || sessionAttrs.state === "TN") {
+        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQTwoAns;
         if (sessionAttrs.propertyInsuranceClaims) {
             speachOutput.text = "Okay. I need to know date and type of the claim. Claim can be Fire, Theft, Liability, Vandalism, Water or other. "
         }
@@ -897,6 +899,7 @@ AOS.prototype.handlerRentersStSpecQuestionThree = function (sessionAttrs) {
     var repromptOutput = new Speech();
 
     if (sessionAttrs.state === "CA") {
+        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQThreeAns.toUpperCase();
         speechOutput.text = "Have you filed any claims in the last 3 years";
     }
     else if (sessionAttrs.state === "AL" || sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "LA" ||
@@ -951,7 +954,7 @@ AOS.prototype.handlerRentersStSpecQuestionFour = function (sessionAttrs) {
     var repromptOutput = new Speech();
 
     if (sessionAttrs.state === "CA") {
-        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQFourAns;
+        //sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQFourAns;
         if (sessionAttrs.propertyInsuranceClaims) {
             speechOutput.text = "Okay. I'll need to know the date and type of claim like fire, theft, liability, vandalism water or other type of claim.";
         }
@@ -1544,6 +1547,7 @@ function mapRentersInfo(sessionAttrs) {
         else {
             rentersInfoData.liveAtCurAddressMoreThanTwoYears = sessionAttrs.livedmorethantwo;
         }
+
         rentersInfoData.isSpouseAdded = false;
         rentersInfoData.isAgreeForTelemarketingCalls = true; //add question to user
 
@@ -1680,6 +1684,9 @@ function mapResidenceInfo(sessionAttrs, residenceInfo) {
         if (sessionAttrs.personalItemsValue == "15000" || sessionAttrs.personalItemsValue == "25000" || sessionAttrs.personalItemsValue == "35000" || sessionAttrs.personalItemsValue == "45000") {
             residenceInfo.residenceDetails.personalItems = sessionAttrs.personalItemsValue;
             residenceInfo.residenceDetails.personalItemsValue = '';
+        }
+        if(sessionAttrs.transactionToken.state === "CA"){
+            residenceInfo.residenceDetails.unOccupiedResidence = sessionAttrs.unOccupiedResidence;
         }
         else {
             residenceInfo.residenceDetails.personalItems = "Other";
@@ -1855,6 +1862,7 @@ function getResidenceInfo(transactionToken) {
 
 function postResidenceInfo(residenceInfoObject, transactionToken) {
     var deferred = q.defer();
+    console.log(residenceInfoObject);
     request(
         {
             method: "POST",
@@ -1869,6 +1877,7 @@ function postResidenceInfo(residenceInfoObject, transactionToken) {
                 deferred.reject(errormsg);
             } else {
                 var responseJson = response.body;
+                console.log(responseJson);
                 deferred.resolve(responseJson);
             }
         });
