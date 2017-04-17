@@ -1309,7 +1309,8 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "isDogAdded": undefined,
         "unOccupiedResidence" : undefined,
         "losstype" : undefined,
-        "lossdate" : undefined
+        "lossdate" : undefined,
+        "dogbreeds" : undefined
     };
 
     if (contextInfo) {
@@ -1435,12 +1436,18 @@ function getAOSRentersSessionAttributes(contextInfo) {
         if (contextInfo.parameters.isDogAdded) {
             sessionAttrs.isDogAdded = contextInfo.parameters.isDogAdded;
         }
-        if (contextInfo.parameters.losstype) {
-            sessionAttrs.losstype = contextInfo.parameters.losstype;
+        var losstype = contextInfo.parameters["losstype.original"];
+        if (losstype && losstype.trim().length > 0) {
+            sessionAttrs.losstype = contextInfo.parameters["losstype"];
         }
-        if (contextInfo.parameters.lossdate) {
-            sessionAttrs.lossdate = contextInfo.parameters.lossdate;
+        var lossdate = contextInfo.parameters["lossdate.original"];
+        if (lossdate && lossdate.trim().length > 0) {
+            sessionAttrs.lossdate = contextInfo.parameters["lossdate"];
         }
+        var dogbreeds = contextInfo.parameters["dogbreeds.original"];
+        if (dogbreeds && dogbreeds.trim().length > 0) {
+            sessionAttrs.dogbreeds = contextInfo.parameters["dogbreeds"];
+        }       
         if (contextInfo.parameters.creditHit != null) {
             sessionAttrs.creditHit = contextInfo.parameters.creditHit;
         }
