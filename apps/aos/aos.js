@@ -1147,11 +1147,13 @@ AOS.prototype.handlerRentersStSpecQuestionSeven = function (sessionAttrs) {
                     deferred.resolve(rentersQuoteSpeechResp);
                 });
         } else {
-            speechOutput.text = "Please login to retrieve quote to see your saved quote. Login details are sent to your registered email id.";
-            rentersQuoteSpeechResp.speechOutput = speechOutput;
-            rentersQuoteSpeechResp.repromptOutput = speechOutput;
+            speechOutput.text = "Please login to retrieve quote to see your saved quote. Login details are sent to your registered email id.";           
         }
     }
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
+
     return deferred.promise;
 };
 
@@ -1184,10 +1186,13 @@ AOS.prototype.handlerRentersStSpecQuestionEight = function (sessionAttrs) {
                 });
         } else {
             speechOutput.text = "Please login to retrieve quote to see your saved quote. Login details are sent to your registered email id.";
-            rentersQuoteSpeechResp.speechOutput = speechOutput;
-            rentersQuoteSpeechResp.repromptOutput = speechOutput;
+            
         }
     }
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
+
     return deferred.promise;
 };
 
