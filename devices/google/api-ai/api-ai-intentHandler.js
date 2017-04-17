@@ -290,7 +290,7 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
-         case "AOS-RENTERS-STSPECQUESTIONEIGHT":
+        case "AOS-RENTERS-STSPECQUESTIONEIGHT":
             handlerAOSRentersStSpecQuestionEight(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
@@ -906,6 +906,7 @@ function handlerAOSRentersIsFiveOrMoreUnitsYes(body, deferred) {
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
             rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
             deferred.resolve(rentersWelcomeSpeechResp);
         });
 
@@ -922,6 +923,7 @@ function handlerAOSRentersIsFiveOrMoreUnitsNo(body, deferred) {
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
             rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
             deferred.resolve(rentersWelcomeSpeechResp);
         });
 
@@ -938,6 +940,7 @@ function handlerAOSRentersStSpecQuestionOne(body, deferred) {
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
             rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
             deferred.resolve(rentersWelcomeSpeechResp);
         });
 
@@ -954,6 +957,7 @@ function handlerAOSRentersStSpecQuestionTwo(body, deferred) {
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
             rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
             deferred.resolve(rentersWelcomeSpeechResp);
         });
 
@@ -970,6 +974,7 @@ function handlerAOSRentersStSpecQuestionThree(body, deferred) {
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
             rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
             deferred.resolve(rentersWelcomeSpeechResp);
         });
 
@@ -986,6 +991,7 @@ function handlerAOSRentersStSpecQuestionFour(body, deferred) {
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
             rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
             deferred.resolve(rentersWelcomeSpeechResp);
         });
 
@@ -1002,6 +1008,7 @@ function handlerAOSRentersStSpecQuestionFive(body, deferred) {
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
             rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
             deferred.resolve(rentersWelcomeSpeechResp);
         });
 
@@ -1018,6 +1025,7 @@ function handlerAOSRentersStSpecQuestionSix(body, deferred) {
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
             rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
             deferred.resolve(rentersWelcomeSpeechResp);
         });
 
@@ -1033,6 +1041,7 @@ function handlerAOSRentersStSpecQuestionSeven(body, deferred) {
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
             rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
             deferred.resolve(rentersWelcomeSpeechResp);
         });
 
@@ -1049,6 +1058,7 @@ function handlerAOSRentersStSpecQuestionEight(body, deferred) {
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
             rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
             deferred.resolve(rentersWelcomeSpeechResp);
         });
 
@@ -1297,6 +1307,7 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "isResidence2600ftFromCoastVisible": undefined,
         "propertyInsuranceClaims": undefined,
         "isDogAdded": undefined,
+        "unOccupiedResidence" : undefined
     };
 
     if (contextInfo) {
@@ -1419,6 +1430,10 @@ function getAOSRentersSessionAttributes(contextInfo) {
         if (contextInfo.parameters.agentDetails) {
             sessionAttrs.agentDetails = contextInfo.parameters.agentDetails;
         }
+        if (contextInfo.parameters.isDogAdded) {
+            sessionAttrs.isDogAdded = contextInfo.parameters.isDogAdded;
+        }
+        
         if (contextInfo.parameters.creditHit != null) {
             sessionAttrs.creditHit = contextInfo.parameters.creditHit;
         }
@@ -1525,12 +1540,12 @@ function getAOSRentersSessionAttributes(contextInfo) {
         if (contextInfo.parameters.isResidence2600ftFromCoastVisible) {
             sessionAttrs.isResidence2600ftFromCoastVisible = contextInfo.parameters.isResidence2600ftFromCoastVisible;
         }
+        if (contextInfo.parameters.unOccupiedResidence) {
+            sessionAttrs.unOccupiedResidence = contextInfo.parameters.unOccupiedResidence;
+        }
         if (contextInfo.parameters.propertyInsuranceClaims) {
             sessionAttrs.propertyInsuranceClaims = contextInfo.parameters.propertyInsuranceClaims;
-        }
-        if (contextInfo.parameters.isDogAdded) {
-            sessionAttrs.isDogAdded = contextInfo.parameters.isDogAdded;
-        }
+        }        
         if (contextInfo.parameters["IsInsuredAddrSame"] === false || contextInfo.parameters["IsInsuredAddrSame"] === "false") {
             sessionAttrs.IsInsuredAddrSame = false;
         }
