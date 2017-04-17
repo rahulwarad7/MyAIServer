@@ -1684,10 +1684,10 @@ function mapResidenceInfo(sessionAttrs, residenceInfo) {
             residenceInfo.residenceDetails.personalItems = sessionAttrs.personalItemsValue;
             residenceInfo.residenceDetails.personalItemsValue = '';
         }
-        if(sessionAttrs.unOccupiedResidence) {
+        if(sessionAttrs.transactionToken.state === "CA") {
             residenceInfo.residenceDetails.unOccupiedResidence = sessionAttrs.unOccupiedResidence;
         }
-        if(sessionAttrs.propertyInsuranceClaims) {
+        if(sessionAttrs.transactionToken.state === "CA") {
             residenceInfo.residenceDetails.propertyInsuranceClaims = sessionAttrs.propertyInsuranceClaims;
         }
         else {
