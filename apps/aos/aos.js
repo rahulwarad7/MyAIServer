@@ -899,7 +899,6 @@ AOS.prototype.handlerRentersStSpecQuestionThree = function (sessionAttrs) {
     var repromptOutput = new Speech();
 
     if (sessionAttrs.state === "CA") {
-        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQThreeAns.toUpperCase();
         speechOutput.text = "Have you filed any claims in the last 3 years";
     }
     else if (sessionAttrs.state === "AL" || sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "LA" ||
@@ -954,8 +953,8 @@ AOS.prototype.handlerRentersStSpecQuestionFour = function (sessionAttrs) {
     var repromptOutput = new Speech();
 
     if (sessionAttrs.state === "CA") {
-        //sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQFourAns;
-        if (sessionAttrs.propertyInsuranceClaims) {
+        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQFourAns.toUpperCase();
+        if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             speechOutput.text = "Okay. I'll need to know the date and type of claim like fire, theft, liability, vandalism water or other type of claim.";
         }
         else {
@@ -964,7 +963,7 @@ AOS.prototype.handlerRentersStSpecQuestionFour = function (sessionAttrs) {
     }
     else if (sessionAttrs.state === "CO" || sessionAttrs.state === "ID" ||
         sessionAttrs.state === "ME" || sessionAttrs.state === "MD" || sessionAttrs.state === "NH") {
-        if (sessionAttrs.propertyInsuranceClaims) {
+        if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             if (sessionAttrs.state === "MD") {
                 speechOutput.text = "Are there any additional residents?";
             }
@@ -983,7 +982,7 @@ AOS.prototype.handlerRentersStSpecQuestionFour = function (sessionAttrs) {
     else if (sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "MA" ||
         sessionAttrs.state === "RI" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
         sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "TN") {
-        if (sessionAttrs.propertyInsuranceClaims) {
+        if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             if (sessionAttrs.state === "MA" || sessionAttrs.state === "NY") {
                 if (sessionAttrs.isDogAdded) {
                     speechOutput = "Please list the dominant breed of your dog or dogs.";
@@ -1021,7 +1020,7 @@ AOS.prototype.handlerRentersStSpecQuestionFive = function (sessionAttrs) {
     var repromptOutput = new Speech();
 
     if (sessionAttrs.state === "CA") {
-        if (sessionAttrs.propertyInsuranceClaims) {
+        if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             speechOutput.text = "Alright, Do you have any dogs?";
         }
         else {
@@ -1033,7 +1032,7 @@ AOS.prototype.handlerRentersStSpecQuestionFive = function (sessionAttrs) {
     }
     else if (sessionAttrs.state === "CO" || sessionAttrs.state === "ID" ||
         sessionAttrs.state === "ME" || sessionAttrs.state === "MD" || sessionAttrs.state === "NH") {
-        if (sessionAttrs.propertyInsuranceClaims) {
+        if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             if (sessionAttrs.state === "MD") {
                 if (sessionAttrs.additionalResidents) {
                     speechOutput = "Got it! Please provide their name, relationship, age, employment and marital status.";
@@ -1075,7 +1074,7 @@ AOS.prototype.handlerRentersStSpecQuestionSix = function (sessionAttrs) {
     var repromptOutput = new Speech();
 
     if (sessionAttrs.state === "CA") {
-        if (sessionAttrs.propertyInsuranceClaims) {
+        if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             sessionAttrs.isDogAdded = sessionAttrs.stateSpecQSixAns;
             if (sessionAttrs.isDogAdded) {
                 speechOutput = "Please list the dominant breed of your dog or dogs.";
@@ -1083,7 +1082,7 @@ AOS.prototype.handlerRentersStSpecQuestionSix = function (sessionAttrs) {
         }
     }
     else if (sessionAttrs.state === "MD") {
-        if (sessionAttrs.propertyInsuranceClaims) {
+        if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             if (sessionAttrs.state === "MD") {
                 if (sessionAttrs.additionalResidents) {
                     speechOutput = "Alright, Do you have any dogs?";
@@ -1101,7 +1100,7 @@ AOS.prototype.handlerRentersStSpecQuestionSix = function (sessionAttrs) {
         }
     }
     else if (sessionAttrs.state === "NY") {
-        if (sessionAttrs.propertyInsuranceClaims && sessionAttrs.additionalResidents) {
+        if (sessionAttrs.propertyInsuranceClaims === "TRUE" && sessionAttrs.additionalResidents) {
             if (sessionAttrs.isDogAdded) {
                 speechOutput = "Please list the dominant breed of your dog or dogs.";
             }
@@ -1124,7 +1123,7 @@ AOS.prototype.handlerRentersStSpecQuestionSeven = function (sessionAttrs) {
     var repromptOutput = new Speech();
 
     if (sessionAttrs.state === "CA" || sessionAttrs.state === "MD") {
-        if (sessionAttrs.propertyInsuranceClaims) {
+        if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             if (sessionAttrs.state === "MD") {
                 if (sessionAttrs.isDogAdded) {
                     speechOutput = "Please list the dominant breed of your dog or dogs.";
@@ -1163,7 +1162,7 @@ AOS.prototype.handlerRentersStSpecQuestionEight = function (sessionAttrs) {
     var repromptOutput = new Speech();
 
     if (sessionAttrs.state === "MD") {
-        if (sessionAttrs.propertyInsuranceClaims) {
+        if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             if (sessionAttrs.state === "MD") {
                 if (sessionAttrs.isDogAdded) {
                     speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
@@ -1685,8 +1684,11 @@ function mapResidenceInfo(sessionAttrs, residenceInfo) {
             residenceInfo.residenceDetails.personalItems = sessionAttrs.personalItemsValue;
             residenceInfo.residenceDetails.personalItemsValue = '';
         }
-        if(sessionAttrs.transactionToken.state === "CA"){
+        if(sessionAttrs.unOccupiedResidence) {
             residenceInfo.residenceDetails.unOccupiedResidence = sessionAttrs.unOccupiedResidence;
+        }
+        if(sessionAttrs.propertyInsuranceClaims) {
+            residenceInfo.residenceDetails.propertyInsuranceClaims = sessionAttrs.propertyInsuranceClaims;
         }
         else {
             residenceInfo.residenceDetails.personalItems = "Other";
