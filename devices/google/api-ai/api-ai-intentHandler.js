@@ -1307,7 +1307,9 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "isResidence2600ftFromCoastVisible": undefined,
         "propertyInsuranceClaims": undefined,
         "isDogAdded": undefined,
-        "unOccupiedResidence" : undefined
+        "unOccupiedResidence" : undefined,
+        "losstype" : undefined,
+        "lossdate" : undefined
     };
 
     if (contextInfo) {
@@ -1433,7 +1435,12 @@ function getAOSRentersSessionAttributes(contextInfo) {
         if (contextInfo.parameters.isDogAdded) {
             sessionAttrs.isDogAdded = contextInfo.parameters.isDogAdded;
         }
-        
+        if (contextInfo.parameters.losstype) {
+            sessionAttrs.losstype = contextInfo.parameters.losstype;
+        }
+        if (contextInfo.parameters.lossdate) {
+            sessionAttrs.lossdate = contextInfo.parameters.lossdate;
+        }
         if (contextInfo.parameters.creditHit != null) {
             sessionAttrs.creditHit = contextInfo.parameters.creditHit;
         }
