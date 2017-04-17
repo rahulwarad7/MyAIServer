@@ -1460,6 +1460,7 @@ function quoteLandingURLResponse(sessionAttrs) {
                 quoteURLSpeechOutput.sessionAttrs = sessionAttrs;
                 quoteURLSpeechOutput.text = "Perfect. Here is the URL to connect to live quote page: ";
                 quoteURLSpeechOutput.text = quoteURLSpeechOutput.text + sessionAttrs.retrieveURL;
+                quoteURLSpeechOutput.text = quoteURLSpeechOutput.text + "&sessionID=" + sessionAttrs.transactionToken.sessionID + "&product=RENTERS&isAI=TRUE";
             }
             else {
                 quoteURLSpeechOutput.text = "Could not save your quote. Please contact near by agent for more details";
