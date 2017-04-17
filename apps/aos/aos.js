@@ -1538,7 +1538,12 @@ function mapRentersInfo(sessionAttrs) {
         }
         rentersInfoData = mapContactInfo(rentersInfoData, sessionAttrs);
         rentersInfoData.businessOutOfResidence = null;
-        rentersInfoData.liveAtCurAddressMoreThanTwoYears = sessionAttrs.livedmorethantwo;
+        if (sessionAttrs.transactionToken.state === "KS") {
+            rentersInfoData.liveAtCurAddressMoreThanTwoYears = null;
+        }
+        else {
+            rentersInfoData.liveAtCurAddressMoreThanTwoYears = sessionAttrs.livedmorethantwo;
+        }
         rentersInfoData.isSpouseAdded = false;
         rentersInfoData.isAgreeForTelemarketingCalls = true; //add question to user
 
