@@ -1307,8 +1307,12 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "isResidence2600ftFromCoastVisible": undefined,
         "propertyInsuranceClaims": undefined,
         "isDogAdded": undefined,
+        "claimLostDate": undefined,
+        "claimLostType": undefined,
+        "claimLostDescription": undefined,
         "unOccupiedResidence" : undefined,
         "losstype" : undefined,
+        "lossDescription" : undefined,
         "lossdate" : undefined,
         "dogbreeds" : undefined
     };
@@ -1436,12 +1440,22 @@ function getAOSRentersSessionAttributes(contextInfo) {
         if (contextInfo.parameters.isDogAdded) {
             sessionAttrs.isDogAdded = contextInfo.parameters.isDogAdded;
         }
-        var losstype = contextInfo.parameters["losstype.original"];
-        if (losstype && losstype.trim().length > 0) {
+        if (contextInfo.parameters.claimLostDate) {
+            sessionAttrs.claimLostDate = contextInfo.parameters.claimLostDate;
+        }
+        if (contextInfo.parameters.claimLostType) {
+            sessionAttrs.claimLostType = contextInfo.parameters.claimLostType;
+        }
+        if (contextInfo.parameters.claimLostDescription) {
+            sessionAttrs.claimLostDescription = contextInfo.parameters.claimLostDescription;
+        }
+        var lossDescription = contextInfo.parameters["losstype.original"];
+        if (lossDescription) {
+            sessionAttrs.lossDescription = lossDescription;
             sessionAttrs.losstype = contextInfo.parameters["losstype"];
         }
         var lossdate = contextInfo.parameters["lossdate.original"];
-        if (lossdate && lossdate.trim().length > 0) {
+        if (lossdate) {
             sessionAttrs.lossdate = contextInfo.parameters["lossdate"];
         }
         var dogbreeds = contextInfo.parameters["dogbreeds.original"];
