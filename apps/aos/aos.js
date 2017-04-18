@@ -760,7 +760,7 @@ AOS.prototype.handlerRentersIsFiveOrMoreUnitsNo = function (sessionAttrs) {
     }
     else if (sessionAttrs.state == "AK" || sessionAttrs.state == "DC" || sessionAttrs.state == "HI" || sessionAttrs.state == "MT" ||
         sessionAttrs.state == "NJ" || sessionAttrs.state == "ND" || sessionAttrs.state == "PA" || sessionAttrs.state == "SD") {
-        speechOutput = "Alright! Do you have any dogs?";
+        speachOutput.text = "Alright! Do you have any dogs?";
     }
     if (!speechOutput.text) {
         speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
@@ -823,7 +823,7 @@ AOS.prototype.handlerRentersStSpecQuestionOne = function (sessionAttrs) {
         sessionAttrs.state == "NJ" || sessionAttrs.state == "ND" || sessionAttrs.state == "PA" || sessionAttrs.state == "SD") {
         sessionAttrs.isDogAdded = sessionAttrs.stateSpecQOneAns;
         if (sessionAttrs.isDogAdded === "true") {
-            speechOutput = "Please list the dominant breed of your dog or dogs.";
+            speachOutput.text = "Please list the dominant breed of your dog or dogs.";
         }
     }
     if (!speechOutput.text) {
@@ -877,19 +877,19 @@ AOS.prototype.handlerRentersStSpecQuestionTwo = function (sessionAttrs) {
                 }
                 else if (sessionAttrs.state == "MA") {
                     if (sessionAttrs.isDogAdded === "true") {
-                        speechOutput = "Please list the dominant breed of your dog or dogs.";
+                        speechOutput.text = "Please list the dominant breed of your dog or dogs.";
                     }
                 }
             }
             else if (sessionAttrs.state === "NY") {
-                speechOutput = "Are there any additional residents?";
+                speachOutput.text = "Are there any additional residents?";
             }
         }
     }
     else if (sessionAttrs.state === "DE" || sessionAttrs.state == "NE" || sessionAttrs.state == "VT" || sessionAttrs.state == "WY") {
         sessionAttrs.isDogAdded = sessionAttrs.stateSpecQTwoAns;
         if (sessionAttrs.isDogAdded === "true") {
-            speechOutput = "Please list the dominant breed of your dog or dogs.";
+            speachOutput.text = "Please list the dominant breed of your dog or dogs.";
         }
     }
     if (!speechOutput.text) {
@@ -941,7 +941,7 @@ AOS.prototype.handlerRentersStSpecQuestionThree = function (sessionAttrs) {
             }
             else if (sessionAttrs.state === "NY") {
                 if (sessionAttrs.additionalResidents) {
-                    speechOutput = "Got it! Please provide their name, relationship, age, employment and marital status.";
+                    speachOutput.text = "Got it! Please provide their name, relationship, age, employment and marital status.";
                 }
             }
         }
@@ -984,7 +984,7 @@ AOS.prototype.handlerRentersStSpecQuestionFour = function (sessionAttrs) {
         else {
             if (sessionAttrs.state === "MD") {
                 if (sessionAttrs.additionalResidents) {
-                    speechOutput = "Alright, Do you have any dogs?";
+                    speachOutput.text = "Alright, Do you have any dogs?";
                 }
             }
         }
@@ -995,7 +995,7 @@ AOS.prototype.handlerRentersStSpecQuestionFour = function (sessionAttrs) {
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             if (sessionAttrs.state === "MA" || sessionAttrs.state === "NY") {
                 if (sessionAttrs.isDogAdded === "true") {
-                    speechOutput = "Please list the dominant breed of your dog or dogs.";
+                    speachOutput.text = "Please list the dominant breed of your dog or dogs.";
                 }
             }
         }
@@ -1003,7 +1003,7 @@ AOS.prototype.handlerRentersStSpecQuestionFour = function (sessionAttrs) {
             if (sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "RI" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
                 sessionAttrs.state === "TN") {
                 if (sessionAttrs.isDogAdded === "true") {
-                    speechOutput = "Please list the dominant breed of your dog or dogs.";
+                    speachOutput.text = "Please list the dominant breed of your dog or dogs.";
                 }
             }
             else if (sessionAttrs.state === "NY") {
