@@ -1496,6 +1496,9 @@ function quoteResponse(sessionAttrs) {
                     quoteSpeechOutput.text = quoteSpeechOutput.text + " .Your down payment would be $" + quoteResp.quoteList[0].paymentInfo.inDownPaymentAmount;
                     quoteSpeechOutput.text = quoteSpeechOutput.text + " .Someone will be in touch with you shortly, but in the meantime would you like to continue from quote?";
                 }
+                if(quoteResp && quoteResp.stopPageType === "DangerousDogSelected") {
+                    quoteSpeechOutput.text = "Okay, You have selected a dangerous dog.  ";
+                }
                 deferred.resolve(quoteSpeechOutput);
             }).catch(function (error) {
                 quoteSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
