@@ -718,7 +718,7 @@ AOS.prototype.handlerRentersIsFiveOrMoreUnitsYes = function (sessionAttrs) {
         sessionAttrs.state == "NJ" || sessionAttrs.state == "ND" || sessionAttrs.state == "PA" || sessionAttrs.state == "SD") {
         speechOutput = "Alright! Do you have any dogs?";
     }
-    else {
+    if(!speechOutput.text) {
         speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
     }
     rentersFindSpeechResp.speechOutput = speechOutput;
@@ -762,7 +762,7 @@ AOS.prototype.handlerRentersIsFiveOrMoreUnitsNo = function (sessionAttrs) {
         sessionAttrs.state == "NJ" || sessionAttrs.state == "ND" || sessionAttrs.state == "PA" || sessionAttrs.state == "SD") {
         speechOutput = "Alright! Do you have any dogs?";
     }
-    else {
+    if(!speechOutput.text) {
         speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
     }
     rentersFindSpeechResp.speechOutput = speechOutput;
@@ -819,7 +819,7 @@ AOS.prototype.handlerRentersStSpecQuestionOne = function (sessionAttrs) {
             speechOutput = "Please list the dominant breed of your dog or dogs.";
         }
     }
-    else {
+    if(!speechOutput.text) {
         speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
     }
     rentersFindSpeechResp.speechOutput = speechOutput;
@@ -882,7 +882,7 @@ AOS.prototype.handlerRentersStSpecQuestionTwo = function (sessionAttrs) {
             speechOutput = "Please list the dominant breed of your dog or dogs.";
         }
     }
-    else {
+   if(!speechOutput.text) {
         speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
     }
     rentersFindSpeechResp.speechOutput = speechOutput;
@@ -936,7 +936,7 @@ AOS.prototype.handlerRentersStSpecQuestionThree = function (sessionAttrs) {
             }
         }
     }
-    else {
+    if(!speechOutput.text) {
         speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
     }
     rentersFindSpeechResp.speechOutput = speechOutput;
@@ -1003,7 +1003,7 @@ AOS.prototype.handlerRentersStSpecQuestionFour = function (sessionAttrs) {
             }
         }
     }
-    else {
+    if(!speechOutput.text) {
         speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
     }
     rentersFindSpeechResp.speechOutput = speechOutput;
@@ -1060,7 +1060,7 @@ AOS.prototype.handlerRentersStSpecQuestionFive = function (sessionAttrs) {
             speachOutput.text = "Alright, Do you have any dogs? ";
         }
     }
-    else {
+    if(!speechOutput.text) {
         speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
     }
     rentersFindSpeechResp.speechOutput = speechOutput;
@@ -1109,7 +1109,7 @@ AOS.prototype.handlerRentersStSpecQuestionSix = function (sessionAttrs) {
             }
         }
     }
-    else {
+    if(!speechOutput.text) {
         speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
     }
     rentersFindSpeechResp.speechOutput = speechOutput;
@@ -1175,7 +1175,7 @@ AOS.prototype.handlerRentersStSpecQuestionEight = function (sessionAttrs) {
                 }
             }
         }
-        deferred.resolve(rentersFindSpeechResp);
+        
     }
     else {
         if (sessionAttrs.transactionToken) {
