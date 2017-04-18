@@ -718,7 +718,7 @@ AOS.prototype.handlerRentersIsFiveOrMoreUnitsYes = function (sessionAttrs) {
         sessionAttrs.state == "NJ" || sessionAttrs.state == "ND" || sessionAttrs.state == "PA" || sessionAttrs.state == "SD") {
         speechOutput = "Alright! Do you have any dogs?";
     }
-    if(!speechOutput.text) {
+    if (!speechOutput.text) {
         speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
     }
     rentersFindSpeechResp.speechOutput = speechOutput;
@@ -762,7 +762,7 @@ AOS.prototype.handlerRentersIsFiveOrMoreUnitsNo = function (sessionAttrs) {
         sessionAttrs.state == "NJ" || sessionAttrs.state == "ND" || sessionAttrs.state == "PA" || sessionAttrs.state == "SD") {
         speechOutput = "Alright! Do you have any dogs?";
     }
-    if(!speechOutput.text) {
+    if (!speechOutput.text) {
         speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
     }
     rentersFindSpeechResp.speechOutput = speechOutput;
@@ -782,7 +782,8 @@ AOS.prototype.handlerRentersStSpecQuestionOne = function (sessionAttrs) {
         speechOutput.text = "Ok. Is your residence regularly unoccupied for 24 hours or more? ";
     }
     else if (sessionAttrs.state === "CT") {
-        if (sessionAttrs && sessionAttrs.agentDetails && sessionAttrs.isResidence2600ftFromCoastVisible) {
+        sessionAttrs.isResidence2600ftFromCoastVisible = sessionAttrs.stateSpecQOneAns;
+        if (sessionAttrs && sessionAttrs.agentDetails && sessionAttrs.isResidence2600ftFromCoastVisible === "true") {
             speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. Here is agent close to you: " + sessionAttrs.agentDetails.name + " , you can call at, " + sessionAttrs.agentDetails.phoneNumber + " , or email at, " + sessionAttrs.agentDetails.emailAddress;
         }
         else {
@@ -819,7 +820,7 @@ AOS.prototype.handlerRentersStSpecQuestionOne = function (sessionAttrs) {
             speechOutput = "Please list the dominant breed of your dog or dogs.";
         }
     }
-    if(!speechOutput.text) {
+    if (!speechOutput.text) {
         speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
     }
     rentersFindSpeechResp.speechOutput = speechOutput;
@@ -839,7 +840,8 @@ AOS.prototype.handlerRentersStSpecQuestionTwo = function (sessionAttrs) {
         speechOutput.text = "Does your property have any of the following protective devices?Smoke Detectors, Fire Extinguishers, Deadbolt Locks, Central Fire Alarm, Fire Sprinklers, 24-Hour Manned Security, Central Burglar Alarm that reports to a monitoring center, Burglar Alarm that sounds in the home";
     }
     else if (sessionAttrs.state === "CT") {
-        if (sessionAttrs && !sessionAttrs.isResidence2600ftFromCoastVisible) {
+        if (sessionAttrs && sessionAttrs.isResidence2600ftFromCoastVisible === "false") {
+            sessionAttrs.isDogAdded = sessionAttrs.stateSpecQTwoAns;
             if (sessionAttrs.isDogAdded === "true") {
                 speechOutput.text = "Please list the dominant breed of your dog or dogs";
             }
@@ -882,7 +884,7 @@ AOS.prototype.handlerRentersStSpecQuestionTwo = function (sessionAttrs) {
             speechOutput = "Please list the dominant breed of your dog or dogs.";
         }
     }
-   if(!speechOutput.text) {
+    if (!speechOutput.text) {
         speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
     }
     rentersFindSpeechResp.speechOutput = speechOutput;
@@ -936,7 +938,7 @@ AOS.prototype.handlerRentersStSpecQuestionThree = function (sessionAttrs) {
             }
         }
     }
-    if(!speechOutput.text) {
+    if (!speechOutput.text) {
         speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
     }
     rentersFindSpeechResp.speechOutput = speechOutput;
@@ -1003,7 +1005,7 @@ AOS.prototype.handlerRentersStSpecQuestionFour = function (sessionAttrs) {
             }
         }
     }
-    if(!speechOutput.text) {
+    if (!speechOutput.text) {
         speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
     }
     rentersFindSpeechResp.speechOutput = speechOutput;
@@ -1060,7 +1062,7 @@ AOS.prototype.handlerRentersStSpecQuestionFive = function (sessionAttrs) {
             speachOutput.text = "Alright, Do you have any dogs? ";
         }
     }
-    if(!speechOutput.text) {
+    if (!speechOutput.text) {
         speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
     }
     rentersFindSpeechResp.speechOutput = speechOutput;
@@ -1109,7 +1111,7 @@ AOS.prototype.handlerRentersStSpecQuestionSix = function (sessionAttrs) {
             }
         }
     }
-    if(!speechOutput.text) {
+    if (!speechOutput.text) {
         speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
     }
     rentersFindSpeechResp.speechOutput = speechOutput;
@@ -1137,7 +1139,7 @@ AOS.prototype.handlerRentersStSpecQuestionSeven = function (sessionAttrs) {
                 rentersFindSpeechResp.speechOutput = speechOutput;
                 rentersFindSpeechResp.repromptOutput = speechOutput;
             }
-        }        
+        }
     }
     else {
         if (sessionAttrs.transactionToken) {
@@ -1175,7 +1177,7 @@ AOS.prototype.handlerRentersStSpecQuestionEight = function (sessionAttrs) {
                 }
             }
         }
-        
+
     }
     else {
         if (sessionAttrs.transactionToken) {
@@ -1496,7 +1498,7 @@ function quoteResponse(sessionAttrs) {
                     quoteSpeechOutput.text = quoteSpeechOutput.text + " .Your down payment would be $" + quoteResp.quoteList[0].paymentInfo.inDownPaymentAmount;
                     quoteSpeechOutput.text = quoteSpeechOutput.text + " .Someone will be in touch with you shortly, but in the meantime would you like to continue from quote?";
                 }
-                if(quoteResp && quoteResp.stopPageType === "DangerousDogSelected") {
+                if (quoteResp && quoteResp.stopPageType === "DangerousDogSelected") {
                     quoteSpeechOutput.text = "Okay, You have selected a dangerous dog.  ";
                 }
                 deferred.resolve(quoteSpeechOutput);
