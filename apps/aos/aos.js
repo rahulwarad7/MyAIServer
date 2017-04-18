@@ -1077,7 +1077,7 @@ AOS.prototype.handlerRentersStSpecQuestionSix = function (sessionAttrs) {
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             sessionAttrs.isDogAdded = sessionAttrs.stateSpecQSixAns;
             if (sessionAttrs.isDogAdded) {
-                speechOutput = "Please list the dominant breed of your dog or dogs.";
+                speechOutput.text = "Please list the dominant breed of your dog or dogs.";
             }
         }
     }
@@ -1085,7 +1085,7 @@ AOS.prototype.handlerRentersStSpecQuestionSix = function (sessionAttrs) {
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             if (sessionAttrs.state === "MD") {
                 if (sessionAttrs.additionalResidents) {
-                    speechOutput = "Alright, Do you have any dogs?";
+                    speechOutput.text = "Alright, Do you have any dogs?";
                 }
             }
         }
@@ -1093,7 +1093,7 @@ AOS.prototype.handlerRentersStSpecQuestionSix = function (sessionAttrs) {
             if (sessionAttrs.state === "MD") {
                 if (sessionAttrs.additionalResidents) {
                     if (sessionAttrs.isDogAdded) {
-                        speechOutput = "Please list the dominant breed of your dog or dogs.";
+                        speechOutput.text = "Please list the dominant breed of your dog or dogs.";
                     }
                 }
             }
@@ -1102,7 +1102,7 @@ AOS.prototype.handlerRentersStSpecQuestionSix = function (sessionAttrs) {
     else if (sessionAttrs.state === "NY") {
         if (sessionAttrs.propertyInsuranceClaims === "TRUE" && sessionAttrs.additionalResidents) {
             if (sessionAttrs.isDogAdded) {
-                speechOutput = "Please list the dominant breed of your dog or dogs.";
+                speechOutput.text = "Please list the dominant breed of your dog or dogs.";
             }
         }
     }
@@ -1126,7 +1126,7 @@ AOS.prototype.handlerRentersStSpecQuestionSeven = function (sessionAttrs) {
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             if (sessionAttrs.state === "MD") {
                 if (sessionAttrs.isDogAdded) {
-                    speechOutput = "Please list the dominant breed of your dog or dogs.";
+                    speechOutput.text = "Please list the dominant breed of your dog or dogs.";
                 }
             }
         }
