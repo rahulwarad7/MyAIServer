@@ -1129,13 +1129,12 @@ AOS.prototype.handlerRentersStSpecQuestionSeven = function (sessionAttrs) {
                     speechOutput.text = "Please list the dominant breed of your dog or dogs.";
                 }
             }
-        }
-        else {
-            speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
-            rentersFindSpeechResp.speechOutput = speechOutput;
-            rentersFindSpeechResp.repromptOutput = speechOutput;
-        }
-        deferred.resolve(rentersFindSpeechResp);
+            else {
+                speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
+                rentersFindSpeechResp.speechOutput = speechOutput;
+                rentersFindSpeechResp.repromptOutput = speechOutput;
+            }
+        }        
     }
     else {
         if (sessionAttrs.transactionToken) {
@@ -1699,10 +1698,10 @@ function mapResidenceInfo(sessionAttrs, residenceInfo) {
         if (sessionAttrs.transactionToken.state === "CA") {
             residenceInfo.residenceDetails.propertyInsuranceClaims = sessionAttrs.propertyInsuranceClaims;
         }
-        if(sessionAttrs.propertyInsuranceClaims === "TRUE") {
+        if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             var lostdate = DateUtil.getFormattedDate(sessionInfo.lossDate, "MM\DD\YYYY");
             var splitDate = null;
-            if(lostdate) {
+            if (lostdate) {
                 var splitDate = lostdate.toString().split("\\");
             }
             residenceInfo.residenceDetails.claims = [];
@@ -1714,13 +1713,13 @@ function mapResidenceInfo(sessionAttrs, residenceInfo) {
             residenceInfo.residenceDetails.claims[0].lossType = sessionAttrs.lossType;
             residenceInfo.residenceDetails.claims[0].lossTypeDescription = sessionAttrs.lossType;
         }
-        if(sessionAttrs.isDogAdded) {            
+        if (sessionAttrs.isDogAdded) {
             residenceInfo.residenceDetails.dogList = [];
             residenceInfo.residenceDetails.dogList[0] = {};
             residenceInfo.residenceDetails.dogList[0].dogId = "1"
             residenceInfo.residenceDetails.dogList[0].dogBreed = sessionAttrs.dogbreeds;
             residenceInfo.residenceDetails.dogList[0].dogCountLable = "Dog #1";
-            residenceInfo.residenceDetails.noOfDogs = "1";            
+            residenceInfo.residenceDetails.noOfDogs = "1";
         }
 
     }
