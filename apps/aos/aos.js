@@ -812,12 +812,12 @@ AOS.prototype.handlerRentersStSpecQuestionOne = function (sessionAttrs) {
     }
     else if (sessionAttrs.state === "DE" || sessionAttrs.state == "NE" || sessionAttrs.state == "VT" || sessionAttrs.state == "WY") {
         sessionAttrs.isResidenceWithinThousandFtFromCoast = sessionAttrs.stateSpecQOneAns;
-        if(sessionAttrs.isResidenceWithinThousandFtFromCoast === "false" && sessionAttrs.state === "DE") {
+        if (sessionAttrs.isResidenceWithinThousandFtFromCoast === "false" && sessionAttrs.state === "DE") {
             speechOutput.text = "Alright, Do you have any dogs?";
         }
-        else{
+        else {
             speechOutput.text = "Alright, Do you have any dogs?";
-        }        
+        }
     }
     else if (sessionAttrs.state == "AK" || sessionAttrs.state == "DC" || sessionAttrs.state == "HI" || sessionAttrs.state == "MT" ||
         sessionAttrs.state == "NJ" || sessionAttrs.state == "ND" || sessionAttrs.state == "PA" || sessionAttrs.state == "SD") {
@@ -887,6 +887,7 @@ AOS.prototype.handlerRentersStSpecQuestionTwo = function (sessionAttrs) {
         }
     }
     else if (sessionAttrs.state === "DE" || sessionAttrs.state == "NE" || sessionAttrs.state == "VT" || sessionAttrs.state == "WY") {
+        sessionAttrs.isDogAdded = sessionAttrs.stateSpecQTwoAns;
         if (sessionAttrs.isDogAdded === "true") {
             speechOutput = "Please list the dominant breed of your dog or dogs.";
         }
