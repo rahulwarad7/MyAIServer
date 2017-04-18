@@ -1147,7 +1147,7 @@ AOS.prototype.handlerRentersStSpecQuestionSeven = function (sessionAttrs) {
                     deferred.resolve(rentersQuoteSpeechResp);
                 });
         } else {
-            speechOutput.text = "Please login to retrieve quote to see your saved quote. Login details are sent to your registered email id.";           
+            speechOutput.text = "Please login to retrieve quote to see your saved quote. Login details are sent to your registered email id.";
         }
     }
     rentersFindSpeechResp.speechOutput = speechOutput;
@@ -1186,7 +1186,7 @@ AOS.prototype.handlerRentersStSpecQuestionEight = function (sessionAttrs) {
                 });
         } else {
             speechOutput.text = "Please login to retrieve quote to see your saved quote. Login details are sent to your registered email id.";
-            
+
         }
     }
     rentersFindSpeechResp.speechOutput = speechOutput;
@@ -1689,16 +1689,40 @@ function mapResidenceInfo(sessionAttrs, residenceInfo) {
             residenceInfo.residenceDetails.personalItems = sessionAttrs.personalItemsValue;
             residenceInfo.residenceDetails.personalItemsValue = '';
         }
-        if(sessionAttrs.transactionToken.state === "CA") {
-            residenceInfo.residenceDetails.unOccupiedResidence = sessionAttrs.unOccupiedResidence;
-        }
-        if(sessionAttrs.transactionToken.state === "CA") {
-            residenceInfo.residenceDetails.propertyInsuranceClaims = sessionAttrs.propertyInsuranceClaims;
-        }
         else {
             residenceInfo.residenceDetails.personalItems = "Other";
             residenceInfo.residenceDetails.personalItemsValue = sessionAttrs.personalItemsValue;
         }
+        if (sessionAttrs.transactionToken.state === "CA") {
+            residenceInfo.residenceDetails.unOccupiedResidence = sessionAttrs.unOccupiedResidence;
+        }
+        if (sessionAttrs.transactionToken.state === "CA") {
+            residenceInfo.residenceDetails.propertyInsuranceClaims = sessionAttrs.propertyInsuranceClaims;
+        }
+        if(sessionAttrs.propertyInsuranceClaims === "TRUE") {
+            var lostdate = DateUtil.getFormattedDate(sessionInfo.lossDate, "MM\DD\YYYY");
+            var splitDate = null;
+            if(lostdate) {
+                var splitDate = lostdate.toString().split("\\");
+            }
+            residenceInfo.residenceDetails.claims = [];
+            residenceInfo.residenceDetails.claims[0].id = "1";
+            residenceInfo.residenceDetails.claims[0].lossdate = {};
+            residenceInfo.residenceDetails.claims[0].lossdate.day = splitDate[1];
+            residenceInfo.residenceDetails.claims[0].lossdate.month = splitDate[0];
+            residenceInfo.residenceDetails.claims[0].lossdate.year = splitDate[2];
+            residenceInfo.residenceDetails.claims[0].lossType = sessionAttrs.lossType;
+            residenceInfo.residenceDetails.claims[0].lossTypeDescription = sessionAttrs.lossType;
+        }
+        if(sessionAttrs.isDogAdded) {            
+            residenceInfo.residenceDetails.dogList = [];
+            residenceInfo.residenceDetails.dogList[0] = {};
+            residenceInfo.residenceDetails.dogList[0].dogId = "1"
+            residenceInfo.residenceDetails.dogList[0].dogBreed = sessionAttrs.dogbreeds;
+            residenceInfo.residenceDetails.dogList[0].dogCountLable = "Dog #1";
+            residenceInfo.residenceDetails.noOfDogs = "1";            
+        }
+
     }
     return residenceInfo;
 }
