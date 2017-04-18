@@ -917,6 +917,8 @@ AOS.prototype.handlerRentersStSpecQuestionThree = function (sessionAttrs) {
         sessionAttrs.state === "WI") {
         sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQThreeAns.toUpperCase();
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
+            sessionAttrs.claimLostDate = sessionAttrs.lossdate;
+            sessionAttrs.claimLostType = sessionAttrs.losstype;
             speechOutput.text = "Okay. I need to know date and type of the claim. Claim can be Fire, Theft, Liability, Vandalism, Water or other. ";
         }
         else {
@@ -1048,6 +1050,8 @@ AOS.prototype.handlerRentersStSpecQuestionFive = function (sessionAttrs) {
     else if (sessionAttrs.state === "CO" || sessionAttrs.state === "ID" ||
         sessionAttrs.state === "ME" || sessionAttrs.state === "MD" || sessionAttrs.state === "NH") {
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
+            sessionAttrs.claimLostDate = sessionAttrs.lossdate;
+            sessionAttrs.claimLostType = sessionAttrs.losstype;
             if (sessionAttrs.state === "MD") {
                 if (sessionAttrs.additionalResidents) {
                     speechOutput.text = "Got it! Please provide their name, relationship, age, employment and marital status.";
