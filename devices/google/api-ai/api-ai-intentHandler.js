@@ -1315,7 +1315,8 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "lossDescription" : undefined,
         "lossdate" : undefined,
         "dogbreeds" : undefined,
-        "isResidenceWithinThousandFtFromCoast" : undefined
+        "isResidenceWithinThousandFtFromCoast" : undefined,
+        "withInCityLimit" : undefined
     };
 
     if (contextInfo) {
@@ -1465,6 +1466,9 @@ function getAOSRentersSessionAttributes(contextInfo) {
         var dogbreeds = contextInfo.parameters["dogbreeds.original"];
         if (dogbreeds && dogbreeds.trim().length > 0) {
             sessionAttrs.dogbreeds = contextInfo.parameters["dogbreeds"];
+        }
+        if (contextInfo.parameters.withInCityLimit != null) {
+            sessionAttrs.withInCityLimit = contextInfo.parameters.withInCityLimit;
         }       
         if (contextInfo.parameters.creditHit != null) {
             sessionAttrs.creditHit = contextInfo.parameters.creditHit;
