@@ -791,6 +791,7 @@ AOS.prototype.handlerRentersStSpecQuestionOne = function (sessionAttrs) {
         }
     }
     else if (sessionAttrs.state === "AL" || sessionAttrs.state === "LA" || sessionAttrs.state === "SC") {
+        sessionAttrs.withInCityLimit = sessionAttrs.stateSpecQOneAns;
         speechOutput.text = "Does your property have any of the protective devices like Smoke Detectors, Fire Extinguishers, Deadbolt Locks, Central Fire Alarm, Fire Sprinklers, 24-Hour Manned Security, Central Burglar Alarm that reports to a monitoring center, Burglar Alarm that sounds in the home";
     }
     else if (sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "ME" || sessionAttrs.state === "MD" ||
@@ -914,7 +915,8 @@ AOS.prototype.handlerRentersStSpecQuestionThree = function (sessionAttrs) {
     else if (sessionAttrs.state === "AL" || sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "LA" ||
         sessionAttrs.state === "ME" || sessionAttrs.state === "MD" || sessionAttrs.state === "NV" || sessionAttrs.state === "NH" || sessionAttrs.state === "SC" ||
         sessionAttrs.state === "WI") {
-        if (sessionAttrs.propertyInsuranceClaims) {
+        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQTwoAns.toUpperCase();
+        if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             speachOutput.text = "Okay. I need to know date and type of the claim. Claim can be Fire, Theft, Liability, Vandalism, Water or other. ";
         }
         else {
