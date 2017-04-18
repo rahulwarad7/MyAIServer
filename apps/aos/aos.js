@@ -815,7 +815,7 @@ AOS.prototype.handlerRentersStSpecQuestionOne = function (sessionAttrs) {
     else if (sessionAttrs.state == "AK" || sessionAttrs.state == "DC" || sessionAttrs.state == "HI" || sessionAttrs.state == "MT" ||
         sessionAttrs.state == "NJ" || sessionAttrs.state == "ND" || sessionAttrs.state == "PA" || sessionAttrs.state == "SD") {
         sessionAttrs.isDogAdded = sessionAttrs.stateSpecQOneAns;
-        if (sessionAttrs.isDogAdded) {
+        if (sessionAttrs.isDogAdded === "true") {
             speechOutput = "Please list the dominant breed of your dog or dogs.";
         }
     }
@@ -840,7 +840,7 @@ AOS.prototype.handlerRentersStSpecQuestionTwo = function (sessionAttrs) {
     }
     else if (sessionAttrs.state === "CT") {
         if (sessionAttrs && !sessionAttrs.isResidence2600ftFromCoastVisible) {
-            if (sessionAttrs.isDogAdded) {
+            if (sessionAttrs.isDogAdded === "true") {
                 speechOutput.text = "Please list the dominant breed of your dog or dogs";
             }
         }
@@ -867,7 +867,7 @@ AOS.prototype.handlerRentersStSpecQuestionTwo = function (sessionAttrs) {
                     speachOutput.text = "And what was the address of the loss location? ";
                 }
                 else if (sessionAttrs.state == "MA") {
-                    if (sessionAttrs.isDogAdded) {
+                    if (sessionAttrs.isDogAdded === "true") {
                         speechOutput = "Please list the dominant breed of your dog or dogs.";
                     }
                 }
@@ -878,7 +878,7 @@ AOS.prototype.handlerRentersStSpecQuestionTwo = function (sessionAttrs) {
         }
     }
     else if (sessionAttrs.state === "DE" || sessionAttrs.state == "NE" || sessionAttrs.state == "VT" || sessionAttrs.state == "WY") {
-        if (sessionAttrs.isDogAdded) {
+        if (sessionAttrs.isDogAdded === "true") {
             speechOutput = "Please list the dominant breed of your dog or dogs.";
         }
     }
@@ -984,7 +984,7 @@ AOS.prototype.handlerRentersStSpecQuestionFour = function (sessionAttrs) {
         sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "TN") {
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             if (sessionAttrs.state === "MA" || sessionAttrs.state === "NY") {
-                if (sessionAttrs.isDogAdded) {
+                if (sessionAttrs.isDogAdded === "true") {
                     speechOutput = "Please list the dominant breed of your dog or dogs.";
                 }
             }
@@ -992,7 +992,7 @@ AOS.prototype.handlerRentersStSpecQuestionFour = function (sessionAttrs) {
         else {
             if (sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "RI" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
                 sessionAttrs.state === "TN") {
-                if (sessionAttrs.isDogAdded) {
+                if (sessionAttrs.isDogAdded === "true") {
                     speechOutput = "Please list the dominant breed of your dog or dogs.";
                 }
             }
@@ -1028,7 +1028,7 @@ AOS.prototype.handlerRentersStSpecQuestionFive = function (sessionAttrs) {
         }
         else {
             sessionAttrs.isDogAdded = sessionAttrs.stateSpecQFiveAns;
-            if (sessionAttrs.isDogAdded) {
+            if (sessionAttrs.isDogAdded === "true") {
                 speechOutput = "Please list the dominant breed of your dog or dogs.";
             }
         }
@@ -1042,7 +1042,7 @@ AOS.prototype.handlerRentersStSpecQuestionFive = function (sessionAttrs) {
                 }
             }
             else {
-                if (sessionAttrs.isDogAdded) {
+                if (sessionAttrs.isDogAdded === "true") {
                     speechOutput = "Please list the dominant breed of your dog or dogs.";
                 }
             }
@@ -1079,7 +1079,7 @@ AOS.prototype.handlerRentersStSpecQuestionSix = function (sessionAttrs) {
     if (sessionAttrs.state === "CA") {
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             sessionAttrs.isDogAdded = sessionAttrs.stateSpecQSixAns;
-            if (sessionAttrs.isDogAdded) {
+            if (sessionAttrs.isDogAdded === "true") {
                 speechOutput.text = "Please list the dominant breed of your dog or dogs.";
             }
         }
@@ -1095,7 +1095,7 @@ AOS.prototype.handlerRentersStSpecQuestionSix = function (sessionAttrs) {
         else {
             if (sessionAttrs.state === "MD") {
                 if (sessionAttrs.additionalResidents) {
-                    if (sessionAttrs.isDogAdded) {
+                    if (sessionAttrs.isDogAdded === "true") {
                         speechOutput.text = "Please list the dominant breed of your dog or dogs.";
                     }
                 }
@@ -1104,7 +1104,7 @@ AOS.prototype.handlerRentersStSpecQuestionSix = function (sessionAttrs) {
     }
     else if (sessionAttrs.state === "NY") {
         if (sessionAttrs.propertyInsuranceClaims === "TRUE" && sessionAttrs.additionalResidents) {
-            if (sessionAttrs.isDogAdded) {
+            if (sessionAttrs.isDogAdded === "true") {
                 speechOutput.text = "Please list the dominant breed of your dog or dogs.";
             }
         }
@@ -1128,7 +1128,7 @@ AOS.prototype.handlerRentersStSpecQuestionSeven = function (sessionAttrs) {
     if (sessionAttrs.state === "CA" || sessionAttrs.state === "MD") {
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             if (sessionAttrs.state === "MD") {
-                if (sessionAttrs.isDogAdded) {
+                if (sessionAttrs.isDogAdded === "true") {
                     speechOutput.text = "Please list the dominant breed of your dog or dogs.";
                 }
             }
@@ -1168,7 +1168,7 @@ AOS.prototype.handlerRentersStSpecQuestionEight = function (sessionAttrs) {
     if (sessionAttrs.state === "MD") {
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             if (sessionAttrs.state === "MD") {
-                if (sessionAttrs.isDogAdded) {
+                if (sessionAttrs.isDogAdded === "true") {
                     speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
                     rentersFindSpeechResp.speechOutput = speechOutput;
                     rentersFindSpeechResp.repromptOutput = speechOutput;
@@ -1716,7 +1716,7 @@ function mapResidenceInfo(sessionAttrs, residenceInfo) {
             residenceInfo.residenceDetails.claims[0].lossType = sessionAttrs.claimLostType;
             residenceInfo.residenceDetails.claims[0].lossTypeDescription = sessionAttrs.claimLostDescription;
         }
-        if (sessionAttrs.isDogAdded) {
+        if (sessionAttrs.isDogAdded === "true") {
             residenceInfo.residenceDetails.dogList = [];
             residenceInfo.residenceDetails.dogList[0] = {};
             residenceInfo.residenceDetails.dogList[0].dogId = "1"
