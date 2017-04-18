@@ -811,7 +811,13 @@ AOS.prototype.handlerRentersStSpecQuestionOne = function (sessionAttrs) {
         }
     }
     else if (sessionAttrs.state === "DE" || sessionAttrs.state == "NE" || sessionAttrs.state == "VT" || sessionAttrs.state == "WY") {
-        speechOutput.text = "Alright, Do you have any dogs?";
+        sessionAttrs.isResidenceWithinThousandFtFromCoast = sessionAttrs.stateSpecQOneAns;
+        if(sessionAttrs.isResidenceWithinThousandFtFromCoast === "false" && sessionAttrs.state === "DE") {
+            speechOutput.text = "Alright, Do you have any dogs?";
+        }
+        else{
+            speechOutput.text = "Alright, Do you have any dogs?";
+        }        
     }
     else if (sessionAttrs.state == "AK" || sessionAttrs.state == "DC" || sessionAttrs.state == "HI" || sessionAttrs.state == "MT" ||
         sessionAttrs.state == "NJ" || sessionAttrs.state == "ND" || sessionAttrs.state == "PA" || sessionAttrs.state == "SD") {
@@ -1705,6 +1711,9 @@ function mapResidenceInfo(sessionAttrs, residenceInfo) {
         }
         if (sessionAttrs.transactionToken.state === "CA") {
             residenceInfo.residenceDetails.propertyInsuranceClaims = sessionAttrs.propertyInsuranceClaims;
+        }
+        if (sessionAttrs.transactionToken.state === "DE") {
+            residenceInfo.residenceDetails.isResidenceWithinThousandFtFromCoast = sessionAttrs.isResidenceWithinThousandFtFromCoast;
         }
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             var lostdate = DateUtil.getFormattedDate(sessionAttrs.claimLostDate, "MM-DD-YYYY");
