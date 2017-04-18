@@ -705,7 +705,7 @@ AOS.prototype.handlerRentersIsFiveOrMoreUnitsYes = function (sessionAttrs) {
     else if (sessionAttrs.state === "AR" || sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "IN" ||
         sessionAttrs.state === "IA" || sessionAttrs.state === "ME" || sessionAttrs.state === "MD" || sessionAttrs.state === "MI" || sessionAttrs.state === "NV" ||
         sessionAttrs.state === "NH" || sessionAttrs.state === "RI" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
-        sessionAttrs.state === "WI" || sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "OK") {
+        sessionAttrs.state === "WI" || sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "OK" || sessionAttrs.state === "MS") {
         speechOutput.text = "Does your property have any of the protective devices like Smoke Detectors, Fire Extinguishers, Deadbolt Locks, Central Fire Alarm, Fire Sprinklers, 24-Hour Manned Security, Central Burglar Alarm that reports to a monitoring center, Burglar Alarm that sounds in the home";
     }
     else if (sessionAttrs.state == "NE" || sessionAttrs.state == "VT" || sessionAttrs.state == "WY" || sessionAttrs.state == "TN") {
@@ -749,7 +749,7 @@ AOS.prototype.handlerRentersIsFiveOrMoreUnitsNo = function (sessionAttrs) {
     else if (sessionAttrs.state === "AR" || sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "IN" ||
         sessionAttrs.state === "IA" || sessionAttrs.state === "ME" || sessionAttrs.state === "MD" || sessionAttrs.state === "MI" || sessionAttrs.state === "NV" ||
         sessionAttrs.state === "NH" || sessionAttrs.state === "RI" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
-        sessionAttrs.state === "WI" || sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "OK") {
+        sessionAttrs.state === "WI" || sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "OK" || sessionAttrs.state === "MS") {
         speechOutput.text = "Does your property have any of the protective devices like Smoke Detectors, Fire Extinguishers, Deadbolt Locks, Central Fire Alarm, Fire Sprinklers, 24-Hour Manned Security, Central Burglar Alarm that reports to a monitoring center, Burglar Alarm that sounds in the home";
     }
     else if (sessionAttrs.state == "NE" || sessionAttrs.state == "VT" || sessionAttrs.state == "WY" || sessionAttrs.state == "TN") {
@@ -782,7 +782,6 @@ AOS.prototype.handlerRentersStSpecQuestionOne = function (sessionAttrs) {
         speechOutput.text = "Ok. Is your residence regularly unoccupied for 24 hours or more? ";
     }
     else if (sessionAttrs.state === "CT") {
-        //sessionAttrs.isResidence2600ftFromCoastVisible = sessionAttrs.stateSpecQOneAns;
         if (sessionAttrs && sessionAttrs.agentDetails && sessionAttrs.stateSpecQOneAns === "true") {
             speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. Here is agent close to you: " + sessionAttrs.agentDetails.name + " , you can call at, " + sessionAttrs.agentDetails.phoneNumber + " , or email at, " + sessionAttrs.agentDetails.emailAddress;
         }
@@ -799,7 +798,7 @@ AOS.prototype.handlerRentersStSpecQuestionOne = function (sessionAttrs) {
         speechOutput.text = "Have you had property insurance for at least 1 year?";
     }
     else if (sessionAttrs.state === "AR" || sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "MA" || sessionAttrs.state === "MI" ||
-        sessionAttrs.state === "RI" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
+        sessionAttrs.state === "RI" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" || sessionAttrs.state === "MS" ||
         sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "OR" || sessionAttrs.state === "TN") {
         speechOutput.text = "Got it, have you filed any claims in the last 3 years?";
     }
@@ -861,10 +860,10 @@ AOS.prototype.handlerRentersStSpecQuestionTwo = function (sessionAttrs) {
         speachOutput.text = "Have you filed any claims in the last 3 years?";
     }
     else if (sessionAttrs.state === "AR" || sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "MA" || sessionAttrs.state === "MI" ||
-        sessionAttrs.state === "RI" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
+        sessionAttrs.state === "RI" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" || sessionAttrs.state === "MS" ||
         sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "OR" || sessionAttrs.state === "TN") {
-        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQTwoAns;
-        if (sessionAttrs.propertyInsuranceClaims) {
+        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQOneAns.toUpperCase();
+        if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             speachOutput.text = "Okay. I need to know date and type of the claim. Claim can be Fire, Theft, Liability, Vandalism, Water or other. "
         }
         else {
