@@ -1701,17 +1701,18 @@ function mapResidenceInfo(sessionAttrs, residenceInfo) {
             residenceInfo.residenceDetails.propertyInsuranceClaims = sessionAttrs.propertyInsuranceClaims;
         }
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
-            var lostdate = DateUtil.getFormattedDate(sessionAttrs.claimLostDate, "MM\DD\YYYY");
-            var splitDate = "01\01\0001";
+            var lostdate = DateUtil.getFormattedDate(sessionAttrs.claimLostDate, "MM-DD-YYYY");
+            var splitDate = "01-01-0001";
             if (lostdate) {
-                var splitDate = lostdate.toString().split("\\");
+                var splitDate = lostdate.toString().split("-");
             }
             residenceInfo.residenceDetails.claims = [];
+            residenceInfo.residenceDetails.claims[0] = {};
             residenceInfo.residenceDetails.claims[0].id = "1";
             residenceInfo.residenceDetails.claims[0].lossdate = {};
-            residenceInfo.residenceDetails.claims[0].lossdate.day = splitDate[1];
-            residenceInfo.residenceDetails.claims[0].lossdate.month = splitDate[0];
-            residenceInfo.residenceDetails.claims[0].lossdate.year = splitDate[2];
+            residenceInfo.residenceDetails.claims[0].lossdate.day = splitDate[2];
+            residenceInfo.residenceDetails.claims[0].lossdate.month = splitDate[1];
+            residenceInfo.residenceDetails.claims[0].lossdate.year = splitDate[0];
             residenceInfo.residenceDetails.claims[0].lossType = sessionAttrs.claimLostType;
             residenceInfo.residenceDetails.claims[0].lossTypeDescription = sessionAttrs.claimLostDescription;
         }
