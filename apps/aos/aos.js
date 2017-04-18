@@ -917,8 +917,6 @@ AOS.prototype.handlerRentersStSpecQuestionThree = function (sessionAttrs) {
         sessionAttrs.state === "WI") {
         sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQThreeAns.toUpperCase();
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
-            sessionAttrs.claimLostDate = sessionAttrs.lossdate;
-            sessionAttrs.claimLostType = sessionAttrs.losstype;
             speechOutput.text = "Okay. I need to know date and type of the claim. Claim can be Fire, Theft, Liability, Vandalism, Water or other. ";
         }
         else {
@@ -948,6 +946,17 @@ AOS.prototype.handlerRentersStSpecQuestionThree = function (sessionAttrs) {
                     speechOutput.text = "Got it! Please provide their name, relationship, age, employment and marital status.";
                 }
             }
+        }
+    }
+    if (sessionAttrs.state === "AR" || sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "MA" || sessionAttrs.state === "MI" ||
+        sessionAttrs.state === "RI" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" || sessionAttrs.state === "MS" ||
+        sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "OR" || sessionAttrs.state === "TN") {
+        // sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQOneAns.toUpperCase();
+        if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
+            sessionAttrs.claimLostDate = sessionAttrs.lossdate;
+            sessionAttrs.claimLostType = sessionAttrs.losstype;
+            sessionAttrs.claimLostDescription = sessionAttrs.lossDescription;
+
         }
     }
     if (!speechOutput.text) {
@@ -1017,6 +1026,17 @@ AOS.prototype.handlerRentersStSpecQuestionFour = function (sessionAttrs) {
             }
         }
     }
+    if (sessionAttrs.state === "AL" || sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "LA" ||
+        sessionAttrs.state === "ME" || sessionAttrs.state === "MD" || sessionAttrs.state === "NV" || sessionAttrs.state === "NH" || sessionAttrs.state === "SC" ||
+        sessionAttrs.state === "WI") {
+        //sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQThreeAns.toUpperCase();
+        if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
+            sessionAttrs.claimLostDate = sessionAttrs.lossdate;
+            sessionAttrs.claimLostType = sessionAttrs.losstype;
+            sessionAttrs.claimLostDescription = sessionAttrs.lossDescription;
+        }
+    }
+
     if (!speechOutput.text) {
         speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
     }
