@@ -782,8 +782,8 @@ AOS.prototype.handlerRentersStSpecQuestionOne = function (sessionAttrs) {
         speechOutput.text = "Ok. Is your residence regularly unoccupied for 24 hours or more? ";
     }
     else if (sessionAttrs.state === "CT") {
-        sessionAttrs.isResidence2600ftFromCoastVisible = sessionAttrs.stateSpecQOneAns;
-        if (sessionAttrs && sessionAttrs.agentDetails && sessionAttrs.isResidence2600ftFromCoastVisible === "true") {
+        //sessionAttrs.isResidence2600ftFromCoastVisible = sessionAttrs.stateSpecQOneAns;
+        if (sessionAttrs && sessionAttrs.agentDetails && sessionAttrs.stateSpecQOneAns === "true") {
             speechOutput.text = "Okay! Sounds like this may be a job for one of our agents. Here is agent close to you: " + sessionAttrs.agentDetails.name + " , you can call at, " + sessionAttrs.agentDetails.phoneNumber + " , or email at, " + sessionAttrs.agentDetails.emailAddress;
         }
         else {
@@ -840,6 +840,7 @@ AOS.prototype.handlerRentersStSpecQuestionTwo = function (sessionAttrs) {
         speechOutput.text = "Does your property have any of the following protective devices?Smoke Detectors, Fire Extinguishers, Deadbolt Locks, Central Fire Alarm, Fire Sprinklers, 24-Hour Manned Security, Central Burglar Alarm that reports to a monitoring center, Burglar Alarm that sounds in the home";
     }
     else if (sessionAttrs.state === "CT") {
+        sessionAttrs.isResidence2600ftFromCoastVisible = sessionAttrs.stateSpecQOneAns;
         if (sessionAttrs && sessionAttrs.isResidence2600ftFromCoastVisible === "false") {
             sessionAttrs.isDogAdded = sessionAttrs.stateSpecQTwoAns;
             if (sessionAttrs.isDogAdded === "true") {
