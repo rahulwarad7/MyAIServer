@@ -1021,6 +1021,9 @@ AOS.prototype.handlerRentersStSpecQuestionFive = function (sessionAttrs) {
 
     if (sessionAttrs.state === "CA") {
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
+            sessionAttrs.claimLostDate = sessionAttrs.lossdate;
+            sessionAttrs.claimLostType = sessionAttrs.losstype;
+            sessionAttrs.claimLostDescription = sessionAttrs.lossDescription;
             speechOutput.text = "Alright, Do you have any dogs?";
         }
         else {
@@ -1677,7 +1680,6 @@ function mapContactInfo(rentersInfoData, sessionAttrs) {
 
 function mapResidenceInfo(sessionAttrs, residenceInfo) {
     var residenceInfoData = null;
-    //residenceInfoData = initializeResidenceInfoRequest();
     if (residenceInfo && residenceInfo.residenceDetails) {
         residenceInfo.residenceDetails.primaryResidence = sessionAttrs.primaryResidence;
         residenceInfo.residenceDetails.locatedInDormOrMilitaryBarracks = sessionAttrs.locatedInDormOrMilitaryBarracks;
@@ -1699,8 +1701,8 @@ function mapResidenceInfo(sessionAttrs, residenceInfo) {
             residenceInfo.residenceDetails.propertyInsuranceClaims = sessionAttrs.propertyInsuranceClaims;
         }
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
-            var lostdate = DateUtil.getFormattedDate(sessionInfo.lossDate, "MM\DD\YYYY");
-            var splitDate = null;
+            var lostdate = DateUtil.getFormattedDate(sessionAttrs.claimLostDate, "MM\DD\YYYY");
+            var splitDate = "01\01\0001";
             if (lostdate) {
                 var splitDate = lostdate.toString().split("\\");
             }
@@ -1710,8 +1712,8 @@ function mapResidenceInfo(sessionAttrs, residenceInfo) {
             residenceInfo.residenceDetails.claims[0].lossdate.day = splitDate[1];
             residenceInfo.residenceDetails.claims[0].lossdate.month = splitDate[0];
             residenceInfo.residenceDetails.claims[0].lossdate.year = splitDate[2];
-            residenceInfo.residenceDetails.claims[0].lossType = sessionAttrs.lossType;
-            residenceInfo.residenceDetails.claims[0].lossTypeDescription = sessionAttrs.lossType;
+            residenceInfo.residenceDetails.claims[0].lossType = sessionAttrs.claimLostType;
+            residenceInfo.residenceDetails.claims[0].lossTypeDescription = sessionAttrs.claimLostDescription;
         }
         if (sessionAttrs.isDogAdded) {
             residenceInfo.residenceDetails.dogList = [];
