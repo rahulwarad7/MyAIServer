@@ -1029,7 +1029,7 @@ AOS.prototype.handlerRentersStSpecQuestionFive = function (sessionAttrs) {
         else {
             sessionAttrs.isDogAdded = sessionAttrs.stateSpecQFiveAns;
             if (sessionAttrs.isDogAdded === "true") {
-                speechOutput = "Please list the dominant breed of your dog or dogs.";
+                speechOutput.text = "Please list the dominant breed of your dog or dogs.";
             }
         }
     }
@@ -1038,19 +1038,19 @@ AOS.prototype.handlerRentersStSpecQuestionFive = function (sessionAttrs) {
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             if (sessionAttrs.state === "MD") {
                 if (sessionAttrs.additionalResidents) {
-                    speechOutput = "Got it! Please provide their name, relationship, age, employment and marital status.";
+                    speechOutput.text = "Got it! Please provide their name, relationship, age, employment and marital status.";
                 }
             }
             else {
                 if (sessionAttrs.isDogAdded === "true") {
-                    speechOutput = "Please list the dominant breed of your dog or dogs.";
+                    speechOutput.text = "Please list the dominant breed of your dog or dogs.";
                 }
             }
         }
         else {
             if (sessionAttrs.state === "MD") {
                 if (sessionAttrs.additionalResidents) {
-                    speechOutput = "Alright, Do you have any dogs?";
+                    speechOutput.text = "Alright, Do you have any dogs?";
                 }
             }
         }
