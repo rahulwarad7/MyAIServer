@@ -893,6 +893,14 @@ AOS.prototype.handlerRentersStSpecQuestionTwo = function (sessionAttrs) {
             speechOutput.text = "Please list the dominant breed of your dog or dogs.";
         }
     }
+    if(sessionAttrs.state === "MA" || sessionAttrs.state === "OR") {
+        if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
+            sessionAttrs.claimLostDate = sessionAttrs.lossdate;
+            sessionAttrs.claimLostType = sessionAttrs.losstype;
+            sessionAttrs.claimLostDescription = sessionAttrs.lossDescription;
+
+        }
+    }
     if (!speechOutput.text) {
         speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
     }
