@@ -797,7 +797,7 @@ AOS.prototype.handlerRentersStSpecQuestionOne = function (sessionAttrs) {
         sessionAttrs.state === "NV" || sessionAttrs.state === "NH" || sessionAttrs.state === "WI") {
         speechOutput.text = "Have you had property insurance for at least 1 year?";
     }
-    else if (sessionAttrs.state === "AR" || sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "MA" || sessionAttrs.state === "MI" ||
+    else if (sessionAttrs.state === "AR" || sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "MI" ||
         sessionAttrs.state === "RI" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" || sessionAttrs.state === "MS" ||
         sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "TN" || sessionAttrs.state === "OK") {
         speechOutput.text = "Got it, have you filed any claims in the last 3 years?";
@@ -820,7 +820,7 @@ AOS.prototype.handlerRentersStSpecQuestionOne = function (sessionAttrs) {
             speechOutput.text = "Alright, Do you have any dogs?";
         }
     }
-    else if (sessionAttrs.state == "AK" || sessionAttrs.state == "DC" || sessionAttrs.state == "HI" || sessionAttrs.state == "MT" ||
+    else if (sessionAttrs.state == "HI" || sessionAttrs.state == "MT" ||
         sessionAttrs.state == "NJ" || sessionAttrs.state == "ND" || sessionAttrs.state == "PA" || sessionAttrs.state == "SD") {
         sessionAttrs.isDogAdded = sessionAttrs.stateSpecQOneAns;
         if (sessionAttrs.isDogAdded === "true") {
@@ -862,7 +862,8 @@ AOS.prototype.handlerRentersStSpecQuestionTwo = function (sessionAttrs) {
     }
     else if (sessionAttrs.state === "AR" || sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "MA" || sessionAttrs.state === "MI" ||
         sessionAttrs.state === "RI" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" || sessionAttrs.state === "MS" ||
-        sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "TN" || sessionAttrs.state === "OK") {
+        sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "TN" || sessionAttrs.state === "OK" ||
+        sessionAttrs.state == "AK" || sessionAttrs.state == "DC") {
 
         sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQTwoAns.toUpperCase();
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
@@ -870,14 +871,14 @@ AOS.prototype.handlerRentersStSpecQuestionTwo = function (sessionAttrs) {
         }
         else {
             if (sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "RI" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
-                sessionAttrs.state === "TN") {
+                sessionAttrs.state === "TN" ) {
                 speechOutput.text = "Alright, Do you have any dogs?";
             }
-            else if (sessionAttrs.state == "MA" || sessionAttrs.state == "AK" || sessionAttrs.state == "DC") {
-                if (sessionAttrs.propertyInsuranceClaims ==="TRUE") {
+            else if (sessionAttrs.state === "MA" || sessionAttrs.state === "AK" || sessionAttrs.state === "DC") {
+                if (sessionAttrs.state === "MA"  && sessionAttrs.propertyInsuranceClaims ==="TRUE") {
                     speechOutput.text = "And what was the address of the loss location? Is it insured address or other ";
                 }
-                else if (sessionAttrs.state == "MA" || sessionAttrs.state == "AK" || sessionAttrs.state == "DC") {
+                else if (sessionAttrs.state === "MA" || sessionAttrs.state === "AK" || sessionAttrs.state === "DC") {
                     if (sessionAttrs.isDogAdded === "true") {
                         speechOutput.text = "Please list the dominant breed of your dog or dogs.";
                     }
@@ -888,19 +889,17 @@ AOS.prototype.handlerRentersStSpecQuestionTwo = function (sessionAttrs) {
             }
         }
     }
-    else if (sessionAttrs.state === "DE" || sessionAttrs.state == "NE" || sessionAttrs.state == "VT" || sessionAttrs.state == "WY") {
+    else if (sessionAttrs.state === "DE" || sessionAttrs.state === "NE" || sessionAttrs.state === "VT" || sessionAttrs.state === "WY") {
         sessionAttrs.isDogAdded = sessionAttrs.stateSpecQTwoAns;
         if (sessionAttrs.isDogAdded === "true") {
             speechOutput.text = "Please list the dominant breed of your dog or dogs.";
         }
     }
-    if (sessionAttrs.state === "MA" || sessionAttrs.state === "OR") {
+    if (sessionAttrs.state === "MA" || sessionAttrs.state === "OR" || sessionAttrs.state === "AK" || sessionAttrs.state === "DC") {
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             sessionAttrs.claimLostDate = sessionAttrs.lossdate;
             sessionAttrs.claimLostType = sessionAttrs.losstype;
-            sessionAttrs.claimLostDescription = sessionAttrs.lossDescription;
-            speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
-
+            sessionAttrs.claimLostDescription = sessionAttrs.lossDescription;           
         }
     }
     if (!speechOutput.text) {
@@ -938,7 +937,7 @@ AOS.prototype.handlerRentersStSpecQuestionThree = function (sessionAttrs) {
             }
         }
     }
-    else if (sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "MA" ||
+    else if (sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "MA" || sessionAttrs.state == "AK" || sessionAttrs.state == "DC" ||
         sessionAttrs.state === "RI" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
         sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "TN") {
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {            
@@ -965,8 +964,8 @@ AOS.prototype.handlerRentersStSpecQuestionThree = function (sessionAttrs) {
     if (sessionAttrs.state === "AR" || sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "MA" || sessionAttrs.state === "MI" ||
         sessionAttrs.state === "OK" || sessionAttrs.state === "RI" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
         sessionAttrs.state === "MS" || sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" ||
-        sessionAttrs.state === "OR" || sessionAttrs.state === "TN") {
-        if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
+        sessionAttrs.state === "OR" || sessionAttrs.state === "TN" || sessionAttrs.state === "AK" || sessionAttrs.state === "DC") {
+        if (sessionAttrs.propertyInsuranceClaims === "TRUE" && sessionAttrs.lossDescription) {
             sessionAttrs.claimLostDate = sessionAttrs.lossdate;
             sessionAttrs.claimLostType = sessionAttrs.losstype;
             sessionAttrs.claimLostDescription = sessionAttrs.lossDescription;
