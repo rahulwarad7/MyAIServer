@@ -976,7 +976,8 @@ AOS.prototype.handlerRentersStSpecQuestionThree = function (sessionAttrs) {
             }
         }
     }
-    else if (sessionAttrs.state == "AK" || sessionAttrs.state == "DC") {
+    else if (sessionAttrs.state == "AK" || sessionAttrs.state == "DC" || sessionAttrs.state === "DC" || sessionAttrs.state == "ND" ||
+        sessionAttrs.state == "SD" || sessionAttrs.state == "HI" || sessionAttrs.state == "MT" ) {
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             sessionAttrs.isDogAdded = sessionAttrs.stateSpecQThreeAns;
             if (sessionAttrs.isDogAdded === "true") {
