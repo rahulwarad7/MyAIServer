@@ -873,8 +873,8 @@ AOS.prototype.handlerRentersStSpecQuestionTwo = function (sessionAttrs) {
                 sessionAttrs.state === "TN") {
                 speechOutput.text = "Alright, Do you have any dogs?";
             }
-            else if (sessionAttrs.state == "MA") {
-                if (sessionAttrs.propertyInsuranceClaims) {
+            else if (sessionAttrs.state == "MA" || sessionAttrs.state == "AK" || sessionAttrs.state == "DC") {
+                if (sessionAttrs.propertyInsuranceClaims ==="TRUE") {
                     speechOutput.text = "And what was the address of the loss location? Is it insured address or other ";
                 }
                 else if (sessionAttrs.state == "MA" || sessionAttrs.state == "AK" || sessionAttrs.state == "DC") {
@@ -942,11 +942,8 @@ AOS.prototype.handlerRentersStSpecQuestionThree = function (sessionAttrs) {
         sessionAttrs.state === "RI" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
         sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "TN") {
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {            
-            if (sessionAttrs.state === "MA" || sessionAttrs.state === "NY") {
-                speechOutput.text = "Alright, Do you have any dogs?";
-            }
-            else if (sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "RI" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
-                sessionAttrs.state === "TN") {
+            if (sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "RI" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
+                sessionAttrs.state === "TN" || sessionAttrs.state == "AK" || sessionAttrs.state == "DC" || sessionAttrs.state === "MA" || sessionAttrs.state === "NY") {
                 speechOutput.text = "Alright, Do you have any dogs?";
             }
         }
@@ -1030,7 +1027,7 @@ AOS.prototype.handlerRentersStSpecQuestionFour = function (sessionAttrs) {
         sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "TN") {
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             sessionAttrs.isDogAdded = sessionAttrs.stateSpecQFourAns;
-            if (sessionAttrs.state === "MA" || sessionAttrs.state === "NY") {
+            if (sessionAttrs.state === "MA" || sessionAttrs.state === "NY" || sessionAttrs.state === "MA" || sessionAttrs.state === "NY") {
                 if (sessionAttrs.isDogAdded === "true") {
                     speechOutput.text = "Please list the dominant breed of your dog or dogs.";
                 }
