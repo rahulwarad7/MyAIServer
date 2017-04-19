@@ -1088,9 +1088,11 @@ AOS.prototype.handlerRentersStSpecQuestionFive = function (sessionAttrs) {
     }
     else if (sessionAttrs.state === "CO" || sessionAttrs.state === "ID" ||
         sessionAttrs.state === "ME" || sessionAttrs.state === "MD" || sessionAttrs.state === "NH") {
-        if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
-            sessionAttrs.claimLostDate = sessionAttrs.lossdate;
-            sessionAttrs.claimLostType = sessionAttrs.losstype;
+        if (sessionAttrs.propertyInsuranceClaims === "TRUE" ) {
+            // sessionAttrs.claimLostDate = sessionAttrs.lossdate;
+            // sessionAttrs.claimLostType = sessionAttrs.losstype;
+            // sessionAttrs.claimLostDescription = sessionAttrs.lossDescription;
+            sessionAttrs.isDogAdded = sessionAttrs.stateSpecQFiveAns;
             if (sessionAttrs.state === "MD") {
                 if (sessionAttrs.additionalResidents) {
                     speechOutput.text = "Got it! Please provide their name, relationship, age, employment and marital status.";
