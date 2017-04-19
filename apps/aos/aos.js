@@ -799,7 +799,7 @@ AOS.prototype.handlerRentersStSpecQuestionOne = function (sessionAttrs) {
     }
     else if (sessionAttrs.state === "AR" || sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "MA" || sessionAttrs.state === "MI" ||
         sessionAttrs.state === "RI" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" || sessionAttrs.state === "MS" ||
-        sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "TN") {
+        sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "TN" || sessionAttrs.state === "OK") {
         speechOutput.text = "Got it, have you filed any claims in the last 3 years?";
     }
     else if (sessionAttrs.state == "MA" || sessionAttrs.state == "OR") {
@@ -862,10 +862,9 @@ AOS.prototype.handlerRentersStSpecQuestionTwo = function (sessionAttrs) {
     }
     else if (sessionAttrs.state === "AR" || sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "MA" || sessionAttrs.state === "MI" ||
         sessionAttrs.state === "RI" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" || sessionAttrs.state === "MS" ||
-        sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "TN") {
-        //if(!sessionAttrs.propertyInsuranceClaims) {
+        sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "TN" || sessionAttrs.state === "OK") {
+       
         sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQTwoAns.toUpperCase();
-        //}        
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             speechOutput.text = "Okay. I need to know date and type of the claim. Claim can be Fire, Theft, Liability, Vandalism, Water or other. "
         }
@@ -1054,7 +1053,6 @@ AOS.prototype.handlerRentersStSpecQuestionFour = function (sessionAttrs) {
     if (sessionAttrs.state === "AL" || sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "LA" ||
         sessionAttrs.state === "ME" || sessionAttrs.state === "MD" || sessionAttrs.state === "NV" || sessionAttrs.state === "NH" || sessionAttrs.state === "SC" ||
         sessionAttrs.state === "WI") {
-        //sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQThreeAns.toUpperCase();
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             sessionAttrs.claimLostDate = sessionAttrs.lossdate;
             sessionAttrs.claimLostType = sessionAttrs.losstype;
