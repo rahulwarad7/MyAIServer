@@ -1023,6 +1023,7 @@ AOS.prototype.handlerRentersStSpecQuestionFour = function (sessionAttrs) {
         sessionAttrs.state === "RI" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
         sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "TN") {
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
+            sessionAttrs.isDogAdded = sessionAttrs.stateSpecQFourAns;
             if (sessionAttrs.state === "MA" || sessionAttrs.state === "NY") {
                 if (sessionAttrs.isDogAdded === "true") {
                     speechOutput.text = "Please list the dominant breed of your dog or dogs.";
