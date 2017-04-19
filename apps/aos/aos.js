@@ -965,9 +965,10 @@ AOS.prototype.handlerRentersStSpecQuestionThree = function (sessionAttrs) {
             }
         }
     }
-    if (sessionAttrs.state === "AR" || sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "MA" || sessionAttrs.state === "MI" ||
-        sessionAttrs.state === "RI" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" || sessionAttrs.state === "MS" ||
-        sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "OR" || sessionAttrs.state === "TN") {
+    if (sessionAttrs.state === "AR" || sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "MA" || sessionAttrs.state === "MI" || 
+        sessionAttrs.state === "OK" || sessionAttrs.state === "RI" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" || 
+        sessionAttrs.state === "MS" || sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || 
+        sessionAttrs.state === "OR" || sessionAttrs.state === "TN") {
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             sessionAttrs.claimLostDate = sessionAttrs.lossdate;
             sessionAttrs.claimLostType = sessionAttrs.losstype;
