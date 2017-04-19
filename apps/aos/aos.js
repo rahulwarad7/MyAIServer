@@ -974,6 +974,7 @@ AOS.prototype.handlerRentersStSpecQuestionThree = function (sessionAttrs) {
     }
     else if (sessionAttrs.state == "AK" || sessionAttrs.state == "DC") {
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
+            sessionAttrs.isDogAdded = sessionAttrs.stateSpecQThreeAns;
             if (sessionAttrs.isDogAdded === "true") {
                 speechOutput.text = "Please list the dominant breed of your dog or dogs.";
             }
