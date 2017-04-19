@@ -716,7 +716,7 @@ AOS.prototype.handlerRentersIsFiveOrMoreUnitsYes = function (sessionAttrs) {
     }
     else if (sessionAttrs.state == "AK" || sessionAttrs.state == "DC" || sessionAttrs.state == "HI" || sessionAttrs.state == "MT" ||
         sessionAttrs.state == "NJ" || sessionAttrs.state == "ND" || sessionAttrs.state == "PA" || sessionAttrs.state == "SD") {
-        speechOutput = "Alright! Do you have any dogs?";
+        speechOutput.text = "Alright! Do you have any dogs?";
     }
     if (!speechOutput.text) {
         speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
@@ -863,7 +863,7 @@ AOS.prototype.handlerRentersStSpecQuestionTwo = function (sessionAttrs) {
     else if (sessionAttrs.state === "AR" || sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "MA" || sessionAttrs.state === "MI" ||
         sessionAttrs.state === "RI" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" || sessionAttrs.state === "MS" ||
         sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "TN" || sessionAttrs.state === "OK") {
-       
+
         sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQTwoAns.toUpperCase();
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             speechOutput.text = "Okay. I need to know date and type of the claim. Claim can be Fire, Theft, Liability, Vandalism, Water or other. "
@@ -941,7 +941,7 @@ AOS.prototype.handlerRentersStSpecQuestionThree = function (sessionAttrs) {
     else if (sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "MA" ||
         sessionAttrs.state === "RI" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
         sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "TN") {
-        if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
+        if (sessionAttrs.propertyInsuranceClaims === "TRUE") {            
             if (sessionAttrs.state === "MA" || sessionAttrs.state === "NY") {
                 speechOutput.text = "Alright, Do you have any dogs?";
             }
@@ -965,9 +965,9 @@ AOS.prototype.handlerRentersStSpecQuestionThree = function (sessionAttrs) {
             }
         }
     }
-    if (sessionAttrs.state === "AR" || sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "MA" || sessionAttrs.state === "MI" || 
-        sessionAttrs.state === "OK" || sessionAttrs.state === "RI" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" || 
-        sessionAttrs.state === "MS" || sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || 
+    if (sessionAttrs.state === "AR" || sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "MA" || sessionAttrs.state === "MI" ||
+        sessionAttrs.state === "OK" || sessionAttrs.state === "RI" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
+        sessionAttrs.state === "MS" || sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" ||
         sessionAttrs.state === "OR" || sessionAttrs.state === "TN") {
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             sessionAttrs.claimLostDate = sessionAttrs.lossdate;
@@ -1093,7 +1093,7 @@ AOS.prototype.handlerRentersStSpecQuestionFive = function (sessionAttrs) {
     }
     else if (sessionAttrs.state === "CO" || sessionAttrs.state === "ID" ||
         sessionAttrs.state === "ME" || sessionAttrs.state === "MD" || sessionAttrs.state === "NH") {
-        if (sessionAttrs.propertyInsuranceClaims === "TRUE" ) {
+        if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             // sessionAttrs.claimLostDate = sessionAttrs.lossdate;
             // sessionAttrs.claimLostType = sessionAttrs.losstype;
             // sessionAttrs.claimLostDescription = sessionAttrs.lossDescription;
