@@ -1017,6 +1017,12 @@ AOS.prototype.handlerRentersStSpecQuestionFour = function (sessionAttrs) {
                     speechOutput.text = "Alright, Do you have any dogs?";
                 }
             }
+            if (sessionAttrs.state === "CO" || sessionAttrs.state === "ID" || sessionAttrs.state === "ME" || sessionAttrs.state === "NH") {
+                sessionAttrs.isDogAdded = sessionAttrs.stateSpecQFourAns;
+                if (sessionAttrs.isDogAdded === "true") {
+                    speechOutput.text = "Please list the dominant breed of your dog or dogs.";
+                }
+            }
         }
     }
     else if (sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "MA" ||
