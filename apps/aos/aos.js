@@ -865,7 +865,7 @@ AOS.prototype.handlerRentersStSpecQuestionTwo = function (sessionAttrs) {
         sessionAttrs.state === "RI" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" || sessionAttrs.state === "MS" ||
         sessionAttrs.state == "VT" ||
         sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "TN" || sessionAttrs.state === "OK") {
-        if (!sessionAttrs.propertyInsuranceClaims) {
+        if (sessionAttrs.stateSpecQTwoAns) {
             sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQTwoAns.toUpperCase();
         }
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
