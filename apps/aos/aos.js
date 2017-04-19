@@ -860,7 +860,7 @@ AOS.prototype.handlerRentersStSpecQuestionTwo = function (sessionAttrs) {
         sessionAttrs.state === "NV" || sessionAttrs.state === "NH" || sessionAttrs.state === "SC" || sessionAttrs.state === "WI") {
         speechOutput.text = "Have you filed any claims in the last 3 years?";
     }
-    else if (sessionAttrs.state === "AR" || sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "MA" || sessionAttrs.state === "MI" ||
+    else if (sessionAttrs.state === "AR" || sessionAttrs.state === "IN" || sessionAttrs.state === "IA" || sessionAttrs.state === "MI" ||
         sessionAttrs.state === "RI" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" || sessionAttrs.state === "MS" ||
         sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "TN" || sessionAttrs.state === "OK") {
         if (!sessionAttrs.propertyInsuranceClaims) {
@@ -874,18 +874,19 @@ AOS.prototype.handlerRentersStSpecQuestionTwo = function (sessionAttrs) {
                 sessionAttrs.state === "TN") {
                 speechOutput.text = "Alright, Do you have any dogs?";
             }
-            else if (sessionAttrs.state === "MA") {
-                if (sessionAttrs.state === "MA" && sessionAttrs.propertyInsuranceClaims === "TRUE") {
-                    speechOutput.text = "And what was the address of the loss location? Is it insured address or other ";
-                }
-                else if (sessionAttrs.state === "MA") {
-                    if (sessionAttrs.isDogAdded === "true") {
-                        speechOutput.text = "Please list the dominant breed of your dog or dogs.";
-                    }
-                }
-            }
             else if (sessionAttrs.state === "NY") {
                 speechOutput.text = "Are there any additional residents?";
+            }
+        }
+    }
+    else if (sessionAttrs.state === "MA") {
+        if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
+            speechOutput.text = "And what was the address of the loss location? Is it insured address or other ";
+        }
+        else if (sessionAttrs.state === "MA") {
+            sessionAttrs.isDogAdded = sessionAttrs.stateSpecQTwoAns;
+            if (sessionAttrs.isDogAdded === "true") {
+                speechOutput.text = "Please list the dominant breed of your dog or dogs.";
             }
         }
     }
