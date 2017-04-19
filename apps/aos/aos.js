@@ -1554,6 +1554,9 @@ function quoteResponse(sessionAttrs) {
                 if (quoteResp && quoteResp.stopPageType === "DangerousDogSelected") {
                     quoteSpeechOutput.text = "Okay, You have selected a dangerous dog.  ";
                 }
+                if (quoteResp && quoteResp.stopPageType === "RejectedUser") {
+                    quoteSpeechOutput.text = "Okay, With these inputs provided, We can't proceed further. Please contact Allstate Agent. ";
+                }
                 deferred.resolve(quoteSpeechOutput);
             }).catch(function (error) {
                 quoteSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
