@@ -1103,6 +1103,11 @@ AOS.prototype.handlerRentersStSpecQuestionFive = function (sessionAttrs) {
                 if (sessionAttrs.additionalResidents === "true") {
                     speechOutput.text = "Alright, Do you have any dogs?";
                 }
+                else {
+                    if (sessionAttrs.isDogAdded === "true") {
+                        speechOutput.text = "Please list the dominant breed of your dog or dogs.";
+                    }
+                }
             }
             else {
                 if (sessionAttrs.isDogAdded === "true") {
@@ -1112,7 +1117,7 @@ AOS.prototype.handlerRentersStSpecQuestionFive = function (sessionAttrs) {
         }
         else {
             if (sessionAttrs.state === "MD") {
-                if (sessionAttrs.additionalResidents === "true")  {
+                if (sessionAttrs.additionalResidents === "true") {
                     speechOutput.text = "Alright, Do you have any dogs?";
                 }
             }
