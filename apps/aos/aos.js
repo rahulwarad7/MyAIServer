@@ -668,7 +668,7 @@ AOS.prototype.handlerRentersResidenceType = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    if (sessionAttrs.residenceBuildingType == "APT" || sessionAttrs.residenceBuildingType == "H01" || sessionAttrs.residenceBuildingType == "CO") {
+    if (sessionAttrs.residenceBuildingType == "APT" || sessionAttrs.residenceBuildingType == "TH1" || sessionAttrs.residenceBuildingType == "CO") {
         speechOutput.text = "Are there more than 4 units in the building? ";
         rentersFindSpeechResp.speechOutput = speechOutput;
         rentersFindSpeechResp.repromptOutput = speechOutput;
