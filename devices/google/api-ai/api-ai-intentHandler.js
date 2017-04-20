@@ -1318,7 +1318,9 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "isResidenceWithinThousandFtFromCoast": undefined,
         "claimLostLocationDisplay": undefined,
         "claimLostLocation": undefined,
-        "withInCityLimit": undefined
+        "withInCityLimit": undefined,
+        "constructionType" : undefined,
+        "additionalResidents" : undefined
     };
 
     if (contextInfo) {
@@ -1462,6 +1464,9 @@ function getAOSRentersSessionAttributes(contextInfo) {
         if (contextInfo.parameters.claimLostLocation) {
             sessionAttrs.claimLostLocation = contextInfo.parameters.claimLostLocation;
         }
+        if (contextInfo.parameters.constructionType) {
+            sessionAttrs.constructionType = contextInfo.parameters.constructionType;
+        }
         var lossDescription = contextInfo.parameters["losstype.original"];
         if (lossDescription) {
             sessionAttrs.lossDescription = lossDescription;
@@ -1589,6 +1594,9 @@ function getAOSRentersSessionAttributes(contextInfo) {
         }
         if (contextInfo.parameters.propertyInsuranceClaims) {
             sessionAttrs.propertyInsuranceClaims = contextInfo.parameters.propertyInsuranceClaims;
+        }
+        if (contextInfo.parameters.additionalResidents) {
+            sessionAttrs.additionalResidents = contextInfo.parameters.additionalResidents;
         }
         if (contextInfo.parameters["IsInsuredAddrSame"] === false || contextInfo.parameters["IsInsuredAddrSame"] === "false") {
             sessionAttrs.IsInsuredAddrSame = false;
