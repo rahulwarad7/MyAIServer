@@ -236,6 +236,12 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
+        case "AOS-RENTERS-RESIDENCEHOMETYPE":
+            handlerAOSRentersResidenceHomeType(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
         case "AOS-RENTERS-ISFIVEORMOREUNITS-YES":
             handlerAOSRentersIsFiveOrMoreUnitsYes(body, deferred)
                 .then(function (responseInfo) {
@@ -896,6 +902,22 @@ function handlerAOSRentersResidenceType(body, deferred) {
     return deferred.promise;
 }
 
+function handlerAOSRentersResidenceHomeType(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    aos.handlerRentersResidenceHomeType(sessionAttrs)
+        .then(function (renterspeechResponse) {
+            rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            deferred.resolve(rentersWelcomeSpeechResp);
+        });
+
+    return deferred.promise;
+}
+
 function handlerAOSRentersIsFiveOrMoreUnitsYes(body, deferred) {
     var rentersWelcomeSpeechResp = {};
     var result = body.result;
@@ -1273,6 +1295,7 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "unitsInBuilding": undefined,
         "locatedInDormOrMilitaryBarracks": undefined,
         "residenceBuildingType": undefined,
+        "residenceBuildingHomeType" : undefined,
         "primaryResidence": undefined,
         "isCurrentAddressSameAsInsuredAddress": undefined,
         "gender": undefined,
@@ -1415,6 +1438,10 @@ function getAOSRentersSessionAttributes(contextInfo) {
         var residenceBuildingType = contextInfo.parameters["aos-renters-typeOfBuilding.original"];
         if (residenceBuildingType && residenceBuildingType.trim().length > 0) {
             sessionAttrs.residenceBuildingType = contextInfo.parameters["aos-renters-typeOfBuilding"];
+        }
+        var residenceBuildingHomeType = contextInfo.parameters["aos-renters-buildingNoUnits.original"];
+        if (residenceBuildingHomeType && residenceBuildingHomeType.trim().length > 0) {
+            sessionAttrs.residenceBuildingHomeType = contextInfo.parameters["aos-renters-buildingNoUnits"];
         }
         var primaryResidence = contextInfo.parameters["isprimaryresidence.original"];
         if (primaryResidence && primaryResidence.trim().length > 0) {
