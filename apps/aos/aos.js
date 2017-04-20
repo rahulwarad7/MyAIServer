@@ -668,51 +668,23 @@ AOS.prototype.handlerRentersResidenceType = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    if (sessionAttrs.residenceBuildingType == "APT" || sessionAttrs.residenceBuildingType == "TH1" || sessionAttrs.residenceBuildingType == "CO") {
-        speechOutput.text = "Are there more than 4 units in the building? ";
-        rentersFindSpeechResp.speechOutput = speechOutput;
-        rentersFindSpeechResp.repromptOutput = speechOutput;
-        deferred.resolve(rentersFindSpeechResp);
-    }
-    else {
-        if (sessionAttrs.state === "CT") {
-            speechOutput.text = "Got it. Is your residence located within 2,600 feet of the coast? ";
-        }
-        else if (sessionAttrs.state === "CA") {
-            speechOutput.text = "Got it. Are you insured by Cal-Vet? ";
-        }
-        else if (sessionAttrs.state === "DE") {
-            speechOutput.text = "Got it. Is the property located within 1,000 feet of the ocean or bay? ";
-        }
-        else if (sessionAttrs.state === "NJ" || sessionAttrs.state === "TX") {
-            speechOutput.text = "Got it. Now I'll need to know what material your residence is made out of. ";
-        }
-        else if (sessionAttrs.state === "AL" || sessionAttrs.state == "LA" || sessionAttrs.state === "SC") {
-            speechOutput.text = "Got it. Is the property within city limits? ";
-        }
-        else if (sessionAttrs.state === "AR" || sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "IN" ||
-            sessionAttrs.state === "IA" || sessionAttrs.state === "ME" || sessionAttrs.state === "MD" || sessionAttrs.state === "MI" || sessionAttrs.state === "NV" ||
-            sessionAttrs.state === "NH" || sessionAttrs.state === "RI" || sessionAttrs.state === "UT" || sessionAttrs.state === "VA" || sessionAttrs.state === "WV" ||
-            sessionAttrs.state === "WI" || sessionAttrs.state === "NM" || sessionAttrs.state === "NY" || sessionAttrs.state === "NC" || sessionAttrs.state === "OK" || sessionAttrs.state === "MS") {
-            speechOutput.text = "Does your property have any of the protective devices like Smoke Detectors, Fire Extinguishers, Deadbolt Locks, Central Fire Alarm, Fire Sprinklers, 24-Hour Manned Security, Central Burglar Alarm that reports to a monitoring center, Burglar Alarm that sounds in the home";
-        }
-        else if (sessionAttrs.state == "NE" || sessionAttrs.state == "VT" || sessionAttrs.state == "WY" || sessionAttrs.state == "TN") {
-            speechOutput.text = "Got it, Have you had property insurance for at least 1 year?";
-        }
-        else if (sessionAttrs.state == "MA" || sessionAttrs.state == "AK" || sessionAttrs.state == "DC" || sessionAttrs.state == "ND" ||
-            sessionAttrs.state == "SD" || sessionAttrs.state == "HI" || sessionAttrs.state == "MT") {
-            speechOutput.text = "Got it, Have you filed any claims in the last 3 years?";
-        }
-        else if (sessionAttrs.state == "PA") {
-            speechOutput.text = "Alright! Do you have any dogs?";
-        }
-        if (!speechOutput.text) {
-            speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
-        }
-        rentersFindSpeechResp.speechOutput = speechOutput;
-        rentersFindSpeechResp.repromptOutput = speechOutput;
-        deferred.resolve(rentersFindSpeechResp);
-    }
+    speechOutput.text = "Are there more than 4 units in the building? ";
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
+
+    return deferred.promise;
+};
+
+AOS.prototype.handlerRentersResidenceHomeType = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+    speechOutput = stateSPecificQuestionOne(sessionAttrs, speechOutput);
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
 
     return deferred.promise;
 };
@@ -1835,7 +1807,13 @@ function mapResidenceInfo(sessionAttrs, residenceInfo) {
     if (residenceInfo && residenceInfo.residenceDetails) {
         residenceInfo.residenceDetails.primaryResidence = sessionAttrs.primaryResidence;
         residenceInfo.residenceDetails.locatedInDormOrMilitaryBarracks = sessionAttrs.locatedInDormOrMilitaryBarracks;
-        residenceInfo.residenceDetails.residenceBuildingType = sessionAttrs.residenceBuildingType;
+        if(sessionAttrs.residenceBuildingType) {
+            residenceInfo.residenceDetails.residenceBuildingType = sessionAttrs.residenceBuildingType;
+        }
+        else {
+            residenceInfo.residenceDetails.residenceBuildingType = sessionAttrs.residenceBuildingType;
+        }
+        
         residenceInfo.residenceDetails.unitsInBuilding = sessionAttrs.unitsInBuilding
         residenceInfo.residenceDetails.businessoutofresidence = sessionAttrs.businessoutofresidence
         if (sessionAttrs.personalItemsValue == "15000" || sessionAttrs.personalItemsValue == "25000" || sessionAttrs.personalItemsValue == "35000" || sessionAttrs.personalItemsValue == "45000") {
