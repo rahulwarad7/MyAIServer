@@ -1310,13 +1310,15 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "claimLostDate": undefined,
         "claimLostType": undefined,
         "claimLostDescription": undefined,
-        "unOccupiedResidence" : undefined,
-        "losstype" : undefined,
-        "lossDescription" : undefined,
-        "lossdate" : undefined,
-        "dogbreeds" : undefined,
-        "isResidenceWithinThousandFtFromCoast" : undefined,
-        "withInCityLimit" : undefined
+        "unOccupiedResidence": undefined,
+        "losstype": undefined,
+        "lossdate": undefined,
+        "LostLocationDisplay": undefined,
+        "dogbreeds": undefined,
+        "isResidenceWithinThousandFtFromCoast": undefined,
+        "claimLostLocationDisplay": undefined,
+        "claimLostLocation": undefined,
+        "withInCityLimit": undefined
     };
 
     if (contextInfo) {
@@ -1454,6 +1456,12 @@ function getAOSRentersSessionAttributes(contextInfo) {
         if (contextInfo.parameters.claimLostDescription) {
             sessionAttrs.claimLostDescription = contextInfo.parameters.claimLostDescription;
         }
+        if (contextInfo.parameters.claimLostLocationDisplay) {
+            sessionAttrs.claimLostLocationDisplay = contextInfo.parameters.claimLostLocationDisplay;
+        }
+        if (contextInfo.parameters.claimLostLocation) {
+            sessionAttrs.claimLostLocation = contextInfo.parameters.claimLostLocation;
+        }
         var lossDescription = contextInfo.parameters["losstype.original"];
         if (lossDescription) {
             sessionAttrs.lossDescription = lossDescription;
@@ -1469,7 +1477,7 @@ function getAOSRentersSessionAttributes(contextInfo) {
         }
         if (contextInfo.parameters.withInCityLimit != null) {
             sessionAttrs.withInCityLimit = contextInfo.parameters.withInCityLimit;
-        }       
+        }
         if (contextInfo.parameters.creditHit != null) {
             sessionAttrs.creditHit = contextInfo.parameters.creditHit;
         }
@@ -1581,7 +1589,7 @@ function getAOSRentersSessionAttributes(contextInfo) {
         }
         if (contextInfo.parameters.propertyInsuranceClaims) {
             sessionAttrs.propertyInsuranceClaims = contextInfo.parameters.propertyInsuranceClaims;
-        }        
+        }
         if (contextInfo.parameters["IsInsuredAddrSame"] === false || contextInfo.parameters["IsInsuredAddrSame"] === "false") {
             sessionAttrs.IsInsuredAddrSame = false;
         }
