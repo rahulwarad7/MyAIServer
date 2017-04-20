@@ -1618,7 +1618,7 @@ function quoteResponse(sessionAttrs) {
                     quoteSpeechOutput.text = "Okay, You have selected a dangerous dog.  ";
                 }
                 if (quoteResp && quoteResp.stopPageType === "RejectedUser") {
-                    quoteSpeechOutput.text = "Okay, With these inputs provided, We can't proceed further. Please contact Allstate Agent. ";
+                    quoteSpeechOutput.text = "Okay, Unable to proceed further. Please contact Allstate Agent. ";
                 }
                 deferred.resolve(quoteSpeechOutput);
             }).catch(function (error) {
