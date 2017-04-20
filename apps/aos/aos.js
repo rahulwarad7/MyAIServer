@@ -893,7 +893,7 @@ AOS.prototype.handlerRentersStSpecQuestionTwo = function (sessionAttrs) {
             }
         }
     }
-    else if (sessionAttrs.state === "MA") {
+    else if (sessionAttrs.state === "MA" || sessionAttrs.state === "NJ") {
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             speechOutput.text = "And lost location is same as current insured address? ";
         }
