@@ -829,7 +829,7 @@ AOS.prototype.handlerRentersStSpecQuestionOne = function (sessionAttrs) {
         }
     }
     else if (sessionAttrs.state == "NJ" || sessionAttrs.state == "TX") {
-        sessionAttrs.constructionType = sessionAttrs.stateSpecQOneAns;
+        sessionAttrs.constructionType = sessionAttrs.constructionType;
         if (sessionAttrs.state == "NJ") {
             speechOutput.text = "Alright, Do you have any dogs?";
         }
@@ -1815,6 +1815,9 @@ function mapResidenceInfo(sessionAttrs, residenceInfo) {
         }
         if (sessionAttrs.transactionToken.state === "DE") {
             residenceInfo.residenceDetails.isResidenceWithinThousandFtFromCoast = sessionAttrs.isResidenceWithinThousandFtFromCoast;
+        }
+        if (sessionAttrs.transactionToken.state === "NJ" || sessionAttrs.transactionToken.state === "TX") {
+            residenceInfo.residenceDetails.constructionType = sessionAttrs.constructionType;
         }
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             var lostdate = DateUtil.getFormattedDate(sessionAttrs.claimLostDate, "MM-DD-YYYY");
