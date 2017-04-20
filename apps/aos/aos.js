@@ -699,6 +699,9 @@ AOS.prototype.handlerRentersIsFiveOrMoreUnitsYes = function (sessionAttrs) {
     else if (sessionAttrs.state === "DE") {
         speechOutput.text = "Got it. Is the property located within 1,000 feet of the ocean or bay? ";
     }
+    else if (sessionAttrs.state === "NJ" || sessionAttrs.state === "TX") {
+        speechOutput.text = "Got it. Now I'll need to know what material your residence is made out of. ";
+    }
     else if (sessionAttrs.state === "AL" || sessionAttrs.state == "LA" || sessionAttrs.state === "SC") {
         speechOutput.text = "Got it. Is the property within city limits? ";
     }
@@ -715,7 +718,7 @@ AOS.prototype.handlerRentersIsFiveOrMoreUnitsYes = function (sessionAttrs) {
         sessionAttrs.state == "SD" || sessionAttrs.state == "HI" || sessionAttrs.state == "MT") {
         speechOutput.text = "Got it, Have you filed any claims in the last 3 years?";
     }
-    else if (sessionAttrs.state == "NJ" || sessionAttrs.state == "PA") {
+    else if (sessionAttrs.state == "PA") {
         speechOutput.text = "Alright! Do you have any dogs?";
     }
     if (!speechOutput.text) {
@@ -743,6 +746,9 @@ AOS.prototype.handlerRentersIsFiveOrMoreUnitsNo = function (sessionAttrs) {
     else if (sessionAttrs.state === "DE") {
         speechOutput.text = "Got it. Is the property located within 1,000 feet of the ocean or bay? ";
     }
+    else if (sessionAttrs.state === "NJ" || sessionAttrs.state === "TX") {
+        speechOutput.text = "Got it. Now I'll need to know what material your residence is made out of. ";
+    }
     else if (sessionAttrs.state === "AL" || sessionAttrs.state == "LA" || sessionAttrs.state === "SC") {
         speechOutput.text = "Got it. Is the property within city limits? ";
     }
@@ -759,7 +765,7 @@ AOS.prototype.handlerRentersIsFiveOrMoreUnitsNo = function (sessionAttrs) {
         sessionAttrs.state == "SD" || sessionAttrs.state == "HI" || sessionAttrs.state == "MT") {
         speechOutput.text = "Got it, Have you filed any claims in the last 3 years?";
     }
-    else if (sessionAttrs.state == "NJ" || sessionAttrs.state == "PA") {
+    else if (sessionAttrs.state == "PA") {
         speechOutput.text = "Alright! Do you have any dogs?";
     }
     if (!speechOutput.text) {
@@ -813,7 +819,7 @@ AOS.prototype.handlerRentersStSpecQuestionOne = function (sessionAttrs) {
             speechOutput.text = "Alright! Do you have any dogs? "
         }
     }
-    else if (sessionAttrs.state == "WY") {
+    else if (sessionAttrs.state == "WY" || sessionAttrs.state === "DE") {
         sessionAttrs.isResidenceWithinThousandFtFromCoast = sessionAttrs.stateSpecQOneAns;
         if (sessionAttrs.isResidenceWithinThousandFtFromCoast === "false" && sessionAttrs.state === "DE") {
             speechOutput.text = "Alright, Do you have any dogs?";
@@ -822,7 +828,13 @@ AOS.prototype.handlerRentersStSpecQuestionOne = function (sessionAttrs) {
             speechOutput.text = "Alright, Do you have any dogs?";
         }
     }
-    else if (sessionAttrs.state == "NJ" || sessionAttrs.state == "PA") {
+    else if (sessionAttrs.state == "NJ" || sessionAttrs.state == "TX") {
+        sessionAttrs.constructionType = sessionAttrs.stateSpecQOneAns;
+        if (sessionAttrs.state == "NJ") {
+            speechOutput.text = "Alright, Do you have any dogs?";
+        }
+    }
+    else if (sessionAttrs.state == "PA") {
         sessionAttrs.isDogAdded = sessionAttrs.stateSpecQOneAns;
         if (sessionAttrs.isDogAdded === "true") {
             speechOutput.text = "Please list the dominant breed of your dog or dogs.";
@@ -885,7 +897,7 @@ AOS.prototype.handlerRentersStSpecQuestionTwo = function (sessionAttrs) {
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             speechOutput.text = "And lost location is same as current insured address? ";
         }
-        else if (sessionAttrs.state === "MA") {
+        else if (sessionAttrs.state === "MA" || sessionAttrs.state === "NJ") {
             sessionAttrs.isDogAdded = sessionAttrs.stateSpecQTwoAns;
             if (sessionAttrs.isDogAdded === "true") {
                 speechOutput.text = "Please list the dominant breed of your dog or dogs.";
@@ -962,7 +974,7 @@ AOS.prototype.handlerRentersStSpecQuestionThree = function (sessionAttrs) {
                 speechOutput.text = "Alright, Do you have any dogs?";
             }
             if (sessionAttrs.state === "MA") {
-                var isInsuredAddress = sessionAttrs.stateSpecQTwoAns;
+                var isInsuredAddress = sessionAttrs.stateSpecQThreeAns;
                 if (isInsuredAddress === "true") {
                     sessionAttrs.claimLostLocationDisplay = sessionAttrs.addrLine1 + ", " + sessionAttrs.city + ", " + sessionAttrs.state + " " + sessionAttrs.zip;
                     sessionAttrs.claimLostLocation = "AI";
