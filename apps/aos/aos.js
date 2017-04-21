@@ -1184,9 +1184,9 @@ AOS.prototype.handlerRentersStSpecQuestionSix = function (sessionAttrs) {
         }
     }
     else if (sessionAttrs.state === "MD") {
-        if(!sessionAttrs.isDogAdded) {
+        if (!sessionAttrs.isDogAdded) {
             sessionAttrs.isDogAdded = sessionAttrs.stateSpecQSixAns;
-        }        
+        }
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             if (sessionAttrs.state === "MD") {
                 if (sessionAttrs.additionalResidents === "true") {
@@ -1241,10 +1241,10 @@ AOS.prototype.handlerRentersStSpecQuestionSeven = function (sessionAttrs) {
                     }
                 }
             }
-        }
-        else {
-            if (!speechOutput.text) {
-                speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
+            else {
+                if (!speechOutput.text) {
+                    speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
+                }
             }
         }
     }
