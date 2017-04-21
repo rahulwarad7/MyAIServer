@@ -1184,7 +1184,9 @@ AOS.prototype.handlerRentersStSpecQuestionSix = function (sessionAttrs) {
         }
     }
     else if (sessionAttrs.state === "MD") {
-        sessionAttrs.isDogAdded = sessionAttrs.stateSpecQSixAns;
+        if(!sessionAttrs.isDogAdded) {
+            sessionAttrs.isDogAdded = sessionAttrs.stateSpecQSixAns;
+        }        
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             if (sessionAttrs.state === "MD") {
                 if (sessionAttrs.additionalResidents === "true") {
