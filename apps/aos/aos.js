@@ -1646,7 +1646,7 @@ function quoteResponse(sessionAttrs) {
                     quoteSpeechOutput.text = quoteSpeechOutput.text + " .Someone will be in touch with you shortly, but in the meantime would you like to continue from quote?";
                 }
                 if (quoteResp && quoteResp.stopPageType === "DangerousDogSelected") {
-                    quoteSpeechOutput.text = "Okay, You have selected a dangerous dog.  ";
+                    quoteSpeechOutput.text = "Okay, Unable to proceed further. You have selected a dangerous dog.  ";
                 }
                 if (quoteResp && quoteResp.stopPageType === "RejectedUser") {
                     quoteSpeechOutput.text = "Okay, Unable to proceed further. Please contact Allstate Agent. ";
