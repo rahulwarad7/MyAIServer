@@ -1336,7 +1336,6 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "propertyInsuranceClaims": undefined,
         "isDogAdded": undefined,
         "isError" :undefined,
-        "isError" : undefined,
         "claimLostDate": undefined,
         "claimLostType": undefined,
         "claimLostDescription": undefined,
