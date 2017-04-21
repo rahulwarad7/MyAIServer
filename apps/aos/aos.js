@@ -1139,6 +1139,7 @@ AOS.prototype.handlerRentersStSpecQuestionFive = function (sessionAttrs) {
                     speechOutput.text = "Alright, Do you have any dogs?";
                 }
                 else {
+                    sessionAttrs.isDogAdded = sessionAttrs.stateSpecQFiveAns;
                     if (sessionAttrs.isDogAdded === "true") {
                         speechOutput.text = "Please list the dominant breed of your dog or dogs.";
                     }
