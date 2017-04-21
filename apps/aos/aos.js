@@ -889,7 +889,9 @@ AOS.prototype.handlerRentersStSpecQuestionThree = function (sessionAttrs) {
     else if (sessionAttrs.state === "AL" || sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "LA" ||
         sessionAttrs.state === "ME" || sessionAttrs.state === "MD" || sessionAttrs.state === "NV" || sessionAttrs.state === "NH" || sessionAttrs.state === "SC" ||
         sessionAttrs.state === "WI") {
-        sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQThreeAns.toUpperCase();
+        if(sessionAttrs.stateSpecQThreeAns){
+            sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQThreeAns.toUpperCase();
+        }        
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             speechOutput.text = "Okay. I need to know date and type of the claim. Claim can be Fire, Theft, Liability, Vandalism, Water or other. ";
         }
@@ -898,6 +900,7 @@ AOS.prototype.handlerRentersStSpecQuestionThree = function (sessionAttrs) {
                 speechOutput.text = "Alright, Do you have any dogs?";
             }
             if (sessionAttrs.state === "MD") {
+                //sessionAttrs.propertyInsuranceClaims == session
                 speechOutput.text = "Are there any additional residents?";
             }
         }
@@ -1129,6 +1132,7 @@ AOS.prototype.handlerRentersStSpecQuestionFive = function (sessionAttrs) {
         }
         else {
             if (sessionAttrs.state === "MD") {
+                sessionAttrs.additionalResidents = sessionAttrs.stateSpecQFiveAns;
                 if (sessionAttrs.additionalResidents === "true") {
                     speechOutput.text = "Alright, Do you have any dogs?";
                 }
@@ -1177,6 +1181,7 @@ AOS.prototype.handlerRentersStSpecQuestionSix = function (sessionAttrs) {
         }
     }
     else if (sessionAttrs.state === "MD") {
+        sessionAttrs.isDogAdded = sessionAttrs.stateSpecQSixAns;
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             if (sessionAttrs.state === "MD") {
                 if (sessionAttrs.additionalResidents === "true") {
