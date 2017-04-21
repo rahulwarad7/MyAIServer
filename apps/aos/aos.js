@@ -1351,7 +1351,6 @@ AOS.prototype.handlerRenterValidCustomer = function (sessionAttrs) {
         }
         else {
             speechOutput.text = "Thank you for the inputs, Near by agent will contact you for further information";
-            sessionAttrs.isError = true;
             rentersQuoteSpeechResp.speechOutput = speechOutput;
             rentersQuoteSpeechResp.repromptOutput = speechOutput;
             rentersQuoteSpeechResp.sessionAttrs = sessionAttrs;
@@ -1652,18 +1651,15 @@ function quoteResponse(sessionAttrs) {
                 }
                 if (quoteResp && quoteResp.stopPageType === "DangerousDogSelected") {
                     quoteSpeechOutput.text = "Okay, Unable to proceed further. You have selected a dangerous dog.  ";
-                    sessionAttrs.isError = true;
                     quoteSpeechOutput.sessionAttrs = sessionAttrs;
                 }
                 if (quoteResp && quoteResp.stopPageType === "RejectedUser") {
                     quoteSpeechOutput.text = "Okay, Unable to proceed further. Please contact Allstate Agent. ";
-                    sessionAttrs.isError = true;
                     quoteSpeechOutput.sessionAttrs = sessionAttrs;
                 }
                 deferred.resolve(quoteSpeechOutput);
             }).catch(function (error) {
                 quoteSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
-                sessionAttrs.isError = true;
                 quoteSpeechOutput.sessionAttrs = sessionAttrs;
                 deferred.resolve(quoteSpeechOutput);
             });
