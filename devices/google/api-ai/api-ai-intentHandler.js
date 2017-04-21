@@ -1114,6 +1114,12 @@ function handlerAOSRenterValidCustomer(body, deferred) {
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
             rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            if(sessionAttrs.isError){
+                rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": {} }];
+            }
+            else{
+            rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
+            }
             deferred.resolve(rentersWelcomeSpeechResp);
         });
 
@@ -1145,7 +1151,7 @@ function handlerAOSRenterGenerateURL(body, deferred) {
     aos.handlerRenterGenerateURL(sessionAttrs)
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
-            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;            
             deferred.resolve(rentersWelcomeSpeechResp);
         });
 
@@ -1190,7 +1196,6 @@ function handlerAOSRentersIsSpouseYes(body, deferred) {
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
             rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
-            //rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
             deferred.resolve(rentersWelcomeSpeechResp);
         });
 
@@ -1330,6 +1335,8 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "isResidence2600ftFromCoastVisible": undefined,
         "propertyInsuranceClaims": undefined,
         "isDogAdded": undefined,
+        "isError" :undefined,
+        "isError" : undefined,
         "claimLostDate": undefined,
         "claimLostType": undefined,
         "claimLostDescription": undefined,
@@ -1473,6 +1480,9 @@ function getAOSRentersSessionAttributes(contextInfo) {
         if (contextInfo.parameters.isDogAdded) {
             sessionAttrs.isDogAdded = contextInfo.parameters.isDogAdded;
         }
+        if (contextInfo.parameters.isError) {
+            sessionAttrs.isError = contextInfo.parameters.isError;
+        }        
         if (contextInfo.parameters.isResidenceWithinThousandFtFromCoast) {
             sessionAttrs.isResidenceWithinThousandFtFromCoast = contextInfo.parameters.isResidenceWithinThousandFtFromCoast;
         }
