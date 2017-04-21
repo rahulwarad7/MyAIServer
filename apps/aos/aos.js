@@ -1134,7 +1134,7 @@ AOS.prototype.handlerRentersStSpecQuestionFive = function (sessionAttrs) {
         }
         else {
             if (sessionAttrs.state === "MD") {
-                sessionAttrs.additionalResidents = sessionAttrs.stateSpecQFiveAns;
+                sessionAttrs.additionalResidents = sessionAttrs.stateSpecQFourAns;
                 if (sessionAttrs.additionalResidents === "true") {
                     speechOutput.text = "Alright, Do you have any dogs?";
                 }
