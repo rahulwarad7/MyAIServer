@@ -889,9 +889,9 @@ AOS.prototype.handlerRentersStSpecQuestionThree = function (sessionAttrs) {
     else if (sessionAttrs.state === "AL" || sessionAttrs.state === "CO" || sessionAttrs.state === "GA" || sessionAttrs.state === "ID" || sessionAttrs.state === "LA" ||
         sessionAttrs.state === "ME" || sessionAttrs.state === "MD" || sessionAttrs.state === "NV" || sessionAttrs.state === "NH" || sessionAttrs.state === "SC" ||
         sessionAttrs.state === "WI") {
-        if(sessionAttrs.stateSpecQThreeAns){
+        if (sessionAttrs.stateSpecQThreeAns) {
             sessionAttrs.propertyInsuranceClaims = sessionAttrs.stateSpecQThreeAns.toUpperCase();
-        }        
+        }
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             speechOutput.text = "Okay. I need to know date and type of the claim. Claim can be Fire, Theft, Liability, Vandalism, Water or other. ";
         }
@@ -1237,10 +1237,10 @@ AOS.prototype.handlerRentersStSpecQuestionSeven = function (sessionAttrs) {
                     }
                 }
             }
-            else {
+        }
+        else {
+            if (!speechOutput.text) {
                 speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
-                rentersFindSpeechResp.speechOutput = speechOutput;
-                rentersFindSpeechResp.repromptOutput = speechOutput;
             }
         }
     }
