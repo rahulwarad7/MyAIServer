@@ -1107,6 +1107,7 @@ AOS.prototype.handlerRentersStSpecQuestionFive = function (sessionAttrs) {
         if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
             sessionAttrs.isDogAdded = sessionAttrs.stateSpecQFiveAns;
             if (sessionAttrs.state === "MD") {
+                sessionAttrs.additionalResidents = sessionAttrs.stateSpecQFiveAns;
                 if (sessionAttrs.additionalResidents === "true") {
                     speechOutput.text = "Got it! Please provide their name, relationship, age, employment and marital status.";
                 }
