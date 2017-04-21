@@ -1113,8 +1113,13 @@ function handlerAOSRenterValidCustomer(body, deferred) {
     aos.handlerRenterValidCustomer(sessionAttrs)
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
-            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;            
-            rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text; 
+            if(sessionAttrs.isError){
+                rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": {} }];
+            }   
+            else{
+                rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
+            }
             deferred.resolve(rentersWelcomeSpeechResp);
         });
 
