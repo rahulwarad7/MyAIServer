@@ -1351,14 +1351,13 @@ AOS.prototype.handlerRenterValidCustomer = function (sessionAttrs) {
         }
         else {
             speechOutput.text = "Thank you for the inputs, Near by agent will contact you for further information";
-            sessionAttrs.transactionToken = null;
+            sessionAttrs.isError = true;
             rentersQuoteSpeechResp.speechOutput = speechOutput;
             rentersQuoteSpeechResp.repromptOutput = speechOutput;
         }
 
     } else {
-        speechOutput.text = "Please login to retrieve quote to see your saved quote. Login details are sent to your registered email id.";
-        sessionAttrs.transactionToken = null;
+        speechOutput.text = "Thank you for the inputs, Near by agent will contact you for further information";
         rentersQuoteSpeechResp.speechOutput = speechOutput;
         rentersQuoteSpeechResp.repromptOutput = speechOutput;
     }
@@ -1652,16 +1651,16 @@ function quoteResponse(sessionAttrs) {
                 }
                 if (quoteResp && quoteResp.stopPageType === "DangerousDogSelected") {
                     quoteSpeechOutput.text = "Okay, Unable to proceed further. You have selected a dangerous dog.  ";
-                    sessionAttrs.transactionToken = null;
+                    sessionAttrs.isError = true;
                 }
                 if (quoteResp && quoteResp.stopPageType === "RejectedUser") {
                     quoteSpeechOutput.text = "Okay, Unable to proceed further. Please contact Allstate Agent. ";
-                    sessionAttrs.transactionToken = null;
+                    sessionAttrs.isError = true;
                 }
                 deferred.resolve(quoteSpeechOutput);
             }).catch(function (error) {
                 quoteSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
-                sessionAttrs.transactionToken = null;
+                sessionAttrs.isError = true;
                 deferred.resolve(quoteSpeechOutput);
             });
     }
