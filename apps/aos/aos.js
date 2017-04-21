@@ -1240,6 +1240,9 @@ AOS.prototype.handlerRentersStSpecQuestionSeven = function (sessionAttrs) {
                         speechOutput.text = "Please list the dominant breed of your dog or dogs.";
                     }
                 }
+                else {
+                    speechOutput.text = "Got it. Just one more question. What is the estimated value of all personal items in your residence?";
+                }
             }
             else {
                 if (!speechOutput.text) {
@@ -1511,7 +1514,6 @@ function getRentersSaveCustomerResponse(sessionAttrs) {
             deferred.resolve(saveCustSpeechOutput);
         }).catch(function (error) {
             saveCustSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
-            sessionAttrs.isError = true;
             deferred.resolve(saveCustSpeechOutput);
         });
 
@@ -1531,7 +1533,6 @@ function getRentersInfoResponse(sessionAttrs) {
                 deferred.resolve(rentersInfoSpeechOutput);
             }).catch(function (error) {
                 rentersInfoSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
-                sessionAttrs.isError = true;
                 deferred.resolve(rentersInfoSpeechOutput);
             });
     }
@@ -1550,7 +1551,6 @@ function confirmProfileResponse(sessionAttrs) {
                     deferred.resolve(rentersInfoSpeechOutput);
                 }).catch(function (error) {
                     rentersInfoSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
-                    sessionAttrs.isError = true;
                     deferred.resolve(rentersInfoSpeechOutput);
                 });
         }
@@ -1579,7 +1579,6 @@ function getRentersQuoteResponse(sessionAttrs) {
                 deferred.resolve(quoteSpeechOutput);
             }).catch(function (error) {
                 quoteSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
-                sessionAttrs.isError = true;
                 deferred.resolve(quoteSpeechOutput);
             });
     }
@@ -1600,7 +1599,6 @@ function saveAndExitResponse(sessionAttrs) {
                 deferred.resolve(quoteSpeechOutput);
             }).catch(function (error) {
                 quoteSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
-                sessionAttrs.isError = true;
                 deferred.resolve(quoteSpeechOutput);
             });
     }
@@ -1627,12 +1625,10 @@ function quoteLandingURLResponse(sessionAttrs) {
             }
             else {
                 quoteURLSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
-                sessionAttrs.isError = true;
             }
             deferred.resolve(quoteURLSpeechOutput);
         }).catch(function (error) {
             quoteURLSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
-            sessionAttrs.isError = true;
             deferred.resolve(quoteURLSpeechOutput);
         });
 
