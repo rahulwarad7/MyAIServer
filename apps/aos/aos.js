@@ -1050,6 +1050,7 @@ AOS.prototype.handlerRentersStSpecQuestionFour = function (sessionAttrs) {
             }
         }
         else {
+            sessionAttrs.isDogAdded = sessionAttrs.stateSpecQFourAns;
             if (sessionAttrs.state === "NY") {
                 if (sessionAttrs.additionalResidents === "true") {
                     speechOutput.text = "Alright, Do you have any dogs?";
