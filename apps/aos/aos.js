@@ -1508,9 +1508,18 @@ function getRentersSaveCustomerResponse(sessionAttrs) {
             if (saveResp && saveResp.transactionToken) {
                 sessionAttrs.transactionToken = saveResp.transactionToken;
                 saveCustSpeechOutput.sessionAttrs = sessionAttrs;
-                saveCustSpeechOutput.text = "Information from outside sources regarding credit history is used to provide you with a renters quote. A third party may be used to calculate your insurance score. This information, along with subsequently collected information, will be shared with outside parties that perform services on Allstate's behalf. ";
-                saveCustSpeechOutput.text = saveCustSpeechOutput.text + "   Privacy Policy:http://www.allstate.com/about/privacy-statement-aic.aspx ";
-                saveCustSpeechOutput.text = saveCustSpeechOutput.text + "   Type OK to authorize.";
+                if (sessionAttrs.transactionToken) {
+                    var state = sessionAttrs.transactionToken.state;
+                    if (state === "CA" || state === "KS" || state === "MD" || state === "DE" || state === "FL") {
+                        saveCustSpeechOutput.text = "Great! Next I'll need to know a little about your employment status. Are you employed, self employed, unemployed, student, retired, home maker or military.";
+                    }
+                    else {
+                        saveCustSpeechOutput.text = "Information from outside sources regarding credit history is used to provide you with a renters quote. A third party may be used to calculate your insurance score. This information, along with subsequently collected information, will be shared with outside parties that perform services on Allstate's behalf. ";
+                        saveCustSpeechOutput.text = saveCustSpeechOutput.text + "   Privacy Policy:http://www.allstate.com/about/privacy-statement-aic.aspx ";
+                        saveCustSpeechOutput.text = saveCustSpeechOutput.text + "   Type OK to authorize.";
+                    }
+
+                }
             }
             deferred.resolve(saveCustSpeechOutput);
         }).catch(function (error) {
