@@ -1510,7 +1510,11 @@ function getRentersSaveCustomerResponse(sessionAttrs) {
                 saveCustSpeechOutput.sessionAttrs = sessionAttrs;
                 if (sessionAttrs.transactionToken) {
                     var state = sessionAttrs.transactionToken.state;
-                    if (state === "CA" || state === "KS" || state === "MD" || state === "DE" || state === "FL") {
+                    if (state === "MD" || state === "NY" || state === "FL") {
+                        saveCustSpeechOutput.text = "Sorry! We are unable to take you forward with this entered state now. Please click on this to continue https://www.allstate.com/"
+                    }
+                    //if (state === "CA" || state === "KS" || state === "MD" || state === "DE" || state === "FL") {
+                    if (state === "CA" || state === "KS" || state === "DE") {
                         saveCustSpeechOutput.text = "Great! Next I'll need to know a little about your employment status. Are you employed, self employed, unemployed, student, retired, home maker or military.";
                     }
                     else {
