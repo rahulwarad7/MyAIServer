@@ -1550,6 +1550,7 @@ function getRentersInfoResponse(sessionAttrs) {
                 deferred.resolve(rentersInfoSpeechOutput);
             }).catch(function (error) {
                 rentersInfoSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
+             sessionAttrs.transactionToken = null;
                 deferred.resolve(rentersInfoSpeechOutput);
             });
     }
@@ -1568,7 +1569,8 @@ function confirmProfileResponse(sessionAttrs) {
                     deferred.resolve(rentersInfoSpeechOutput);
                 }).catch(function (error) {
                     rentersInfoSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
-                    deferred.resolve(rentersInfoSpeechOutput);
+                 sessionAttrs.transactionToken = null;    
+                deferred.resolve(rentersInfoSpeechOutput);
                 });
         }
         else {
@@ -1596,6 +1598,7 @@ function getRentersQuoteResponse(sessionAttrs) {
                 deferred.resolve(quoteSpeechOutput);
             }).catch(function (error) {
                 quoteSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
+             sessionAttrs.transactionToken = null;
                 deferred.resolve(quoteSpeechOutput);
             });
     }
