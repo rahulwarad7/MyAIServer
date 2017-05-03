@@ -1662,11 +1662,11 @@ function quoteResponse(sessionAttrs) {
         orderQuote(sessionAttrs.transactionToken)
             .then(function (quoteResp) {
                 if (quoteResp && quoteResp.quoteList) {
-                    quoteSpeechOutput.text = "Okay, thanks for all the info! Here's your renters quote.  ";
-                    quoteSpeechOutput.text = quoteSpeechOutput.text + "Total payable amount $" + quoteResp.quoteList[0].paymentInfo.paymentAmount;
-                    quoteSpeechOutput.text = quoteSpeechOutput.text + ".Per month would cost $" + quoteResp.quoteList[0].paymentInfo.monthlyPaymentAmount;
-                    quoteSpeechOutput.text = quoteSpeechOutput.text + " .Your down payment would be $" + quoteResp.quoteList[0].paymentInfo.inDownPaymentAmount;
-                    quoteSpeechOutput.text = quoteSpeechOutput.text + " .Someone will be in touch with you shortly, but in the meantime would you like to continue from quote?";
+                    quoteSpeechOutput.text = "Okay, thanks for all the info! Here's your renters quote. ";
+                    quoteSpeechOutput.text = quoteSpeechOutput.text + "Total payable amount is $" + quoteResp.quoteList[0].paymentInfo.paymentAmount;
+                    quoteSpeechOutput.text = quoteSpeechOutput.text + "and per month would cost $" + quoteResp.quoteList[0].paymentInfo.monthlyPaymentAmount;
+                    quoteSpeechOutput.text = quoteSpeechOutput.text + ". Your down payment would be $" + quoteResp.quoteList[0].paymentInfo.inDownPaymentAmount;
+                    quoteSpeechOutput.text = quoteSpeechOutput.text + ". Someone will be in touch with you shortly, but in the meantime would you like to continue from quote?";
                     sessionAttrs.isError = false;
                 }
                 if (quoteResp && quoteResp.stopPageType === "DangerousDogSelected") {
