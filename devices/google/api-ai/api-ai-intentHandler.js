@@ -1113,11 +1113,11 @@ function handlerAOSRenterValidCustomer(body, deferred) {
     aos.handlerRenterValidCustomer(sessionAttrs)
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
-            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text; 
-            if(sessionAttrs.isError){
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
+            if (sessionAttrs.isError) {
                 rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": {} }];
-            }   
-            else{
+            }
+            else {
                 rentersWelcomeSpeechResp.contextOut = [{ "name": "renters", "parameters": sessionAttrs }];
             }
             deferred.resolve(rentersWelcomeSpeechResp);
@@ -1151,7 +1151,7 @@ function handlerAOSRenterGenerateURL(body, deferred) {
     aos.handlerRenterGenerateURL(sessionAttrs)
         .then(function (renterspeechResponse) {
             rentersWelcomeSpeechResp.speech = renterspeechResponse.speechOutput.text;
-            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;            
+            rentersWelcomeSpeechResp.displayText = renterspeechResponse.speechOutput.text;
             deferred.resolve(rentersWelcomeSpeechResp);
         });
 
@@ -1300,7 +1300,7 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "unitsInBuilding": undefined,
         "locatedInDormOrMilitaryBarracks": undefined,
         "residenceBuildingType": undefined,
-        "residenceBuildingHomeType" : undefined,
+        "residenceBuildingHomeType": undefined,
         "primaryResidence": undefined,
         "isCurrentAddressSameAsInsuredAddress": undefined,
         "gender": undefined,
@@ -1335,7 +1335,7 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "isResidence2600ftFromCoastVisible": undefined,
         "propertyInsuranceClaims": undefined,
         "isDogAdded": undefined,
-        "isError" :undefined,
+        "isError": undefined,
         "claimLostDate": undefined,
         "claimLostType": undefined,
         "claimLostDescription": undefined,
@@ -1348,8 +1348,8 @@ function getAOSRentersSessionAttributes(contextInfo) {
         "claimLostLocationDisplay": undefined,
         "claimLostLocation": undefined,
         "withInCityLimit": undefined,
-        "constructionType" : undefined,
-        "additionalResidents" : undefined
+        "constructionType": undefined,
+        "additionalResidents": undefined
     };
 
     if (contextInfo) {
@@ -1360,10 +1360,16 @@ function getAOSRentersSessionAttributes(contextInfo) {
             var arr = givenname.split(" ");
             if (arr.length <= 2) {
                 sessionAttrs.firstName = arr[0];
+                if (sessionAttrs.firstName) {
+                    firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+                }
                 sessionAttrs.lastName = arr[1];
             }
             else {
                 sessionAttrs.firstName = arr[0];
+                if (sessionAttrs.firstName) {
+                    firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+                }
                 sessionAttrs.middleName = arr[1];
                 sessionAttrs.lastName = arr[2];
             }
@@ -1481,7 +1487,7 @@ function getAOSRentersSessionAttributes(contextInfo) {
         }
         if (contextInfo.parameters.isError) {
             sessionAttrs.isError = contextInfo.parameters.isError;
-        }        
+        }
         if (contextInfo.parameters.isResidenceWithinThousandFtFromCoast) {
             sessionAttrs.isResidenceWithinThousandFtFromCoast = contextInfo.parameters.isResidenceWithinThousandFtFromCoast;
         }
