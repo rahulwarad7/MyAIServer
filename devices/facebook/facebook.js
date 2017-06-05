@@ -15,6 +15,9 @@ FacebookMsg.prototype.processResponse = function (body, respData) {
                 facebookInfo.facebook = GetWelcomeTemplateInfo(respData);
                 break;
             case "AGENT-FIND-BYZIP":
+            case "AOS-RENTERS-ISPRIMARYRESIDENCE-NO":
+            case "AOS-RENTERS-ISBUSINESSOPERATED-YES":
+            case "AOS-RENTERS-RESIDENCELOCATION-YES":
                 facebookInfo.facebook = GetAgentTemplateInfo(respData);
                 break;
             default:
@@ -54,8 +57,8 @@ function GetWelcomeTemplateInfo(respData) {
 }
 
 function GetAgentTemplateInfo(respData) {
-    var agFindCntx = respData.contextOut.find(function (curCntx) { return curCntx.name.toUpperCase() === "AGENTFINDBYZIP"; });
-    var agentInfo = agFindCntx.parameters.agent;
+    var agFindCntx = respData.contextOut.find(function (curCntx) { return curCntx.name.toUpperCase() === "renters"; });
+    var agentInfo = renters.parameters.agentDetails;
     var attachment = {
         type: "template",
         payload: {
@@ -63,18 +66,13 @@ function GetAgentTemplateInfo(respData) {
             elements: [{
                 title: agentInfo.name,
                 subtitle: Utilities.getCombinedAddress(agentInfo),
-                item_url: "https://www.agents.allstate.com/",
+                item_url: agentInfo.website,
                 image_url: agentInfo.imageUrl,
                 buttons: [
                     {
                         type: "phone_number",
                         title: "Call",
                         payload: agentInfo.phoneNumber
-                    },
-                    {
-                        type:"postback",
-                        title:"Email me agent details.",
-                        payload: "email please"
                     }],
             }]
         }
