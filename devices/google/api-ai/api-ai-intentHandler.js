@@ -88,7 +88,12 @@ function intentHandlers(body) {
                     deferred.resolve(responseInfo);
                 });
             break;
-
+        case "AOS-RENTERS-PHONEWHY":
+            handlerAOSRentersPhoneWhy(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
         case "AOS-RENTERS-PHONENUMBER":
             handlerAOSRentersPhoneNumber(body, deferred)
                 .then(function (responseInfo) {
@@ -104,6 +109,12 @@ function intentHandlers(body) {
             break;
         case "AOS-RENTERS-EMAILADDRESS":
             handlerAOSRentersEmailAddress(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AOS-RENTERS-EMAILADDRESS-WHY":
+            handlerAOSRentersEmailAddressWhy(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
                 });
@@ -147,6 +158,12 @@ function intentHandlers(body) {
             break;
         case "AOS-RENTERS-EMPSTATUS":
             handlerAOSRentersEmpStatus(body, deferred)
+                .then(function (responseInfo) {
+                    deferred.resolve(responseInfo);
+                });
+            break;
+        case "AOS-RENTERS-EMPSTATUS-WHY":
+            handlerAOSRentersEmpStatusWhy(body, deferred)
                 .then(function (responseInfo) {
                     deferred.resolve(responseInfo);
                 });
@@ -556,7 +573,17 @@ function handlerAOSRentersInsuranceInsuredAddrSame(body, deferred) {
 
     return deferred.promise;
 }
+function handlerAOSRentersPhoneWhy(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
 
+    rentersWelcomeSpeechResp.speech = " We ask for your phone number so that we can contact you to answer any questions you may have or to help you finalize your quote.";
+    rentersWelcomeSpeechResp.displayText = rentersWelcomeSpeechResp.speech;
+    deferred.resolve(rentersWelcomeSpeechResp);
+    return deferred.promise;
+}
 function handlerAOSRentersPhoneNumber(body, deferred) {
     var rentersWelcomeSpeechResp = {};
     var result = body.result;
@@ -601,6 +628,18 @@ function handlerAOSRentersEmailAddress(body, deferred) {
             deferred.resolve(rentersWelcomeSpeechResp);
         });
 
+    return deferred.promise;
+}
+
+function handlerAOSRentersEmailAddressWhy(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    rentersWelcomeSpeechResp.speech = " We ask for your email so that we can email your saved quote if you need to return to it later.";
+    rentersWelcomeSpeechResp.displayText = rentersWelcomeSpeechResp.speech;
+    deferred.resolve(rentersWelcomeSpeechResp);
     return deferred.promise;
 }
 
@@ -685,6 +724,17 @@ function handlerAOSRentersEmpStatus(body, deferred) {
     return deferred.promise;
 }
 
+function handlerAOSRentersEmpStatusWhy(body, deferred) {
+    var rentersWelcomeSpeechResp = {};
+    var result = body.result;
+    var rentersCntx = result.contexts.find(function (curCntx) { return curCntx.name === "renters"; });
+    var sessionAttrs = getAOSRentersSessionAttributes(rentersCntx);
+
+    rentersWelcomeSpeechResp.speech = " We ask for employment Status to make sure you qualify for the best rates.";
+    rentersWelcomeSpeechResp.displayText = rentersWelcomeSpeechResp.speech;
+    deferred.resolve(rentersWelcomeSpeechResp);
+    return deferred.promise;
+}
 function handlerAOSRentersGender(body, deferred) {
     var rentersWelcomeSpeechResp = {};
     var result = body.result;
