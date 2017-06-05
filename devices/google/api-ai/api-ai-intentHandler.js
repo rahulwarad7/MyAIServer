@@ -1361,14 +1361,14 @@ function getAOSRentersSessionAttributes(contextInfo) {
             if (arr.length <= 2) {
                 sessionAttrs.firstName = arr[0];
                 if (sessionAttrs.firstName) {
-                    firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+                    sessionAttrs.firstName = sessionAttrs.firstName.charAt(0).toUpperCase() + sessionAttrs.firstName.slice(1);
                 }
                 sessionAttrs.lastName = arr[1];
             }
             else {
                 sessionAttrs.firstName = arr[0];
                 if (sessionAttrs.firstName) {
-                    firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+                    sessionAttrs.firstName = sessionAttrs.firstName.charAt(0).toUpperCase() + sessionAttrs.firstName.slice(1);
                 }
                 sessionAttrs.middleName = arr[1];
                 sessionAttrs.lastName = arr[2];
