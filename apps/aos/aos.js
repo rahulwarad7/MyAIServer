@@ -2327,13 +2327,13 @@ function ProcessQuoteResponse(retrieveQuoteServResp) {
 function ProcessAgentResponse(agentServResp) {
     var agents = [];
     if (agentServResp && agentServResp.agentAvailable && agentServResp.agents.length > 0) {
-        for (var index = 0; index < agentServResp.agents.length; index = 3) {
+        for (var index = 0; index < agentServResp.agents.length; index++) {
             var currServAgent = agentServResp.agents[index];
             var agentInfo = new Agent();
             agentInfo.id = currServAgent.id;
             agentInfo.name = currServAgent.name;
             agentInfo.addressLine1 = currServAgent.addressLine1;
-            var website = "https://www.agents.allstate.com/" + currServAgent.name.trim() + currServAgent.city.trim() + currServAgent.state + ".html";
+            var website = "https://www.agents.allstate.com/" + currServAgent.name.trim() +'-' + currServAgent.city.trim() +'-' + currServAgent.state + ".html";
             agentInfo.website = website.replace(/\s+/g, '-').toLowerCase();
             agentInfo.city = currServAgent.city;
             agentInfo.state = currServAgent.state;
