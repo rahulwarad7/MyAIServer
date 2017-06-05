@@ -311,7 +311,7 @@ AOS.prototype.handlerRentersEmpStatus = function (sessionAttrs) {
         getAgents(sessionInfo)
             .then(function (agentDetails) {
                 if (agentDetails && agentDetails.length > 0) {
-                    sessionAttrs.agentDetails = agentDetails[0];
+                    sessionAttrs.agentDetails = agentDetails;
                 }
                 if (sessionAttrs.state != "FL") {
                     speechOutput.text = "Now please mention your gender ";
@@ -1550,7 +1550,7 @@ function getRentersInfoResponse(sessionAttrs) {
                 deferred.resolve(rentersInfoSpeechOutput);
             }).catch(function (error) {
                 rentersInfoSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
-             sessionAttrs.transactionToken = null;
+                sessionAttrs.transactionToken = null;
                 deferred.resolve(rentersInfoSpeechOutput);
             });
     }
@@ -1569,8 +1569,8 @@ function confirmProfileResponse(sessionAttrs) {
                     deferred.resolve(rentersInfoSpeechOutput);
                 }).catch(function (error) {
                     rentersInfoSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
-                 sessionAttrs.transactionToken = null;    
-                deferred.resolve(rentersInfoSpeechOutput);
+                    sessionAttrs.transactionToken = null;
+                    deferred.resolve(rentersInfoSpeechOutput);
                 });
         }
         else {
@@ -1598,7 +1598,7 @@ function getRentersQuoteResponse(sessionAttrs) {
                 deferred.resolve(quoteSpeechOutput);
             }).catch(function (error) {
                 quoteSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
-             sessionAttrs.transactionToken = null;
+                sessionAttrs.transactionToken = null;
                 deferred.resolve(quoteSpeechOutput);
             });
     }
@@ -2327,12 +2327,14 @@ function ProcessQuoteResponse(retrieveQuoteServResp) {
 function ProcessAgentResponse(agentServResp) {
     var agents = [];
     if (agentServResp && agentServResp.agentAvailable && agentServResp.agents.length > 0) {
-        for (var index = 0; index < agentServResp.agents.length; index++) {
+        for (var index = 0; index < agentServResp.agents.length; index = 3) {
             var currServAgent = agentServResp.agents[index];
             var agentInfo = new Agent();
             agentInfo.id = currServAgent.id;
             agentInfo.name = currServAgent.name;
             agentInfo.addressLine1 = currServAgent.addressLine1;
+            var website = "https://www.agents.allstate.com/" + currServAgent.name.trim() + currServAgent.city.trim() + currServAgent.state + ".html";
+            agentInfo.website = website.replace(/\s+/g, '-').toLowerCase();
             agentInfo.city = currServAgent.city;
             agentInfo.state = currServAgent.state;
             agentInfo.zipCode = currServAgent.zipCode;
