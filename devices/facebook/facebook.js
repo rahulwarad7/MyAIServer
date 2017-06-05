@@ -18,6 +18,7 @@ FacebookMsg.prototype.processResponse = function (body, respData) {
             case "AOS-RENTERS-ISPRIMARYRESIDENCE-NO":
             case "AOS-RENTERS-ISBUSINESSOPERATED-YES":
             case "AOS-RENTERS-RESIDENCELOCATION-YES":
+            case "AOS-RENTERS-SAVEQUOTE-NO":
                 facebookInfo.facebook = GetAgentTemplateInfo(respData);
                 break;
             default:
