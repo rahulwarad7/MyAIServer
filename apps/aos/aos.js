@@ -430,7 +430,7 @@ AOS.prototype.handlerRentersLivedMoreThanTwoYrsNo = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    speechOutput.text = "Okay, What's the CITY and ZIP code of your previous address?";
+    speechOutput.text = "Got it. Could you type your previous address below?";
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     deferred.resolve(rentersFindSpeechResp);
@@ -469,7 +469,7 @@ AOS.prototype.handlerRentersPrevStreetAddrs = function (sessionAttrs) {
         getStateFromZip(sessionAttrs.transactionToken.sessionID, sessionAttrs.prevzip)
             .then(function (state) {
                 sessionAttrs.prevstate = state;
-                speechOutput.text = "Got it. Could you type your previous address below? ";
+                speechOutput.text = "Okay, What's the CITY and ZIP code of your previous address? ";
                 rentersFindSpeechResp.speechOutput = speechOutput;
                 rentersFindSpeechResp.repromptOutput = speechOutput;
                 rentersFindSpeechResp.sessionAttrs = sessionAttrs;
