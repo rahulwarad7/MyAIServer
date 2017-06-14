@@ -234,7 +234,7 @@ AOS.prototype.handlerRentersInsuranceInsuredAddrDiff = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
     rentersFindSpeechResp.contextOut = [];
-    speechOutput.text = "I see. Would you mind typing the city and ZIP code of the residence you'd like to insure?";
+    speechOutput.text = "I see. Would you mind typing the street address that you'd like to insure?";
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     deferred.resolve(rentersFindSpeechResp);
@@ -251,7 +251,29 @@ AOS.prototype.handlerRentersNewCityZip = function (sessionAttrs) {
         speechOutput.text = "Hmm, let's try that again. Make sure you're entering a valid 5-digit ZIP code.Remember, you can type \"help\" at any time! ";
     }
     else {
-        speechOutput.text = "Now what is the street address to insure? ";
+        if (sessionAttrs.IsInsuredAddrSame == false) {
+            getRentersSaveCustomerResponse(sessionAttrs)
+                .then(function (saveCustSpeechOutput) {
+                    rentersFindSpeechResp.speechOutput = saveCustSpeechOutput;
+                    rentersFindSpeechResp.repromptOutput = null;
+                    rentersFindSpeechResp.sessionAttrs = sessionAttrs;
+                    deferred.resolve(rentersFindSpeechResp);
+                });
+        }
+        else if (sessionAttrs.IsInsuredAddrSame == false) {
+            getRentersSaveCustomerResponse(sessionAttrs)
+                .then(function (saveCustSpeechOutput) {
+                    rentersFindSpeechResp.speechOutput = saveCustSpeechOutput;
+                    rentersFindSpeechResp.repromptOutput = null;
+                    rentersFindSpeechResp.sessionAttrs = sessionAttrs;
+                    deferred.resolve(rentersFindSpeechResp);
+                });
+        } else {
+            speechOutput.text = "Is this the address you'd like to insure?";
+            rentersFindSpeechResp.speechOutput = speechOutput;
+            rentersFindSpeechResp.repromptOutput = speechOutput;
+        }
+
     }
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
@@ -265,30 +287,7 @@ AOS.prototype.handlerRentersDiffAddress = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-
-    if (sessionAttrs.IsInsuredAddrSame == false) {
-        getRentersSaveCustomerResponse(sessionAttrs)
-            .then(function (saveCustSpeechOutput) {
-                rentersFindSpeechResp.speechOutput = saveCustSpeechOutput;
-                rentersFindSpeechResp.repromptOutput = null;
-                rentersFindSpeechResp.sessionAttrs = sessionAttrs;
-                deferred.resolve(rentersFindSpeechResp);
-            });
-    }
-    else if (sessionAttrs.IsInsuredAddrSame == false) {
-        getRentersSaveCustomerResponse(sessionAttrs)
-            .then(function (saveCustSpeechOutput) {
-                rentersFindSpeechResp.speechOutput = saveCustSpeechOutput;
-                rentersFindSpeechResp.repromptOutput = null;
-                rentersFindSpeechResp.sessionAttrs = sessionAttrs;
-                deferred.resolve(rentersFindSpeechResp);
-            });
-    } else {
-        speechOutput.text = "Is this the address you'd like to insure?";
-        rentersFindSpeechResp.speechOutput = speechOutput;
-        rentersFindSpeechResp.repromptOutput = speechOutput;
-    }
-
+    speechOutput.text = "What is the city and ZIP code of the residence you'd like to insure? ";
     return deferred.promise;
 };
 
@@ -298,7 +297,7 @@ AOS.prototype.handlerCreditHistoryAuthorize = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
     if (sessionAttrs.state != "KS") {
-        speechOutput.text = "Great! Next I'll need to know a little about your employment status. Are you employed, self employed, unemployed, student, retired, home maker or military";
+        speechOutput.text = "Great! Next I'll need to know a little about your employment status.";
     }
     else {
         speechOutput.text = "Thanks. Would you like to add a spouse to your quote?";
@@ -350,7 +349,7 @@ AOS.prototype.handlerRentersGender = function (sessionAttrs) {
         speechOutput.text = "Thanks. Would you like to add a spouse to your quote? ";
     }
     else {
-        speechOutput.text = "Thanks. Now Tell me about your marital status like single, married and lived with spouse, divorced, legally married but separated, widowed, domestic partnership";
+        speechOutput.text = "Thanks. Now Tell me about your marital status.";
     }
 
 
@@ -509,7 +508,7 @@ AOS.prototype.handleRentersSpouseInsuranceName = function (sessionAttrs) {
         rentersFindSpeechResp.speechOutput = speechOutput;
         rentersFindSpeechResp.repromptOutput = speechOutput;
     } else {
-        speechOutput.text = sessionAttrs.spouseName + ", please provide your spouse's last name.";
+        speechOutput.text = sessionAttrs.spousefirstName + ", please provide your spouse's last name.";
         rentersFindSpeechResp.speechOutput = speechOutput;
         rentersFindSpeechResp.repromptOutput = speechOutput;
     }
@@ -1515,7 +1514,7 @@ function getRentersSaveCustomerResponse(sessionAttrs) {
             return rentersSaveCustomer(customerSaveInfo, sessionInfo.sessionId);
         }).then(function (saveResp) {
             if (sessionAttrs.state === "FL") {
-                saveCustSpeechOutput.text = "Sorry! We are unable to take you forward with this entered state now. Please click on this to continue https://www.allstate.com/landingpages/renters-fl.aspx"
+                saveCustSpeechOutput.text = "I'm sorry quoting via chat isn't available in your zip code yet. You can visit the following site to continue your quote: https://www.allstate.com/landingpages/renters-fl.aspx";
             }
             if (saveResp && saveResp.transactionToken) {
                 sessionAttrs.transactionToken = saveResp.transactionToken;
@@ -1530,7 +1529,7 @@ function getRentersSaveCustomerResponse(sessionAttrs) {
                         saveCustSpeechOutput.text = "Great! Next I'll need to know a little about your employment status. Are you employed, self employed, unemployed, student, retired, home maker or military.";
                     }
                     else {
-                        saveCustSpeechOutput.text = "Information from outside sources regarding credit history is used to provide you with a renters quote. A third party may be used to calculate your insurance score. This information, along with subsequently collected information, will be shared with outside parties that perform services on Allstate's behalf. ";
+                        saveCustSpeechOutput.text = "Before we go any further, I need you to agree to the following: Information from outside sources regarding credit history is used to provide you with a renters quote. A third party may be used to calculate your insurance score. This information, along with subsequently collected information, will be shared with outside parties that perform services on Allstate's behalf. ";
                         saveCustSpeechOutput.text = saveCustSpeechOutput.text + "   Privacy Policy:http://www.allstate.com/about/privacy-statement-aic.aspx ";
                         saveCustSpeechOutput.text = saveCustSpeechOutput.text + "   Type OK to authorize.";
                     }
