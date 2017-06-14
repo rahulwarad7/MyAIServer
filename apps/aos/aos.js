@@ -275,10 +275,7 @@ AOS.prototype.handlerRentersNewCityZip = function (sessionAttrs) {
         }
 
     }
-    rentersFindSpeechResp.speechOutput = speechOutput;
-    rentersFindSpeechResp.repromptOutput = speechOutput;
-    deferred.resolve(rentersFindSpeechResp);
-
+    
     return deferred.promise;
 };
 
@@ -1542,7 +1539,7 @@ function getRentersSaveCustomerResponse(sessionAttrs) {
             deferred.resolve(saveCustSpeechOutput);
         }).catch(function (error) {
             saveCustSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
-            deferred.resolve(saveCustSpeechOutput);
+             deferred.resolve(saveCustSpeechOutput);
         });
 
     return deferred.promise;
