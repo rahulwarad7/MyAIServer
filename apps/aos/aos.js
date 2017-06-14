@@ -1537,10 +1537,11 @@ function getRentersInfoResponse(sessionAttrs) {
     var deferred = q.defer();
     var rentersInfoSpeechOutput = new Speech();
     if (sessionAttrs.transactionToken) {
-        var rentersInfo = mapRentersInfo(sessionAttrs);
-        getStateFromZip(sessionInfo.sessionId, sessionInfo.prevzip)
+        var rentersInfo;
+        getStateFromZip(sessionAttrs.transactionToken.sessionID, sessionAttrs.prevzip)
             .then(function (state) {
                 sessionAttrs.prevstate = state;
+                rentersInfo = mapRentersInfo(sessionAttrs);
             }).then(function (newstate) {
                 saveRentersInfo(rentersInfo, sessionAttrs.transactionToken)
                     .then(function (result) {
@@ -1844,7 +1845,7 @@ function mapAddress(address, sessionAttrs) {
         address.addressLine1 = sessionAttrs.prevaddrLine1;
         address.city = sessionAttrs.prevcity;
         address.state = sessionAttrs.prevstate;
-        address.zipCode = sessionAttrs.prevzipcode;
+        address.zipCode = sessionAttrs.prevzip;
     }
     else {
         address.addressLine1 = sessionAttrs.addrLine1;
@@ -2016,17 +2017,19 @@ function startAutoAOSSession(zip) {
 
 function getStateFromZip(sessionId, zip) {
     var deferred = q.defer();
-    var urlGetStateFromZip = URL_GETSTATE.replace("{0}", zip);
-    request({ method: 'GET', uri: urlGetStateFromZip, headers: { "X-TID": sessionId } },
-        function (error, response, body) {
-            if (error || response.statusCode !== 200) {
-                errormsg = "Error from server session";
-                deferred.reject(errormsg);
-            } else {
-                var responseJson = JSON.parse(response.body);
-                deferred.resolve(responseJson.stateCode);
-            }
-        });
+    if (zip) {
+        var urlGetStateFromZip = URL_GETSTATE.replace("{0}", zip);
+        request({ method: 'GET', uri: urlGetStateFromZip, headers: { "X-TID": sessionId } },
+            function (error, response, body) {
+                if (error || response.statusCode !== 200) {
+                    errormsg = "Error from server session";
+                    deferred.reject(errormsg);
+                } else {
+                    var responseJson = JSON.parse(response.body);
+                    deferred.resolve(responseJson.stateCode);
+                }
+            });
+    }
     return deferred.promise;
 }
 
