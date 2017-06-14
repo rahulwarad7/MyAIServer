@@ -1538,23 +1538,39 @@ function getRentersInfoResponse(sessionAttrs) {
     var rentersInfoSpeechOutput = new Speech();
     if (sessionAttrs.transactionToken) {
         var rentersInfo;
-        getStateFromZip(sessionAttrs.transactionToken.sessionID, sessionAttrs.prevzip)
-            .then(function (state) {
-                sessionAttrs.prevstate = state;
-                rentersInfo = mapRentersInfo(sessionAttrs);
-            }).then(function (newstate) {
-                saveRentersInfo(rentersInfo, sessionAttrs.transactionToken)
-                    .then(function (result) {
-                        sessionAttrs.creditHit = result.creditHit;
-                        sessionAttrs.isRenterReOrderData = result.isRenterReOrderData;
-                        rentersInfoSpeechOutput.text = "Thank you for the basic renters information. Would you like to proceed."
-                        deferred.resolve(rentersInfoSpeechOutput);
-                    }).catch(function (error) {
-                        rentersInfoSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
-                        sessionAttrs.transactionToken = null;
-                        deferred.resolve(rentersInfoSpeechOutput);
-                    });
-            });
+        if (sessionAttrs.prevzip) {
+            getStateFromZip(sessionAttrs.transactionToken.sessionID, sessionAttrs.prevzip)
+                .then(function (state) {
+                    sessionAttrs.prevstate = state;
+                    rentersInfo = mapRentersInfo(sessionAttrs);
+                }).then(function (newstate) {
+                    saveRentersInfo(rentersInfo, sessionAttrs.transactionToken)
+                        .then(function (result) {
+                            sessionAttrs.creditHit = result.creditHit;
+                            sessionAttrs.isRenterReOrderData = result.isRenterReOrderData;
+                            rentersInfoSpeechOutput.text = "Thank you for the basic renters information. Would you like to proceed."
+                            deferred.resolve(rentersInfoSpeechOutput);
+                        }).catch(function (error) {
+                            rentersInfoSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
+                            sessionAttrs.transactionToken = null;
+                            deferred.resolve(rentersInfoSpeechOutput);
+                        });
+                });
+        }
+        else {
+            rentersInfo = mapRentersInfo(sessionAttrs);
+            saveRentersInfo(rentersInfo, sessionAttrs.transactionToken)
+                .then(function (result) {
+                    sessionAttrs.creditHit = result.creditHit;
+                    sessionAttrs.isRenterReOrderData = result.isRenterReOrderData;
+                    rentersInfoSpeechOutput.text = "Thank you for the basic renters information. Would you like to proceed."
+                    deferred.resolve(rentersInfoSpeechOutput);
+                }).catch(function (error) {
+                    rentersInfoSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
+                    sessionAttrs.transactionToken = null;
+                    deferred.resolve(rentersInfoSpeechOutput);
+                });
+        }
         return deferred.promise;
     }
 }
