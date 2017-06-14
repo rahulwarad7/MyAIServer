@@ -522,7 +522,7 @@ AOS.prototype.handleRentersSpouseInsuranceDOB = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
 
-    speechOutput.text = "Great! I would need to know a little about your spouse's employment status. Like employed, self employed, unemployed, student, retired, home maker or military";
+    speechOutput.text = "Great! I would need to know a little about your spouse's employment status.";
     rentersFindSpeechResp.speechOutput = speechOutput;
     rentersFindSpeechResp.repromptOutput = speechOutput;
     deferred.resolve(rentersFindSpeechResp);
@@ -1526,7 +1526,7 @@ function getRentersSaveCustomerResponse(sessionAttrs) {
                     }
                     //if (state === "CA" || state === "KS" || state === "MD" || state === "DE" || state === "FL") {
                     else if (state === "CA" || state === "KS" || state === "DE") {
-                        saveCustSpeechOutput.text = "Great! Next I'll need to know a little about your employment status. Are you employed, self employed, unemployed, student, retired, home maker or military.";
+                        saveCustSpeechOutput.text = "Great! Next I'll need to know a little about your employment status.";
                     }
                     else {
                         saveCustSpeechOutput.text = "Before we go any further, I need you to agree to the following: Information from outside sources regarding credit history is used to provide you with a renters quote. A third party may be used to calculate your insurance score. This information, along with subsequently collected information, will be shared with outside parties that perform services on Allstate's behalf. ";
