@@ -465,23 +465,11 @@ AOS.prototype.handlerRentersPrevStreetAddrs = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    if (sessionAttrs.prevzip && sessionAttrs.transactionToken) {
-        getStateFromZip(sessionAttrs.transactionToken.sessionID, sessionAttrs.prevzip)
-            .then(function (state) {
-                sessionAttrs.prevstate = state;
-                speechOutput.text = "Okay, What's the CITY and ZIP code of your previous address? ";
-                rentersFindSpeechResp.speechOutput = speechOutput;
-                rentersFindSpeechResp.repromptOutput = speechOutput;
-                rentersFindSpeechResp.sessionAttrs = sessionAttrs;
-                deferred.resolve(rentersFindSpeechResp);
-            });
-    }
-    else {
-        speechOutput.text = "Sorry, I didn't quite understand that! Make sure you're entering a valid address. Remember, you can type \"help\" at any time! ";
-        rentersFindSpeechResp.speechOutput = speechOutput;
-        rentersFindSpeechResp.repromptOutput = speechOutput;
-        deferred.resolve(rentersFindSpeechResp);
-    }
+    speechOutput.text = "Okay, What's the CITY and ZIP code of your previous address? ";
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    rentersFindSpeechResp.sessionAttrs = sessionAttrs;
+    deferred.resolve(rentersFindSpeechResp);
     return deferred.promise;
 };
 
@@ -1550,812 +1538,816 @@ function getRentersInfoResponse(sessionAttrs) {
     var rentersInfoSpeechOutput = new Speech();
     if (sessionAttrs.transactionToken) {
         var rentersInfo = mapRentersInfo(sessionAttrs);
-        saveRentersInfo(rentersInfo, sessionAttrs.transactionToken)
-            .then(function (result) {
-                sessionAttrs.creditHit = result.creditHit;
-                sessionAttrs.isRenterReOrderData = result.isRenterReOrderData;
-                rentersInfoSpeechOutput.text = "Thank you for the basic renters information. Would you like to proceed."
-                deferred.resolve(rentersInfoSpeechOutput);
-            }).catch(function (error) {
-                rentersInfoSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
-                sessionAttrs.transactionToken = null;
-                deferred.resolve(rentersInfoSpeechOutput);
+        getStateFromZip(sessionInfo.sessionId, sessionInfo.prevzip)
+            .then(function (state) {
+                sessionAttrs.prevstate = state;
+            }).then(function (newstate) {
+                saveRentersInfo(rentersInfo, sessionAttrs.transactionToken)
+                    .then(function (result) {
+                        sessionAttrs.creditHit = result.creditHit;
+                        sessionAttrs.isRenterReOrderData = result.isRenterReOrderData;
+                        rentersInfoSpeechOutput.text = "Thank you for the basic renters information. Would you like to proceed."
+                        deferred.resolve(rentersInfoSpeechOutput);
+                    }).catch(function (error) {
+                        rentersInfoSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
+                        sessionAttrs.transactionToken = null;
+                        deferred.resolve(rentersInfoSpeechOutput);
+                    });
             });
+        return deferred.promise;
     }
-    return deferred.promise;
-}
 
-function confirmProfileResponse(sessionAttrs) {
-    var deferred = q.defer();
-    var rentersInfoSpeechOutput = new Speech();
-    if (sessionAttrs.transactionToken) {
-        var confirmProfileInfo = mapRentersConfirmProfile(sessionAttrs);
-        if (sessionAttrs && !sessionAttrs.creditHit && !sessionAttrs.isRenterReOrderData) {
-            postConfirmProfile(confirmProfileInfo, sessionAttrs.transactionToken)
-                .then(function (result) {
-                    rentersInfoSpeechOutput.text = "Great! Now is this residence your primary residence? ";
-                    deferred.resolve(rentersInfoSpeechOutput);
-                }).catch(function (error) {
-                    rentersInfoSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
-                    sessionAttrs.transactionToken = null;
-                    deferred.resolve(rentersInfoSpeechOutput);
-                });
-        }
-        else {
-            rentersInfoSpeechOutput.text = "Great! Now is this residence your primary residence? ";
-            deferred.resolve(rentersInfoSpeechOutput);
-        }
-    }
-    return deferred.promise;
-}
-
-function getRentersQuoteResponse(sessionAttrs) {
-    var deferred = q.defer();
-    var quoteSpeechOutput = new Speech();
-    if (sessionAttrs.transactionToken) {
-        getResidenceInfo(sessionAttrs.transactionToken)
-            .then(function (response) {
-                var residenceInfoObject = response;
-                residenceInfoObject = mapResidenceInfo(sessionAttrs, JSON.parse(residenceInfoObject));
-                return postResidenceInfo(residenceInfoObject, sessionAttrs.transactionToken);
-            }).then(function (response) {
-                if (response) {
-                    sessionAttrs.isValidRenterCustomer = response.isValidRenterCustomer;
-                    quoteSpeechOutput.text = "Thank you for the inputs, Your details has been validated. would you like to get quote details? ";
-                }
-                deferred.resolve(quoteSpeechOutput);
-            }).catch(function (error) {
-                quoteSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
-                sessionAttrs.transactionToken = null;
-                deferred.resolve(quoteSpeechOutput);
-            });
-    }
-    return deferred.promise;
-}
-
-function saveAndExitResponse(sessionAttrs) {
-    var deferred = q.defer();
-    var quoteSpeechOutput = new Speech();
-    if (sessionAttrs.transactionToken) {
-        saveAndExplicit(sessionAttrs.emailAddress, sessionAttrs.transactionToken)
-            .then(function (response) {
-                return saveAndExit(sessionAttrs.emailAddress, sessionAttrs.transactionToken);
-            }).then(function (response) {
-                if (!response) {
-                    quoteSpeechOutput.text = "Thank you for the inputs, Your details has been saved. would you like to complete the transaction ? ";
-                }
-                deferred.resolve(quoteSpeechOutput);
-            }).catch(function (error) {
-                quoteSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
-                deferred.resolve(quoteSpeechOutput);
-            });
-    }
-    return deferred.promise;
-}
-
-function quoteLandingURLResponse(sessionAttrs) {
-    var deferred = q.defer();
-    var quoteURLSpeechOutput = new Speech();
-    var sessionInfo = new Session();
-    sessionInfo.zip = sessionAttrs.zip;
-    sessionInfo.newzip = sessionAttrs.newzip;
-    startAutoAOSSession()
-        .then(function (id) {
-            sessionInfo.sessionId = id;
-            return quoteRepository(sessionAttrs, sessionInfo.sessionId);
-        }).then(function (response) {
-            if (response && response.quoteList) {
-                sessionAttrs.retrieveURL = response.quoteList[0].retrieveUrl;
-                quoteURLSpeechOutput.sessionAttrs = sessionAttrs;
-                quoteURLSpeechOutput.text = "Perfect. Here is the URL to connect to live quote page: ";
-                quoteURLSpeechOutput.text = quoteURLSpeechOutput.text + sessionAttrs.retrieveURL;
-                quoteURLSpeechOutput.text = quoteURLSpeechOutput.text + "&sessionID=" + sessionAttrs.transactionToken.sessionID + "&product=RENTERS&isAI=TRUE";
+    function confirmProfileResponse(sessionAttrs) {
+        var deferred = q.defer();
+        var rentersInfoSpeechOutput = new Speech();
+        if (sessionAttrs.transactionToken) {
+            var confirmProfileInfo = mapRentersConfirmProfile(sessionAttrs);
+            if (sessionAttrs && !sessionAttrs.creditHit && !sessionAttrs.isRenterReOrderData) {
+                postConfirmProfile(confirmProfileInfo, sessionAttrs.transactionToken)
+                    .then(function (result) {
+                        rentersInfoSpeechOutput.text = "Great! Now is this residence your primary residence? ";
+                        deferred.resolve(rentersInfoSpeechOutput);
+                    }).catch(function (error) {
+                        rentersInfoSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
+                        sessionAttrs.transactionToken = null;
+                        deferred.resolve(rentersInfoSpeechOutput);
+                    });
             }
             else {
-                quoteURLSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
+                rentersInfoSpeechOutput.text = "Great! Now is this residence your primary residence? ";
+                deferred.resolve(rentersInfoSpeechOutput);
             }
-            deferred.resolve(quoteURLSpeechOutput);
-        }).catch(function (error) {
-            quoteURLSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
-            deferred.resolve(quoteURLSpeechOutput);
-        });
+        }
+        return deferred.promise;
+    }
 
-    return deferred.promise;
-}
+    function getRentersQuoteResponse(sessionAttrs) {
+        var deferred = q.defer();
+        var quoteSpeechOutput = new Speech();
+        if (sessionAttrs.transactionToken) {
+            getResidenceInfo(sessionAttrs.transactionToken)
+                .then(function (response) {
+                    var residenceInfoObject = response;
+                    residenceInfoObject = mapResidenceInfo(sessionAttrs, JSON.parse(residenceInfoObject));
+                    return postResidenceInfo(residenceInfoObject, sessionAttrs.transactionToken);
+                }).then(function (response) {
+                    if (response) {
+                        sessionAttrs.isValidRenterCustomer = response.isValidRenterCustomer;
+                        quoteSpeechOutput.text = "Thank you for the inputs, Your details has been validated. would you like to get quote details? ";
+                    }
+                    deferred.resolve(quoteSpeechOutput);
+                }).catch(function (error) {
+                    quoteSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
+                    sessionAttrs.transactionToken = null;
+                    deferred.resolve(quoteSpeechOutput);
+                });
+        }
+        return deferred.promise;
+    }
 
-function quoteResponse(sessionAttrs) {
-    var deferred = q.defer();
-    var quoteSpeechOutput = new Speech();
-    if (sessionAttrs.transactionToken) {
-        orderQuote(sessionAttrs.transactionToken)
-            .then(function (quoteResp) {
-                if (quoteResp && quoteResp.quoteList) {
-                    quoteSpeechOutput.text = "Okay, thanks for all the info! Here's your renters quote. ";
-                    quoteSpeechOutput.text = quoteSpeechOutput.text + "Total payable amount is $" + quoteResp.quoteList[0].paymentInfo.paymentAmount;
-                    quoteSpeechOutput.text = quoteSpeechOutput.text + " and per month would cost $" + quoteResp.quoteList[0].paymentInfo.monthlyPaymentAmount;
-                    quoteSpeechOutput.text = quoteSpeechOutput.text + ". Your down payment would be $" + quoteResp.quoteList[0].paymentInfo.inDownPaymentAmount;
-                    quoteSpeechOutput.text = quoteSpeechOutput.text + ". Someone will be in touch with you shortly, but in the meantime would you like to continue from quote?";
-                    sessionAttrs.isError = false;
+    function saveAndExitResponse(sessionAttrs) {
+        var deferred = q.defer();
+        var quoteSpeechOutput = new Speech();
+        if (sessionAttrs.transactionToken) {
+            saveAndExplicit(sessionAttrs.emailAddress, sessionAttrs.transactionToken)
+                .then(function (response) {
+                    return saveAndExit(sessionAttrs.emailAddress, sessionAttrs.transactionToken);
+                }).then(function (response) {
+                    if (!response) {
+                        quoteSpeechOutput.text = "Thank you for the inputs, Your details has been saved. would you like to complete the transaction ? ";
+                    }
+                    deferred.resolve(quoteSpeechOutput);
+                }).catch(function (error) {
+                    quoteSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
+                    deferred.resolve(quoteSpeechOutput);
+                });
+        }
+        return deferred.promise;
+    }
+
+    function quoteLandingURLResponse(sessionAttrs) {
+        var deferred = q.defer();
+        var quoteURLSpeechOutput = new Speech();
+        var sessionInfo = new Session();
+        sessionInfo.zip = sessionAttrs.zip;
+        sessionInfo.newzip = sessionAttrs.newzip;
+        startAutoAOSSession()
+            .then(function (id) {
+                sessionInfo.sessionId = id;
+                return quoteRepository(sessionAttrs, sessionInfo.sessionId);
+            }).then(function (response) {
+                if (response && response.quoteList) {
+                    sessionAttrs.retrieveURL = response.quoteList[0].retrieveUrl;
+                    quoteURLSpeechOutput.sessionAttrs = sessionAttrs;
+                    quoteURLSpeechOutput.text = "Perfect. Here is the URL to connect to live quote page: ";
+                    quoteURLSpeechOutput.text = quoteURLSpeechOutput.text + sessionAttrs.retrieveURL;
+                    quoteURLSpeechOutput.text = quoteURLSpeechOutput.text + "&sessionID=" + sessionAttrs.transactionToken.sessionID + "&product=RENTERS&isAI=TRUE";
                 }
-                if (quoteResp && quoteResp.stopPageType === "DangerousDogSelected") {
-                    quoteSpeechOutput.text = "Okay, Unable to proceed further. You have selected a dangerous dog.  ";
-                    sessionAttrs.isError = true;
-                    quoteSpeechOutput.sessionAttrs = sessionAttrs;
+                else {
+                    quoteURLSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
                 }
-                if (quoteResp && quoteResp.stopPageType === "RejectedUser") {
-                    quoteSpeechOutput.text = "Okay, Unable to proceed further. Please contact Allstate Agent. ";
-                    sessionAttrs.isError = true;
-                    quoteSpeechOutput.sessionAttrs = sessionAttrs;
-                }
-                deferred.resolve(quoteSpeechOutput);
+                deferred.resolve(quoteURLSpeechOutput);
             }).catch(function (error) {
-                quoteSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
-                quoteSpeechOutput.sessionAttrs = sessionAttrs;
-                deferred.resolve(quoteSpeechOutput);
+                quoteURLSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
+                deferred.resolve(quoteURLSpeechOutput);
             });
+
+        return deferred.promise;
     }
-    return deferred.promise;
-}
 
-function getCustomerSaveInfo(sessionAttrs, sessionInfo) {
-    var customerData = {};
-    customerData.firstName = sessionAttrs.firstName;
-    customerData.lastName = sessionAttrs.lastName;
-    customerData.suffix = '';
-    customerData.dateOfBirth = DateUtil.getFormattedDate(sessionAttrs.dob, "MMDDYYYY");
-    customerData.mailingAddress = sessionAttrs.addrLine1;
-    customerData.city = sessionAttrs.city;
-    customerData.state = sessionAttrs.state;
-    customerData.zipCode = sessionAttrs.zip;
-    customerData.aWSFlag = "N";
-    customerData.affinity = {};
-    customerData.insuredAddress = {};
-    customerData.insuredAddress.addressLine1 = '';
-    customerData.insuredAddress.city = '';
-    customerData.insuredAddress.state = '';
-    customerData.insuredAddress.zipCode = '';
-    if (!sessionAttrs.IsInsuredAddrSame) {
-        if (customerData.insuredAddress) {
-            customerData.insuredAddress.addressLine1 = sessionAttrs.newaddrLine1;
-            customerData.insuredAddress.aptOrUnit = '';
-            customerData.insuredAddress.city = sessionAttrs.newcity;
-            customerData.insuredAddress.state = sessionAttrs.newstate;
-            customerData.insuredAddress.zipCode = sessionAttrs.newzip;
+    function quoteResponse(sessionAttrs) {
+        var deferred = q.defer();
+        var quoteSpeechOutput = new Speech();
+        if (sessionAttrs.transactionToken) {
+            orderQuote(sessionAttrs.transactionToken)
+                .then(function (quoteResp) {
+                    if (quoteResp && quoteResp.quoteList) {
+                        quoteSpeechOutput.text = "Okay, thanks for all the info! Here's your renters quote. ";
+                        quoteSpeechOutput.text = quoteSpeechOutput.text + "Total payable amount is $" + quoteResp.quoteList[0].paymentInfo.paymentAmount;
+                        quoteSpeechOutput.text = quoteSpeechOutput.text + " and per month would cost $" + quoteResp.quoteList[0].paymentInfo.monthlyPaymentAmount;
+                        quoteSpeechOutput.text = quoteSpeechOutput.text + ". Your down payment would be $" + quoteResp.quoteList[0].paymentInfo.inDownPaymentAmount;
+                        quoteSpeechOutput.text = quoteSpeechOutput.text + ". Someone will be in touch with you shortly, but in the meantime would you like to continue from quote?";
+                        sessionAttrs.isError = false;
+                    }
+                    if (quoteResp && quoteResp.stopPageType === "DangerousDogSelected") {
+                        quoteSpeechOutput.text = "Okay, Unable to proceed further. You have selected a dangerous dog.  ";
+                        sessionAttrs.isError = true;
+                        quoteSpeechOutput.sessionAttrs = sessionAttrs;
+                    }
+                    if (quoteResp && quoteResp.stopPageType === "RejectedUser") {
+                        quoteSpeechOutput.text = "Okay, Unable to proceed further. Please contact Allstate Agent. ";
+                        sessionAttrs.isError = true;
+                        quoteSpeechOutput.sessionAttrs = sessionAttrs;
+                    }
+                    deferred.resolve(quoteSpeechOutput);
+                }).catch(function (error) {
+                    quoteSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
+                    quoteSpeechOutput.sessionAttrs = sessionAttrs;
+                    deferred.resolve(quoteSpeechOutput);
+                });
         }
+        return deferred.promise;
     }
-    customerData.isInsuredAddressSameAsCurrent = sessionAttrs.IsInsuredAddrSame;
-    return customerData;
-}
 
-function mapRentersInfo(sessionAttrs) {
-    var rentersInfoData = null;
-    rentersInfoData = initializeRentersInfoRequest();
-    if (rentersInfoData) {
-        rentersInfoData = mapResident(rentersInfoData, sessionAttrs);
-        rentersInfoData.insuredAddress = mapAddress(rentersInfoData.insuredAddress, sessionAttrs);
-        rentersInfoData.currentAddress = mapAddress(rentersInfoData.currentAddress, sessionAttrs);
-        if (!sessionAttrs.livedmorethantwo) {
-            rentersInfoData.previousAddress = mapAddress(rentersInfoData.previousAddress, sessionAttrs);
+    function getCustomerSaveInfo(sessionAttrs, sessionInfo) {
+        var customerData = {};
+        customerData.firstName = sessionAttrs.firstName;
+        customerData.lastName = sessionAttrs.lastName;
+        customerData.suffix = '';
+        customerData.dateOfBirth = DateUtil.getFormattedDate(sessionAttrs.dob, "MMDDYYYY");
+        customerData.mailingAddress = sessionAttrs.addrLine1;
+        customerData.city = sessionAttrs.city;
+        customerData.state = sessionAttrs.state;
+        customerData.zipCode = sessionAttrs.zip;
+        customerData.aWSFlag = "N";
+        customerData.affinity = {};
+        customerData.insuredAddress = {};
+        customerData.insuredAddress.addressLine1 = '';
+        customerData.insuredAddress.city = '';
+        customerData.insuredAddress.state = '';
+        customerData.insuredAddress.zipCode = '';
+        if (!sessionAttrs.IsInsuredAddrSame) {
+            if (customerData.insuredAddress) {
+                customerData.insuredAddress.addressLine1 = sessionAttrs.newaddrLine1;
+                customerData.insuredAddress.aptOrUnit = '';
+                customerData.insuredAddress.city = sessionAttrs.newcity;
+                customerData.insuredAddress.state = sessionAttrs.newstate;
+                customerData.insuredAddress.zipCode = sessionAttrs.newzip;
+            }
         }
-        rentersInfoData = mapContactInfo(rentersInfoData, sessionAttrs);
-        rentersInfoData.businessOutOfResidence = null;
-        if (sessionAttrs.transactionToken.state === "KS") {
-            rentersInfoData.liveAtCurAddressMoreThanTwoYears = null;
-        }
-        else {
-            rentersInfoData.liveAtCurAddressMoreThanTwoYears = sessionAttrs.livedmorethantwo;
-        }
-
-        rentersInfoData.isSpouseAdded = false;
-        rentersInfoData.isAgreeForTelemarketingCalls = true; //add question to user
-
+        customerData.isInsuredAddressSameAsCurrent = sessionAttrs.IsInsuredAddrSame;
+        return customerData;
     }
-    return rentersInfoData;
-}
 
-function mapRentersConfirmProfile(sessionAttrs) {
-    var confProfileData = {};
-    confProfileData.profiles = getProfiles(sessionAttrs);
-    confProfileData.addresses = getAddresses(sessionAttrs);
-    return confProfileData;
-}
+    function mapRentersInfo(sessionAttrs) {
+        var rentersInfoData = null;
+        rentersInfoData = initializeRentersInfoRequest();
+        if (rentersInfoData) {
+            rentersInfoData = mapResident(rentersInfoData, sessionAttrs);
+            rentersInfoData.insuredAddress = mapAddress(rentersInfoData.insuredAddress, sessionAttrs);
+            rentersInfoData.currentAddress = mapAddress(rentersInfoData.currentAddress, sessionAttrs);
+            if (!sessionAttrs.livedmorethantwo) {
+                rentersInfoData.previousAddress = mapAddress(rentersInfoData.previousAddress, sessionAttrs);
+            }
+            rentersInfoData = mapContactInfo(rentersInfoData, sessionAttrs);
+            rentersInfoData.businessOutOfResidence = null;
+            if (sessionAttrs.transactionToken.state === "KS") {
+                rentersInfoData.liveAtCurAddressMoreThanTwoYears = null;
+            }
+            else {
+                rentersInfoData.liveAtCurAddressMoreThanTwoYears = sessionAttrs.livedmorethantwo;
+            }
 
-function getProfiles(sessionAttrs) {
-    var profiles = [];
-    var profile = {};
-    profile.driverGUID = null;
-    profile.driverNumber = null;
-    profile.relationshipToPrimaryDriver = "SA";
-    profile.firstName = sessionAttrs.firstName;
-    profile.middleName = null;
-    profile.lastName = sessionAttrs.lastName;
-    profile.suffix = null;
-    profile.dateOfBirth = DateUtil.getFormattedDate(sessionAttrs.dob, "MMDDYYYY");;
-    profile.id = "dvEditPrimary";
-    profiles.push(profile);
-    if (sessionAttrs.spouseAdded) {
+            rentersInfoData.isSpouseAdded = false;
+            rentersInfoData.isAgreeForTelemarketingCalls = true; //add question to user
+
+        }
+        return rentersInfoData;
+    }
+
+    function mapRentersConfirmProfile(sessionAttrs) {
+        var confProfileData = {};
+        confProfileData.profiles = getProfiles(sessionAttrs);
+        confProfileData.addresses = getAddresses(sessionAttrs);
+        return confProfileData;
+    }
+
+    function getProfiles(sessionAttrs) {
+        var profiles = [];
+        var profile = {};
         profile.driverGUID = null;
         profile.driverNumber = null;
-        profile.relationshipToPrimaryDriver = null;
-        profile.firstName = sessionAttrs.spousefirstName;
+        profile.relationshipToPrimaryDriver = "SA";
+        profile.firstName = sessionAttrs.firstName;
         profile.middleName = null;
-        profile.lastName = sessionAttrs.spouselastName;
+        profile.lastName = sessionAttrs.lastName;
         profile.suffix = null;
-        profile.dateOfBirth = DateUtil.getFormattedDate(sessionAttrs.spouseDob, "MMDDYYYY");;
-        profile.id = "dvEditSpouse";
+        profile.dateOfBirth = DateUtil.getFormattedDate(sessionAttrs.dob, "MMDDYYYY");;
+        profile.id = "dvEditPrimary";
         profiles.push(profile);
-    }
-    return profiles;
-}
-
-function getAddresses(sessionAttrs) {
-    var addresses = [];
-    var addrs = {};
-    addrs.address = {};
-    addrs.address.addressLine1 = sessionAttrs.addrLine1;
-    addrs.address.aptOrUnit = null;
-    addrs.address.city = sessionAttrs.city;
-    addrs.address.state = sessionAttrs.transactionToken.state;
-    addrs.address.zipCode = sessionAttrs.zip;
-    addrs.address.stateReadOnly = true;
-    addrs.address.zipCodeReadOnly = true;
-    addrs.invalidZipCode = false;
-    addrs.isPreviousAddress = false;
-    addrs.headerText = "Current Address";
-    addrs.id = "dvEditAddress";
-    addrs.editHeader = "Edit Primary Address";
-    addresses.push(addrs);
-    return addresses;
-}
-
-function mapResident(rentersInfoData, sessionAttrs) {
-    if (rentersInfoData.primaryRenter) {
-        rentersInfoData.primaryRenter.firstName = sessionAttrs.firstName;
-        rentersInfoData.primaryRenter.lastName = sessionAttrs.lastName;
-        rentersInfoData.primaryRenter.gender = sessionAttrs.gender;
-        rentersInfoData.primaryRenter.employmentStatus = sessionAttrs.employmentStatus;
-        if (sessionAttrs.state === "CA" || sessionAttrs.state === "CT" || sessionAttrs.state === "MD" || sessionAttrs.state === "OR" || sessionAttrs.state === "PA" || sessionAttrs.state === "NY") {
-            rentersInfoData.primaryRenter.maritalStatus = sessionAttrs.maritalstatus;
+        if (sessionAttrs.spouseAdded) {
+            profile.driverGUID = null;
+            profile.driverNumber = null;
+            profile.relationshipToPrimaryDriver = null;
+            profile.firstName = sessionAttrs.spousefirstName;
+            profile.middleName = null;
+            profile.lastName = sessionAttrs.spouselastName;
+            profile.suffix = null;
+            profile.dateOfBirth = DateUtil.getFormattedDate(sessionAttrs.spouseDob, "MMDDYYYY");;
+            profile.id = "dvEditSpouse";
+            profiles.push(profile);
         }
+        return profiles;
+    }
 
-        rentersInfoData.primaryRenter.dateOfBirth = DateUtil.getFormattedDate(sessionAttrs.dob, "MMDDYYYY");
-        if (sessionAttrs.dob) {
-            var birthdate = new Date(sessionAttrs.dob);
-            var cur = new Date();
-            var diff = cur - birthdate;
-            var age = Math.floor(diff / 31557600000);
-            rentersInfoData.primaryRenter.age = age;
+    function getAddresses(sessionAttrs) {
+        var addresses = [];
+        var addrs = {};
+        addrs.address = {};
+        addrs.address.addressLine1 = sessionAttrs.addrLine1;
+        addrs.address.aptOrUnit = null;
+        addrs.address.city = sessionAttrs.city;
+        addrs.address.state = sessionAttrs.transactionToken.state;
+        addrs.address.zipCode = sessionAttrs.zip;
+        addrs.address.stateReadOnly = true;
+        addrs.address.zipCodeReadOnly = true;
+        addrs.invalidZipCode = false;
+        addrs.isPreviousAddress = false;
+        addrs.headerText = "Current Address";
+        addrs.id = "dvEditAddress";
+        addrs.editHeader = "Edit Primary Address";
+        addresses.push(addrs);
+        return addresses;
+    }
+
+    function mapResident(rentersInfoData, sessionAttrs) {
+        if (rentersInfoData.primaryRenter) {
+            rentersInfoData.primaryRenter.firstName = sessionAttrs.firstName;
+            rentersInfoData.primaryRenter.lastName = sessionAttrs.lastName;
+            rentersInfoData.primaryRenter.gender = sessionAttrs.gender;
+            rentersInfoData.primaryRenter.employmentStatus = sessionAttrs.employmentStatus;
+            if (sessionAttrs.state === "CA" || sessionAttrs.state === "CT" || sessionAttrs.state === "MD" || sessionAttrs.state === "OR" || sessionAttrs.state === "PA" || sessionAttrs.state === "NY") {
+                rentersInfoData.primaryRenter.maritalStatus = sessionAttrs.maritalstatus;
+            }
+
+            rentersInfoData.primaryRenter.dateOfBirth = DateUtil.getFormattedDate(sessionAttrs.dob, "MMDDYYYY");
+            if (sessionAttrs.dob) {
+                var birthdate = new Date(sessionAttrs.dob);
+                var cur = new Date();
+                var diff = cur - birthdate;
+                var age = Math.floor(diff / 31557600000);
+                rentersInfoData.primaryRenter.age = age;
+            }
+
         }
+        if (sessionAttrs.spouseAdded) {
+            rentersInfoData.spouse.firstName = sessionAttrs.spousefirstName;
+            rentersInfoData.spouse.lastName = sessionAttrs.spouselastName;
+            rentersInfoData.spouse.gender = sessionAttrs.spouseGender;
+            rentersInfoData.spouse.employmentStatus = sessionAttrs.spouseEmpStatus;
+            rentersInfoData.spouse.dateOfBirth = DateUtil.getFormattedDate(sessionAttrs.spouseDob, "MMDDYYYY");
+            if (sessionAttrs.spouseDob) {
+                var birthdate = new Date(sessionAttrs.spouseDob);
+                var cur = new Date();
+                var diff = cur - birthdate;
+                var age = Math.floor(diff / 31557600000);
+                rentersInfoData.spouse.age = age;
+            }
 
-    }
-    if (sessionAttrs.spouseAdded) {
-        rentersInfoData.spouse.firstName = sessionAttrs.spousefirstName;
-        rentersInfoData.spouse.lastName = sessionAttrs.spouselastName;
-        rentersInfoData.spouse.gender = sessionAttrs.spouseGender;
-        rentersInfoData.spouse.employmentStatus = sessionAttrs.spouseEmpStatus;
-        rentersInfoData.spouse.dateOfBirth = DateUtil.getFormattedDate(sessionAttrs.spouseDob, "MMDDYYYY");
-        if (sessionAttrs.spouseDob) {
-            var birthdate = new Date(sessionAttrs.spouseDob);
-            var cur = new Date();
-            var diff = cur - birthdate;
-            var age = Math.floor(diff / 31557600000);
-            rentersInfoData.spouse.age = age;
         }
-
+        return rentersInfoData;
     }
-    return rentersInfoData;
-}
 
-function mapAddress(address, sessionAttrs) {
-    if (address.addressType === "Previous") {
-        address.addressLine1 = sessionAttrs.prevaddrLine1;
-        address.city = sessionAttrs.prevcity;
-        address.state = sessionAttrs.prevstate;
-        address.zipCode = sessionAttrs.prevzipcode;
-    }
-    else {
-        address.addressLine1 = sessionAttrs.addrLine1;
-        address.city = sessionAttrs.city;
-        address.state = sessionAttrs.transactionToken.state;
-        address.zipCode = sessionAttrs.zip;
-    }
-    return address;
-}
-
-function mapContactInfo(rentersInfoData, sessionAttrs) {
-    if (rentersInfoData.contactInformation) {
-        rentersInfoData.contactInformation.phoneNumber = sessionAttrs.phoneNumber;
-        rentersInfoData.contactInformation.emailAddress = sessionAttrs.emailAddress;
-    }
-    return rentersInfoData;
-}
-
-function mapResidenceInfo(sessionAttrs, residenceInfo) {
-    var residenceInfoData = null;
-    if (residenceInfo && residenceInfo.residenceDetails) {
-        residenceInfo.residenceDetails.primaryResidence = sessionAttrs.primaryResidence;
-        residenceInfo.residenceDetails.locatedInDormOrMilitaryBarracks = sessionAttrs.locatedInDormOrMilitaryBarracks;
-        if (sessionAttrs.residenceBuildingType) {
-            residenceInfo.residenceDetails.residenceBuildingType = sessionAttrs.residenceBuildingType;
+    function mapAddress(address, sessionAttrs) {
+        if (address.addressType === "Previous") {
+            address.addressLine1 = sessionAttrs.prevaddrLine1;
+            address.city = sessionAttrs.prevcity;
+            address.state = sessionAttrs.prevstate;
+            address.zipCode = sessionAttrs.prevzipcode;
         }
         else {
-            residenceInfo.residenceDetails.residenceBuildingType = sessionAttrs.residenceBuildingType;
+            address.addressLine1 = sessionAttrs.addrLine1;
+            address.city = sessionAttrs.city;
+            address.state = sessionAttrs.transactionToken.state;
+            address.zipCode = sessionAttrs.zip;
         }
-
-        residenceInfo.residenceDetails.unitsInBuilding = sessionAttrs.unitsInBuilding;
-        residenceInfo.residenceDetails.businessoutofresidence = sessionAttrs.businessoutofresidence;
-        if (sessionAttrs.state === "WI" || sessionAttrs.state === "ID" || sessionAttrs.state === "IA" || sessionAttrs.state === "AK" || sessionAttrs.state === "HI" ||
-            sessionAttrs.state === "MT" || sessionAttrs.state === "NE" || sessionAttrs.state === "ND" || sessionAttrs.state === "SD") {
-            if (sessionAttrs.personalItemsValue == "10000" || sessionAttrs.personalItemsValue == "20000" || sessionAttrs.personalItemsValue == "30000" || sessionAttrs.personalItemsValue == "40000") {
-                residenceInfo.residenceDetails.personalItems = sessionAttrs.personalItemsValue;
-                residenceInfo.residenceDetails.personalItemsValue = '';
-            }
-        }
-        else if (sessionAttrs.state === "AL" || sessionAttrs.state === "NC" || sessionAttrs.state === "AZ") {
-            if (sessionAttrs.personalItemsValue == "20000" || sessionAttrs.personalItemsValue == "30000" || sessionAttrs.personalItemsValue == "40000" || sessionAttrs.personalItemsValue == "50000") {
-                residenceInfo.residenceDetails.personalItems = sessionAttrs.personalItemsValue;
-                residenceInfo.residenceDetails.personalItemsValue = '';
-            }
-        }
-        else if (sessionAttrs.state === "NY") {
-            if (sessionAttrs.personalItemsValue == "25000" || sessionAttrs.personalItemsValue == "35000" || sessionAttrs.personalItemsValue == "45000" || sessionAttrs.personalItemsValue == "55000") {
-                residenceInfo.residenceDetails.personalItems = sessionAttrs.personalItemsValue;
-                residenceInfo.residenceDetails.personalItemsValue = '';
-            }
-        }
-        else if (sessionAttrs.state === "KS") {
-            if (sessionAttrs.personalItemsValue == "15000" || sessionAttrs.personalItemsValue == "25000" || sessionAttrs.personalItemsValue == "50000" || sessionAttrs.personalItemsValue == "100000") {
-                residenceInfo.residenceDetails.personalItems = sessionAttrs.personalItemsValue;
-                residenceInfo.residenceDetails.personalItemsValue = '';
-            }
-        }
-        else {
-            if (sessionAttrs.personalItemsValue == "15000" || sessionAttrs.personalItemsValue == "25000" || sessionAttrs.personalItemsValue == "35000" || sessionAttrs.personalItemsValue == "45000") {
-                residenceInfo.residenceDetails.personalItems = sessionAttrs.personalItemsValue;
-                residenceInfo.residenceDetails.personalItemsValue = '';
-            }
-        }
-        if (residenceInfo.residenceDetails && !residenceInfo.residenceDetails.personalItems) {
-            residenceInfo.residenceDetails.personalItems = "Other";
-            residenceInfo.residenceDetails.personalItemsValue = sessionAttrs.personalItemsValue;
-        }
-        if (sessionAttrs.transactionToken.state === "CA") {
-            residenceInfo.residenceDetails.unOccupiedResidence = sessionAttrs.unOccupiedResidence;
-        }
-        if (sessionAttrs.transactionToken.state === "CA") {
-            residenceInfo.residenceDetails.propertyInsuranceClaims = sessionAttrs.propertyInsuranceClaims;
-        }
-        if (sessionAttrs.transactionToken.state === "DE") {
-            residenceInfo.residenceDetails.isResidenceWithinThousandFtFromCoast = sessionAttrs.isResidenceWithinThousandFtFromCoast;
-        }
-        if (sessionAttrs.transactionToken.state === "NJ" || sessionAttrs.transactionToken.state === "TX") {
-            residenceInfo.residenceDetails.constructionType = sessionAttrs.constructionType;
-        }
-        if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
-            var lostdate = DateUtil.getFormattedDate(sessionAttrs.claimLostDate, "MM-DD-YYYY");
-            var splitDate = "01-01-0001";
-            if (lostdate) {
-                var splitDate = lostdate.toString().split("-");
-            }
-            residenceInfo.residenceDetails.claims = [];
-            residenceInfo.residenceDetails.claims[0] = {};
-            residenceInfo.residenceDetails.claims[0].id = "1";
-            residenceInfo.residenceDetails.claims[0].lossdate = {};
-            residenceInfo.residenceDetails.claims[0].lossdate.day = splitDate[2];
-            residenceInfo.residenceDetails.claims[0].lossdate.month = splitDate[1];
-            residenceInfo.residenceDetails.claims[0].lossdate.year = splitDate[0];
-            residenceInfo.residenceDetails.claims[0].lossType = sessionAttrs.claimLostType;
-            residenceInfo.residenceDetails.claims[0].lossTypeDescription = sessionAttrs.claimLostDescription;
-            if (sessionAttrs.claimLostLocationDisplay) {
-                residenceInfo.residenceDetails.claims[0].lossLocation = sessionAttrs.claimLostLocation;
-                residenceInfo.residenceDetails.claims[0].lossLocationDisplay = sessionAttrs.claimLostLocationDisplay;
-            }
-        }
-        if (sessionAttrs.isDogAdded === "true") {
-            residenceInfo.residenceDetails.dogList = [];
-            residenceInfo.residenceDetails.dogList[0] = {};
-            residenceInfo.residenceDetails.dogList[0].dogId = "1"
-            residenceInfo.residenceDetails.dogList[0].dogBreed = sessionAttrs.dogbreeds;
-            residenceInfo.residenceDetails.dogList[0].dogCountLable = "Dog #1";
-            residenceInfo.residenceDetails.noOfDogs = "1";
-        }
-
+        return address;
     }
-    return residenceInfo;
-}
 
-function initializeRentersInfoRequest() {
-    var rentersInfo = {};
-    rentersInfo.primaryRenter = new Resident();
-    rentersInfo.spouse = new Resident();
-    rentersInfo.insuredAddress = new Address();
-    rentersInfo.insuredAddress.addressType = "Current";
-    rentersInfo.currentAddress = new Address();
-    rentersInfo.currentAddress.addressType = "Current";
-    rentersInfo.previousAddress = new Address();
-    rentersInfo.previousAddress.addressType = "Previous";
-    rentersInfo.contactInformation = new ContactInfo();
-    rentersInfo.businessOutOfResidence = null;
-    rentersInfo.liveAtCurAddressMoreThanTwoYears = "true";
-    rentersInfo.isSpouseAdded = false;
-    rentersInfo.isAgreeForTelemarketingCalls = true;
-    rentersInfo.isCurrentAddressSameAsInsuredAddress = true;
-    rentersInfo.isRenterOrderData = false;
-    rentersInfo.isAddressStandardized = false;
-    rentersInfo.isdpAgeCheck = false;
-    rentersInfo.messageType = null;
-    rentersInfo.errors = null;
-    rentersInfo.stopPageType = "None";
-    rentersInfo.isSuccess = true;
-    return rentersInfo;
-}
-//#endregion
-
-
-//#region AOS API CALLS
-function startAOSSession(zip) {
-    var deferred = q.defer();
-    request({ method: 'GET', uri: URL_RENTERS_SESSIONID }, function (error, response, body) {
-        if (error || response.statusCode !== 200) {
-            errormsg = "Error from server session";
-            deferred.reject(errormsg);
-        } else {
-            var sessionId = response.headers['x-tid'];
-            deferred.resolve(sessionId);
+    function mapContactInfo(rentersInfoData, sessionAttrs) {
+        if (rentersInfoData.contactInformation) {
+            rentersInfoData.contactInformation.phoneNumber = sessionAttrs.phoneNumber;
+            rentersInfoData.contactInformation.emailAddress = sessionAttrs.emailAddress;
         }
-    });
-    return deferred.promise;
-}
-
-function startAutoAOSSession(zip) {
-    var deferred = q.defer();
-    request({ method: 'GET', uri: URL_AUTO_SESSIONID }, function (error, response, body) {
-        if (error || response.statusCode !== 200) {
-            errormsg = "Error from server session";
-            deferred.reject(errormsg);
-        } else {
-            var sessionId = response.headers['x-tid'];
-            deferred.resolve(sessionId);
-        }
-    });
-    return deferred.promise;
-}
-
-function getStateFromZip(sessionId, zip) {
-    var deferred = q.defer();
-    var urlGetStateFromZip = URL_GETSTATE.replace("{0}", zip);
-    request({ method: 'GET', uri: urlGetStateFromZip, headers: { "X-TID": sessionId } },
-        function (error, response, body) {
-            if (error || response.statusCode !== 200) {
-                errormsg = "Error from server session";
-                deferred.reject(errormsg);
-            } else {
-                var responseJson = JSON.parse(response.body);
-                deferred.resolve(responseJson.stateCode);
-            }
-        });
-    return deferred.promise;
-}
-
-function rentersSaveCustomer(customerSaveInfo, sessionId) {
-    var deferred = q.defer();
-    request(
-        {
-            method: "POST",
-            uri: URL_RENTERS_SAVECUSTOMER,
-            json: customerSaveInfo,
-            headers: { "X-TID": sessionId, "x-pd": "RENTERS" }
-        },
-        function (error, response, body) {
-            if (error || response.statusCode !== 200) {
-                errormsg = "Error from server session";
-                deferred.reject(errormsg);
-            } else {
-                var responseJson = response.body;
-                deferred.resolve(responseJson);
-            }
-        });
-
-    return deferred.promise;
-}
-
-function saveRentersInfo(rentersInfo, transactionToken) {
-    console.log(rentersInfo);
-    var deferred = q.defer();
-    request(
-        {
-            method: "POST",
-            uri: URL_RENTERS_RENTERSINFO,
-            "content-type": "application/json",
-            json: rentersInfo,
-            headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/occupants/primary/" }
-        },
-        function (error, response, body) {
-            if (error || response.statusCode !== 200) {
-                errormsg = "Error from server session";
-                deferred.reject(errormsg);
-            } else {
-                var responseJson = response.body;
-                deferred.resolve(responseJson);
-            }
-        });
-
-    return deferred.promise;
-}
-
-function postConfirmProfile(confirmInfo, transactionToken) {
-    var deferred = q.defer();
-    request(
-        {
-            method: "POST",
-            uri: URL_RENTERS_CONFIRMPROFILE,
-            "content-type": "application/json",
-            json: confirmInfo,
-            headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/confirm-profile" }
-        },
-        function (error, response, body) {
-            if (error || response.statusCode !== 200) {
-                errormsg = "Error from server session";
-                deferred.reject(errormsg);
-            } else {
-                var responseJson = response.body;
-                deferred.resolve(responseJson);
-            }
-        });
-
-    return deferred.promise;
-}
-
-function getResidenceInfo(transactionToken) {
-    var deferred = q.defer();
-    request(
-        {
-            method: "GET",
-            uri: URL_RENTERS_RESIDENCEINFO,
-            "content-type": "application/json",
-            headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/residence-info/" }
-        },
-        function (error, response, body) {
-            if (error || response.statusCode !== 200) {
-                errormsg = "Error from server session";
-                deferred.reject(errormsg);
-            } else {
-                var responseJson = response.body;
-                deferred.resolve(responseJson);
-            }
-        });
-
-    return deferred.promise;
-}
-
-function postResidenceInfo(residenceInfoObject, transactionToken) {
-    var deferred = q.defer();
-    console.log(residenceInfoObject);
-    request(
-        {
-            method: "POST",
-            uri: URL_RENTERS_RESIDENCEINFO,
-            "content-type": "application/json",
-            json: residenceInfoObject,
-            headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/residence-info/" }
-        },
-        function (error, response, body) {
-            if (error || response.statusCode !== 200) {
-                errormsg = "Error from server session";
-                deferred.reject(errormsg);
-            } else {
-                var responseJson = response.body;
-                console.log(responseJson);
-                deferred.resolve(responseJson);
-            }
-        });
-
-    return deferred.promise;
-}
-
-function orderQuote(transactionToken) {
-    var deferred = q.defer();
-    request(
-        {
-            method: "POST",
-            uri: URL_RENTERS_ORDERQUOTE,
-            headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/residence-info/" }
-        },
-        function (error, response, body) {
-            if (error || response.statusCode !== 200) {
-                errormsg = "Error from server session";
-                deferred.reject(errormsg);
-            } else {
-                var responseJson = JSON.parse(response.body);
-                deferred.resolve(responseJson);
-            }
-        });
-
-    return deferred.promise;
-}
-
-function getSavedQuote(sessionInfo) {
-    var deferred = q.defer();
-    if (sessionInfo.dob) {
-        var dob = DateUtil.getFormattedDate(sessionInfo.dob, "MMDDYYYY");
-        sessionInfo.dob = dob;
+        return rentersInfoData;
     }
-    request(
-        {
-            method: 'POST',
-            uri: URL_RETRIEVEQUOTE,
-            "content-type": "application/json",
-            headers: { "X-pd": "AUTO", "X-TID": sessionInfo.sessionId },
-            json: true,
-            body: { "lastName": sessionInfo.lastname, "dateOfBirth": sessionInfo.dob, "emailID": sessionInfo.email, "zipCode": sessionInfo.zipcode }
-        },
-        function (error, response, body) {
-            if (error || response.statusCode !== 200) {
-                errormsg = "Error from server session";
-                deferred.reject(errormsg);
-            } else {
-                var quotes = ProcessQuoteResponse(response.body);
-                deferred.resolve(quotes);
+
+    function mapResidenceInfo(sessionAttrs, residenceInfo) {
+        var residenceInfoData = null;
+        if (residenceInfo && residenceInfo.residenceDetails) {
+            residenceInfo.residenceDetails.primaryResidence = sessionAttrs.primaryResidence;
+            residenceInfo.residenceDetails.locatedInDormOrMilitaryBarracks = sessionAttrs.locatedInDormOrMilitaryBarracks;
+            if (sessionAttrs.residenceBuildingType) {
+                residenceInfo.residenceDetails.residenceBuildingType = sessionAttrs.residenceBuildingType;
             }
-        });
-
-    return deferred.promise;
-}
-
-function saveAndExplicit(emailid, transactionToken) {
-    var deferred = q.defer();
-    request(
-        {
-            method: "POST",
-            uri: URL_RENTERS_SAVEEXPLICIT,
-            "content-type": "application/json",
-            headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/save-quote" },
-            json: true,
-            body: { "email": emailid, "moduleName": "RentersQuote", "quoteType": "RENTER_SINGLE" }
-        },
-        function (error, response, body) {
-            if (error || response.statusCode !== 200) {
-                errormsg = "Error from server session";
-                deferred.reject(errormsg);
-            } else {
-                var responseJson = response.body;
-                deferred.resolve(responseJson);
+            else {
+                residenceInfo.residenceDetails.residenceBuildingType = sessionAttrs.residenceBuildingType;
             }
-        });
 
-    return deferred.promise;
-}
-
-function saveAndExit(emailid, transactionToken) {
-    var deferred = q.defer();
-    request(
-        {
-            method: "POST",
-            uri: URL_RENTERS_SAVEANDEXIT,
-            "content-type": "application/json",
-            headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/save-quote" },
-            json: true,
-            body: { "email": emailid, "moduleName": "RentersQuote", "quoteType": "RENTER_SINGLE" }
-        },
-        function (error, response, body) {
-            if (error || response.statusCode !== 200) {
-                errormsg = "Error from server session";
-                deferred.reject(errormsg);
-            } else {
-                var responseJson = response.body;
-                deferred.resolve(responseJson);
-            }
-        });
-
-    return deferred.promise;
-}
-
-function quoteRepository(sessionAttrs, sessionID) {
-    var deferred = q.defer();
-    var dob;
-    if (sessionAttrs && sessionAttrs.dob) {
-        dob = DateUtil.getFormattedDate(sessionAttrs.dob, "MMDDYYYY");
-    }
-    request(
-        {
-            method: "POST",
-            uri: URL_RENTERS_QUOTEREPOSITORY,
-            "content-type": "application/json",
-            headers: { "X-TID": sessionID, "X-PD": "AUTO", "X-VID": "/" },
-            json: true,
-            body: { "dateOfBirth": dob, "emailID": sessionAttrs.emailAddress, "lastName": sessionAttrs.lastName, "zipCode": sessionAttrs.zip }
-        },
-        function (error, response, body) {
-            if (error || response.statusCode !== 200) {
-                errormsg = "Error from server session";
-                deferred.reject(errormsg);
-            } else {
-                var responseJson = response.body;
-                deferred.resolve(responseJson);
-            }
-        });
-
-    return deferred.promise;
-}
-
-function getAgents(sessionInfo) {
-    var deferred = q.defer();
-    request(
-        {
-            method: 'POST',
-            url: URL_GETAGENTS,
-            "content-type": "application/json",
-            headers: {
-                "X-TID": sessionInfo.sessionId,
-                "X-ST": sessionInfo.state
-            },
-            json: true,
-            body: { "zipCode": sessionInfo.zip }
-        },
-        function (error, response, body) {
-            if (error || response.statusCode !== 200) {
-                errormsg = "Error from server session";
-                deferred.reject(errormsg);
-            } else {
-                var agents = ProcessAgentResponse(response.body);
-                deferred.resolve(agents);
-            }
-        });
-
-    return deferred.promise;
-}
-//#endregion
-
-//#region RESPONSE MAPPERS
-function ProcessQuoteResponse(retrieveQuoteServResp) {
-    var quotes = [];
-    if (retrieveQuoteServResp && retrieveQuoteServResp.quoteList && retrieveQuoteServResp.quoteList.length > 0) {
-        for (var index = 0; index < retrieveQuoteServResp.quoteList.length; index++) {
-            var currSavedQuote = retrieveQuoteServResp.quoteList[index];
-            var savedQuote = new RetrieveQuote();
-            if (currSavedQuote.policyNumber) {
-                savedQuote.policyNumber = currSavedQuote.policyNumber;
-                savedQuote.controlNumber = currSavedQuote.controlNumber;
-                savedQuote.product = currSavedQuote.product;
-                savedQuote.startDate = currSavedQuote.startDate;
-                if (currSavedQuote && currSavedQuote.agentBusinessCard) {
-                    savedQuote.agentName = currSavedQuote.agentBusinessCard.name;
-                    savedQuote.agentPhoneNumber = currSavedQuote.agentBusinessCard.phoneNumber;
-                    savedQuote.agentEmailAddress = currSavedQuote.agentBusinessCard.emailAddress;
+            residenceInfo.residenceDetails.unitsInBuilding = sessionAttrs.unitsInBuilding;
+            residenceInfo.residenceDetails.businessoutofresidence = sessionAttrs.businessoutofresidence;
+            if (sessionAttrs.state === "WI" || sessionAttrs.state === "ID" || sessionAttrs.state === "IA" || sessionAttrs.state === "AK" || sessionAttrs.state === "HI" ||
+                sessionAttrs.state === "MT" || sessionAttrs.state === "NE" || sessionAttrs.state === "ND" || sessionAttrs.state === "SD") {
+                if (sessionAttrs.personalItemsValue == "10000" || sessionAttrs.personalItemsValue == "20000" || sessionAttrs.personalItemsValue == "30000" || sessionAttrs.personalItemsValue == "40000") {
+                    residenceInfo.residenceDetails.personalItems = sessionAttrs.personalItemsValue;
+                    residenceInfo.residenceDetails.personalItemsValue = '';
                 }
             }
+            else if (sessionAttrs.state === "AL" || sessionAttrs.state === "NC" || sessionAttrs.state === "AZ") {
+                if (sessionAttrs.personalItemsValue == "20000" || sessionAttrs.personalItemsValue == "30000" || sessionAttrs.personalItemsValue == "40000" || sessionAttrs.personalItemsValue == "50000") {
+                    residenceInfo.residenceDetails.personalItems = sessionAttrs.personalItemsValue;
+                    residenceInfo.residenceDetails.personalItemsValue = '';
+                }
+            }
+            else if (sessionAttrs.state === "NY") {
+                if (sessionAttrs.personalItemsValue == "25000" || sessionAttrs.personalItemsValue == "35000" || sessionAttrs.personalItemsValue == "45000" || sessionAttrs.personalItemsValue == "55000") {
+                    residenceInfo.residenceDetails.personalItems = sessionAttrs.personalItemsValue;
+                    residenceInfo.residenceDetails.personalItemsValue = '';
+                }
+            }
+            else if (sessionAttrs.state === "KS") {
+                if (sessionAttrs.personalItemsValue == "15000" || sessionAttrs.personalItemsValue == "25000" || sessionAttrs.personalItemsValue == "50000" || sessionAttrs.personalItemsValue == "100000") {
+                    residenceInfo.residenceDetails.personalItems = sessionAttrs.personalItemsValue;
+                    residenceInfo.residenceDetails.personalItemsValue = '';
+                }
+            }
+            else {
+                if (sessionAttrs.personalItemsValue == "15000" || sessionAttrs.personalItemsValue == "25000" || sessionAttrs.personalItemsValue == "35000" || sessionAttrs.personalItemsValue == "45000") {
+                    residenceInfo.residenceDetails.personalItems = sessionAttrs.personalItemsValue;
+                    residenceInfo.residenceDetails.personalItemsValue = '';
+                }
+            }
+            if (residenceInfo.residenceDetails && !residenceInfo.residenceDetails.personalItems) {
+                residenceInfo.residenceDetails.personalItems = "Other";
+                residenceInfo.residenceDetails.personalItemsValue = sessionAttrs.personalItemsValue;
+            }
+            if (sessionAttrs.transactionToken.state === "CA") {
+                residenceInfo.residenceDetails.unOccupiedResidence = sessionAttrs.unOccupiedResidence;
+            }
+            if (sessionAttrs.transactionToken.state === "CA") {
+                residenceInfo.residenceDetails.propertyInsuranceClaims = sessionAttrs.propertyInsuranceClaims;
+            }
+            if (sessionAttrs.transactionToken.state === "DE") {
+                residenceInfo.residenceDetails.isResidenceWithinThousandFtFromCoast = sessionAttrs.isResidenceWithinThousandFtFromCoast;
+            }
+            if (sessionAttrs.transactionToken.state === "NJ" || sessionAttrs.transactionToken.state === "TX") {
+                residenceInfo.residenceDetails.constructionType = sessionAttrs.constructionType;
+            }
+            if (sessionAttrs.propertyInsuranceClaims === "TRUE") {
+                var lostdate = DateUtil.getFormattedDate(sessionAttrs.claimLostDate, "MM-DD-YYYY");
+                var splitDate = "01-01-0001";
+                if (lostdate) {
+                    var splitDate = lostdate.toString().split("-");
+                }
+                residenceInfo.residenceDetails.claims = [];
+                residenceInfo.residenceDetails.claims[0] = {};
+                residenceInfo.residenceDetails.claims[0].id = "1";
+                residenceInfo.residenceDetails.claims[0].lossdate = {};
+                residenceInfo.residenceDetails.claims[0].lossdate.day = splitDate[2];
+                residenceInfo.residenceDetails.claims[0].lossdate.month = splitDate[1];
+                residenceInfo.residenceDetails.claims[0].lossdate.year = splitDate[0];
+                residenceInfo.residenceDetails.claims[0].lossType = sessionAttrs.claimLostType;
+                residenceInfo.residenceDetails.claims[0].lossTypeDescription = sessionAttrs.claimLostDescription;
+                if (sessionAttrs.claimLostLocationDisplay) {
+                    residenceInfo.residenceDetails.claims[0].lossLocation = sessionAttrs.claimLostLocation;
+                    residenceInfo.residenceDetails.claims[0].lossLocationDisplay = sessionAttrs.claimLostLocationDisplay;
+                }
+            }
+            if (sessionAttrs.isDogAdded === "true") {
+                residenceInfo.residenceDetails.dogList = [];
+                residenceInfo.residenceDetails.dogList[0] = {};
+                residenceInfo.residenceDetails.dogList[0].dogId = "1"
+                residenceInfo.residenceDetails.dogList[0].dogBreed = sessionAttrs.dogbreeds;
+                residenceInfo.residenceDetails.dogList[0].dogCountLable = "Dog #1";
+                residenceInfo.residenceDetails.noOfDogs = "1";
+            }
 
-            quotes.push(savedQuote);
         }
+        return residenceInfo;
     }
 
-    return quotes;
-}
+    function initializeRentersInfoRequest() {
+        var rentersInfo = {};
+        rentersInfo.primaryRenter = new Resident();
+        rentersInfo.spouse = new Resident();
+        rentersInfo.insuredAddress = new Address();
+        rentersInfo.insuredAddress.addressType = "Current";
+        rentersInfo.currentAddress = new Address();
+        rentersInfo.currentAddress.addressType = "Current";
+        rentersInfo.previousAddress = new Address();
+        rentersInfo.previousAddress.addressType = "Previous";
+        rentersInfo.contactInformation = new ContactInfo();
+        rentersInfo.businessOutOfResidence = null;
+        rentersInfo.liveAtCurAddressMoreThanTwoYears = "true";
+        rentersInfo.isSpouseAdded = false;
+        rentersInfo.isAgreeForTelemarketingCalls = true;
+        rentersInfo.isCurrentAddressSameAsInsuredAddress = true;
+        rentersInfo.isRenterOrderData = false;
+        rentersInfo.isAddressStandardized = false;
+        rentersInfo.isdpAgeCheck = false;
+        rentersInfo.messageType = null;
+        rentersInfo.errors = null;
+        rentersInfo.stopPageType = "None";
+        rentersInfo.isSuccess = true;
+        return rentersInfo;
+    }
+    //#endregion
 
-function ProcessAgentResponse(agentServResp) {
-    var agents = [];
-    if (agentServResp && agentServResp.agentAvailable && agentServResp.agents.length > 0) {
-        for (var index = 0; index < agentServResp.agents.length; index++) {
-            var currServAgent = agentServResp.agents[index];
-            var agentInfo = new Agent();
-            agentInfo.id = currServAgent.id;
-            agentInfo.name = currServAgent.name;
-            agentInfo.addressLine1 = currServAgent.addressLine1;
-            agentInfo.city = currServAgent.city;
-            agentInfo.state = currServAgent.state;
-            var website = "https://www.agents.allstate.com/" + currServAgent.name.trim() + '-' + currServAgent.city.trim() + '-' + currServAgent.state + ".html";
-            agentInfo.website = website.replace(/\s+/g, '-').toLowerCase();
-            agentInfo.zipCode = currServAgent.zipCode;
-            agentInfo.phoneNumber = currServAgent.phoneNumber;
-            agentInfo.imageUrl = currServAgent.imageURL;
-            agentInfo.emailAddress = currServAgent.emailAddress;
-            agents.push(agentInfo);
-        }
+
+    //#region AOS API CALLS
+    function startAOSSession(zip) {
+        var deferred = q.defer();
+        request({ method: 'GET', uri: URL_RENTERS_SESSIONID }, function (error, response, body) {
+            if (error || response.statusCode !== 200) {
+                errormsg = "Error from server session";
+                deferred.reject(errormsg);
+            } else {
+                var sessionId = response.headers['x-tid'];
+                deferred.resolve(sessionId);
+            }
+        });
+        return deferred.promise;
     }
 
-    return agents;
-}
-//#endregion
+    function startAutoAOSSession(zip) {
+        var deferred = q.defer();
+        request({ method: 'GET', uri: URL_AUTO_SESSIONID }, function (error, response, body) {
+            if (error || response.statusCode !== 200) {
+                errormsg = "Error from server session";
+                deferred.reject(errormsg);
+            } else {
+                var sessionId = response.headers['x-tid'];
+                deferred.resolve(sessionId);
+            }
+        });
+        return deferred.promise;
+    }
+
+    function getStateFromZip(sessionId, zip) {
+        var deferred = q.defer();
+        var urlGetStateFromZip = URL_GETSTATE.replace("{0}", zip);
+        request({ method: 'GET', uri: urlGetStateFromZip, headers: { "X-TID": sessionId } },
+            function (error, response, body) {
+                if (error || response.statusCode !== 200) {
+                    errormsg = "Error from server session";
+                    deferred.reject(errormsg);
+                } else {
+                    var responseJson = JSON.parse(response.body);
+                    deferred.resolve(responseJson.stateCode);
+                }
+            });
+        return deferred.promise;
+    }
+
+    function rentersSaveCustomer(customerSaveInfo, sessionId) {
+        var deferred = q.defer();
+        request(
+            {
+                method: "POST",
+                uri: URL_RENTERS_SAVECUSTOMER,
+                json: customerSaveInfo,
+                headers: { "X-TID": sessionId, "x-pd": "RENTERS" }
+            },
+            function (error, response, body) {
+                if (error || response.statusCode !== 200) {
+                    errormsg = "Error from server session";
+                    deferred.reject(errormsg);
+                } else {
+                    var responseJson = response.body;
+                    deferred.resolve(responseJson);
+                }
+            });
+
+        return deferred.promise;
+    }
+
+    function saveRentersInfo(rentersInfo, transactionToken) {
+        console.log(rentersInfo);
+        var deferred = q.defer();
+        request(
+            {
+                method: "POST",
+                uri: URL_RENTERS_RENTERSINFO,
+                "content-type": "application/json",
+                json: rentersInfo,
+                headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/occupants/primary/" }
+            },
+            function (error, response, body) {
+                if (error || response.statusCode !== 200) {
+                    errormsg = "Error from server session";
+                    deferred.reject(errormsg);
+                } else {
+                    var responseJson = response.body;
+                    deferred.resolve(responseJson);
+                }
+            });
+
+        return deferred.promise;
+    }
+
+    function postConfirmProfile(confirmInfo, transactionToken) {
+        var deferred = q.defer();
+        request(
+            {
+                method: "POST",
+                uri: URL_RENTERS_CONFIRMPROFILE,
+                "content-type": "application/json",
+                json: confirmInfo,
+                headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/confirm-profile" }
+            },
+            function (error, response, body) {
+                if (error || response.statusCode !== 200) {
+                    errormsg = "Error from server session";
+                    deferred.reject(errormsg);
+                } else {
+                    var responseJson = response.body;
+                    deferred.resolve(responseJson);
+                }
+            });
+
+        return deferred.promise;
+    }
+
+    function getResidenceInfo(transactionToken) {
+        var deferred = q.defer();
+        request(
+            {
+                method: "GET",
+                uri: URL_RENTERS_RESIDENCEINFO,
+                "content-type": "application/json",
+                headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/residence-info/" }
+            },
+            function (error, response, body) {
+                if (error || response.statusCode !== 200) {
+                    errormsg = "Error from server session";
+                    deferred.reject(errormsg);
+                } else {
+                    var responseJson = response.body;
+                    deferred.resolve(responseJson);
+                }
+            });
+
+        return deferred.promise;
+    }
+
+    function postResidenceInfo(residenceInfoObject, transactionToken) {
+        var deferred = q.defer();
+        console.log(residenceInfoObject);
+        request(
+            {
+                method: "POST",
+                uri: URL_RENTERS_RESIDENCEINFO,
+                "content-type": "application/json",
+                json: residenceInfoObject,
+                headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/residence-info/" }
+            },
+            function (error, response, body) {
+                if (error || response.statusCode !== 200) {
+                    errormsg = "Error from server session";
+                    deferred.reject(errormsg);
+                } else {
+                    var responseJson = response.body;
+                    console.log(responseJson);
+                    deferred.resolve(responseJson);
+                }
+            });
+
+        return deferred.promise;
+    }
+
+    function orderQuote(transactionToken) {
+        var deferred = q.defer();
+        request(
+            {
+                method: "POST",
+                uri: URL_RENTERS_ORDERQUOTE,
+                headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/residence-info/" }
+            },
+            function (error, response, body) {
+                if (error || response.statusCode !== 200) {
+                    errormsg = "Error from server session";
+                    deferred.reject(errormsg);
+                } else {
+                    var responseJson = JSON.parse(response.body);
+                    deferred.resolve(responseJson);
+                }
+            });
+
+        return deferred.promise;
+    }
+
+    function getSavedQuote(sessionInfo) {
+        var deferred = q.defer();
+        if (sessionInfo.dob) {
+            var dob = DateUtil.getFormattedDate(sessionInfo.dob, "MMDDYYYY");
+            sessionInfo.dob = dob;
+        }
+        request(
+            {
+                method: 'POST',
+                uri: URL_RETRIEVEQUOTE,
+                "content-type": "application/json",
+                headers: { "X-pd": "AUTO", "X-TID": sessionInfo.sessionId },
+                json: true,
+                body: { "lastName": sessionInfo.lastname, "dateOfBirth": sessionInfo.dob, "emailID": sessionInfo.email, "zipCode": sessionInfo.zipcode }
+            },
+            function (error, response, body) {
+                if (error || response.statusCode !== 200) {
+                    errormsg = "Error from server session";
+                    deferred.reject(errormsg);
+                } else {
+                    var quotes = ProcessQuoteResponse(response.body);
+                    deferred.resolve(quotes);
+                }
+            });
+
+        return deferred.promise;
+    }
+
+    function saveAndExplicit(emailid, transactionToken) {
+        var deferred = q.defer();
+        request(
+            {
+                method: "POST",
+                uri: URL_RENTERS_SAVEEXPLICIT,
+                "content-type": "application/json",
+                headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/save-quote" },
+                json: true,
+                body: { "email": emailid, "moduleName": "RentersQuote", "quoteType": "RENTER_SINGLE" }
+            },
+            function (error, response, body) {
+                if (error || response.statusCode !== 200) {
+                    errormsg = "Error from server session";
+                    deferred.reject(errormsg);
+                } else {
+                    var responseJson = response.body;
+                    deferred.resolve(responseJson);
+                }
+            });
+
+        return deferred.promise;
+    }
+
+    function saveAndExit(emailid, transactionToken) {
+        var deferred = q.defer();
+        request(
+            {
+                method: "POST",
+                uri: URL_RENTERS_SAVEANDEXIT,
+                "content-type": "application/json",
+                headers: { "X-TID": transactionToken.sessionID, "X-PD": "RENTERS", "X-ZP": transactionToken.zipCode, "X-CN": transactionToken.controlNumber, "X-ST": transactionToken.state, "X-VID": "/save-quote" },
+                json: true,
+                body: { "email": emailid, "moduleName": "RentersQuote", "quoteType": "RENTER_SINGLE" }
+            },
+            function (error, response, body) {
+                if (error || response.statusCode !== 200) {
+                    errormsg = "Error from server session";
+                    deferred.reject(errormsg);
+                } else {
+                    var responseJson = response.body;
+                    deferred.resolve(responseJson);
+                }
+            });
+
+        return deferred.promise;
+    }
+
+    function quoteRepository(sessionAttrs, sessionID) {
+        var deferred = q.defer();
+        var dob;
+        if (sessionAttrs && sessionAttrs.dob) {
+            dob = DateUtil.getFormattedDate(sessionAttrs.dob, "MMDDYYYY");
+        }
+        request(
+            {
+                method: "POST",
+                uri: URL_RENTERS_QUOTEREPOSITORY,
+                "content-type": "application/json",
+                headers: { "X-TID": sessionID, "X-PD": "AUTO", "X-VID": "/" },
+                json: true,
+                body: { "dateOfBirth": dob, "emailID": sessionAttrs.emailAddress, "lastName": sessionAttrs.lastName, "zipCode": sessionAttrs.zip }
+            },
+            function (error, response, body) {
+                if (error || response.statusCode !== 200) {
+                    errormsg = "Error from server session";
+                    deferred.reject(errormsg);
+                } else {
+                    var responseJson = response.body;
+                    deferred.resolve(responseJson);
+                }
+            });
+
+        return deferred.promise;
+    }
+
+    function getAgents(sessionInfo) {
+        var deferred = q.defer();
+        request(
+            {
+                method: 'POST',
+                url: URL_GETAGENTS,
+                "content-type": "application/json",
+                headers: {
+                    "X-TID": sessionInfo.sessionId,
+                    "X-ST": sessionInfo.state
+                },
+                json: true,
+                body: { "zipCode": sessionInfo.zip }
+            },
+            function (error, response, body) {
+                if (error || response.statusCode !== 200) {
+                    errormsg = "Error from server session";
+                    deferred.reject(errormsg);
+                } else {
+                    var agents = ProcessAgentResponse(response.body);
+                    deferred.resolve(agents);
+                }
+            });
+
+        return deferred.promise;
+    }
+    //#endregion
+
+    //#region RESPONSE MAPPERS
+    function ProcessQuoteResponse(retrieveQuoteServResp) {
+        var quotes = [];
+        if (retrieveQuoteServResp && retrieveQuoteServResp.quoteList && retrieveQuoteServResp.quoteList.length > 0) {
+            for (var index = 0; index < retrieveQuoteServResp.quoteList.length; index++) {
+                var currSavedQuote = retrieveQuoteServResp.quoteList[index];
+                var savedQuote = new RetrieveQuote();
+                if (currSavedQuote.policyNumber) {
+                    savedQuote.policyNumber = currSavedQuote.policyNumber;
+                    savedQuote.controlNumber = currSavedQuote.controlNumber;
+                    savedQuote.product = currSavedQuote.product;
+                    savedQuote.startDate = currSavedQuote.startDate;
+                    if (currSavedQuote && currSavedQuote.agentBusinessCard) {
+                        savedQuote.agentName = currSavedQuote.agentBusinessCard.name;
+                        savedQuote.agentPhoneNumber = currSavedQuote.agentBusinessCard.phoneNumber;
+                        savedQuote.agentEmailAddress = currSavedQuote.agentBusinessCard.emailAddress;
+                    }
+                }
+
+                quotes.push(savedQuote);
+            }
+        }
+
+        return quotes;
+    }
+
+    function ProcessAgentResponse(agentServResp) {
+        var agents = [];
+        if (agentServResp && agentServResp.agentAvailable && agentServResp.agents.length > 0) {
+            for (var index = 0; index < agentServResp.agents.length; index++) {
+                var currServAgent = agentServResp.agents[index];
+                var agentInfo = new Agent();
+                agentInfo.id = currServAgent.id;
+                agentInfo.name = currServAgent.name;
+                agentInfo.addressLine1 = currServAgent.addressLine1;
+                agentInfo.city = currServAgent.city;
+                agentInfo.state = currServAgent.state;
+                var website = "https://www.agents.allstate.com/" + currServAgent.name.trim() + '-' + currServAgent.city.trim() + '-' + currServAgent.state + ".html";
+                agentInfo.website = website.replace(/\s+/g, '-').toLowerCase();
+                agentInfo.zipCode = currServAgent.zipCode;
+                agentInfo.phoneNumber = currServAgent.phoneNumber;
+                agentInfo.imageUrl = currServAgent.imageURL;
+                agentInfo.emailAddress = currServAgent.emailAddress;
+                agents.push(agentInfo);
+            }
+        }
+
+        return agents;
+    }
+    //#endregion
 
 
-module.exports = new AOS();
+    module.exports = new AOS();
