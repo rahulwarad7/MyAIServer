@@ -275,7 +275,7 @@ AOS.prototype.handlerRentersNewCityZip = function (sessionAttrs) {
         }
 
     }
-    
+
     return deferred.promise;
 };
 
@@ -443,31 +443,6 @@ AOS.prototype.handlerRentersPrevCityZip = function (sessionAttrs) {
     var rentersFindSpeechResp = new SpeechResponse();
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
-    if (sessionAttrs.prevzip && sessionAttrs.transactionToken) {
-        getStateFromZip(sessionAttrs.transactionToken.sessionID, sessionAttrs.prevzip)
-            .then(function (state) {
-                sessionAttrs.prevstate = state;
-                speechOutput.text = "Got it. Could you type your previous address below? ";
-                rentersFindSpeechResp.speechOutput = speechOutput;
-                rentersFindSpeechResp.repromptOutput = speechOutput;
-                rentersFindSpeechResp.sessionAttrs = sessionAttrs;
-                deferred.resolve(rentersFindSpeechResp);
-            });
-    }
-    else {
-        speechOutput.text = "Prevous address is not valid. Please provide valid city and zipcode";
-        rentersFindSpeechResp.speechOutput = speechOutput;
-        rentersFindSpeechResp.repromptOutput = speechOutput;
-        deferred.resolve(rentersFindSpeechResp);
-    }
-    return deferred.promise;
-};
-
-AOS.prototype.handlerRentersPrevStreetAddrs = function (sessionAttrs) {
-    var deferred = q.defer();
-    var rentersFindSpeechResp = new SpeechResponse();
-    var speechOutput = new Speech();
-    var repromptOutput = new Speech();
     if (sessionAttrs.transactionToken) {
         getRentersInfoResponse(sessionAttrs)
             .then(function (rentersInfoSpeechOutput) {
@@ -482,6 +457,31 @@ AOS.prototype.handlerRentersPrevStreetAddrs = function (sessionAttrs) {
         rentersFindSpeechResp.repromptOutput = speechOutput;
     }
 
+    return deferred.promise;
+};
+
+AOS.prototype.handlerRentersPrevStreetAddrs = function (sessionAttrs) {
+    var deferred = q.defer();
+    var rentersFindSpeechResp = new SpeechResponse();
+    var speechOutput = new Speech();
+    var repromptOutput = new Speech();
+    if (sessionAttrs.prevzip && sessionAttrs.transactionToken) {
+        getStateFromZip(sessionAttrs.transactionToken.sessionID, sessionAttrs.prevzip)
+            .then(function (state) {
+                sessionAttrs.prevstate = state;
+                speechOutput.text = "Got it. Could you type your previous address below? ";
+                rentersFindSpeechResp.speechOutput = speechOutput;
+                rentersFindSpeechResp.repromptOutput = speechOutput;
+                rentersFindSpeechResp.sessionAttrs = sessionAttrs;
+                deferred.resolve(rentersFindSpeechResp);
+            });
+    }
+    else {
+        speechOutput.text = "Sorry, I didn't quite understand that! Make sure you're entering a valid address. Remember, you can type \"help\" at any time! ";
+        rentersFindSpeechResp.speechOutput = speechOutput;
+        rentersFindSpeechResp.repromptOutput = speechOutput;
+        deferred.resolve(rentersFindSpeechResp);
+    }
     return deferred.promise;
 };
 
@@ -1539,7 +1539,7 @@ function getRentersSaveCustomerResponse(sessionAttrs) {
             deferred.resolve(saveCustSpeechOutput);
         }).catch(function (error) {
             saveCustSpeechOutput.text = "something went wrong with renters insurance service. Please try again later.";
-             deferred.resolve(saveCustSpeechOutput);
+            deferred.resolve(saveCustSpeechOutput);
         });
 
     return deferred.promise;
