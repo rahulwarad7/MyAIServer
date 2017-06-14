@@ -288,6 +288,9 @@ AOS.prototype.handlerRentersDiffAddress = function (sessionAttrs) {
     var speechOutput = new Speech();
     var repromptOutput = new Speech();
     speechOutput.text = "What is the city and ZIP code of the residence you'd like to insure? ";
+    rentersFindSpeechResp.speechOutput = speechOutput;
+    rentersFindSpeechResp.repromptOutput = speechOutput;
+    deferred.resolve(rentersFindSpeechResp);
     return deferred.promise;
 };
 
