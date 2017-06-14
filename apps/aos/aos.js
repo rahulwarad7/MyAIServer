@@ -504,7 +504,7 @@ AOS.prototype.handleRentersSpouseInsuranceName = function (sessionAttrs) {
     var repromptOutput = new Speech();
 
     if (sessionAttrs.spouselastName) {
-        speechOutput.text = "What is " + sessionAttrs.spouseName + "'s birthday?";
+        speechOutput.text = "What is " + sessionAttrs.spousefirstName + "'s birthday?";
         rentersFindSpeechResp.speechOutput = speechOutput;
         rentersFindSpeechResp.repromptOutput = speechOutput;
     } else {
